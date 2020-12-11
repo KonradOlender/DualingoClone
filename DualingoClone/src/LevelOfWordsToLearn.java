@@ -1,4 +1,5 @@
+import java.util.List;
 
 public interface LevelOfWordsToLearn {
-	public void algorythm();
+	public List<Word> generateWords();
 }

@@ -1,14 +1,14 @@
 import java.util.Iterator;
 
-public class RandomIterator implements Iterator<Object>
+public class RandomIterator implements Iterator<Word>
 {
 	public boolean hasNext() 
 	{
 		return false;
 	}
 	
-	public Object next()
+	public Word next()
 	{
-		return new Object();
+		return new Word();
 	}
 }

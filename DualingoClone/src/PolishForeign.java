@@ -1,21 +1,30 @@
+import javax.swing.*;
 
 public class PolishForeign extends LearningMode{
 
 	public PolishForeign(TypeOfLearning tol)
 	{
 		super(tol);
-		this.panel = this.getPanel();
+		this.panel = new JPanel();
+		JLabel label = new JLabel(getQuestion());
+		panel.add(label);
 	}
 	
 	@Override
 	public String getCorrectAnswer()
 	{
-		return word.word;
+		return super.getQuestion();
 	}
 	
 	@Override
 	public String getQuestion()
 	{
-		return word.translation;
+		return super.getCorrectAnswer();
+	}
+	
+	@Override
+	public JPanel getQuestionPanel()
+	{
+		return panel;
 	}
 }

@@ -9,8 +9,46 @@ abstract public class LearningMode extends TypeOfLearning{
 	}
 	
 	@Override
-	public JPanel getPanel()
+	public JPanel getMainPanel()
 	{
-		return tol.getPanel();
+		return tol.getMainPanel();
 	}
+	
+	@Override
+	public void SetWord(Word word)
+	{
+		tol.SetWord(word);
+	}
+	
+	@Override
+	public String getCorrectAnswer()
+	{
+		return tol.getCorrectAnswer();
+	}
+	
+	@Override
+	public String getQuestion()
+	{
+		return tol.getQuestion();
+	}
+	
+	@Override
+	public String getUserAnswer()
+	{
+		return tol.getUserAnswer();
+	}
+
+	@Override
+	public JPanel getQuestionPanel()
+	{
+		return tol.getQuestionPanel();
+	}
+	
+	@Override
+	public JPanel getAnswerPanel()
+	{
+		return tol.getAnswerPanel();
+	}
+	
+	
 }

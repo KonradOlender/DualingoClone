@@ -9,7 +9,8 @@ public class CloseAnswers extends LearningMode{
 	{
 		super(tol);
 		answers = new JRadioButton[numberOfAnswers];
-		this.panel = this.getPanel();
+		this.panel = new JPanel();
+		this.panel.setLayout(new BoxLayout(panel, 1));
 		ButtonGroup bg=new ButtonGroup(); 
 		for(int i=0 ;i < numberOfAnswers ; i++)
 		{
@@ -17,7 +18,20 @@ public class CloseAnswers extends LearningMode{
 			answers[i].setText("Button" + i);
 			answers[i].setBounds(100,25*(i+1),100,30); 
 			bg.add(answers[i]);
-			panel.add(answers[i]);
+			this.panel.add(answers[i]);
 		}    
+		
+	}
+	
+	@Override
+	public String getUserAnswer()
+	{
+		return "";
+	}
+	
+	@Override
+	public JPanel getAnswerPanel()
+	{
+		return this.panel;
 	}
 }

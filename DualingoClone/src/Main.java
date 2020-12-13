@@ -5,9 +5,9 @@ public class Main {
 		// TODO Auto-generated method stub
 		JFrame j = new JFrame();
 		JPanel jbasik = new JPanel();
-		JPanel j2 =(new CloseAnswers(new Quiz())).getPanel();
-		JPanel j3 =(new OpenAnswers(new Quiz())).getPanel();
-		jbasik.add(j2);
+		//JPanel j2 =(new CloseAnswers(new Quiz())).createPanel();
+		JPanel j3 =(new PolishForeign(new OpenAnswers(new Quiz()))).createPanel();
+		//jbasik.add(j2);
 		jbasik.add(j3);
 		j.add(jbasik);	
 		j.setVisible(true);

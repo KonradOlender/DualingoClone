@@ -1,22 +1,19 @@
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class ForeignPolish extends LearningMode{
 	
 	public ForeignPolish(TypeOfLearning tol)
 	{
 		super(tol);
-
-		this.panel = this.getPanel();
+		this.panel = new JPanel();
+		JLabel label = new JLabel(getQuestion());
+		panel.add(label);
 	}
 	
 	@Override
-	public String getCorrectAnswer()
+	public JPanel getQuestionPanel()
 	{
-		return word.translation;
-	}
-	
-	@Override
-	public String getQuestion()
-	{
-		return word.word;
+		return panel;
 	}
 }

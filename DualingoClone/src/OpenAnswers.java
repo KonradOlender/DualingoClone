@@ -1,3 +1,5 @@
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class OpenAnswers extends LearningMode{
@@ -6,7 +8,8 @@ public class OpenAnswers extends LearningMode{
 	public OpenAnswers(TypeOfLearning tol)
 	{
 		super(tol);
-		this.panel = this.getPanel();
+		this.panel = new JPanel();
+		this.panel.setLayout(new BoxLayout(panel, 1));
 		answerField = new JTextField();
 		this.panel.add(answerField);
 	}
@@ -15,5 +18,11 @@ public class OpenAnswers extends LearningMode{
 	public String getUserAnswer()
 	{
 		return answerField.getText();
+	}
+	
+	@Override
+	public JPanel getAnswerPanel()
+	{
+		return this.panel;
 	}
 }

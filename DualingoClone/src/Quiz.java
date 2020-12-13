@@ -1,3 +1,6 @@
+import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 
 public class Quiz extends TypeOfLearning{
@@ -7,7 +10,8 @@ public class Quiz extends TypeOfLearning{
 	public Quiz()
 	{
 		super();
-		nextQuestionButton = new JButton("Next");
+		nextQuestionButton = new JButton("Next Question >");
+		nextQuestionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(nextQuestionButton);
 	}
 }

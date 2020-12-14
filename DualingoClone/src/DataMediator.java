@@ -1,3 +1,5 @@
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class DataMediator {
 
@@ -29,13 +31,37 @@ public class DataMediator {
 	}
 	
 	public void addUser(String name) {
-		//user chosees an option to add a user
+		//user chooses an option to add a user
 	}
 	
-	public void startLearning() {
+	public void startLearning(int level) {
 		//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
+		
+		/*JFrame j = new JFrame();
+		JPanel jbasik = new JPanel();
+		//JPanel j2 =(new ForeignPolish(new OpenAnswers(new Quiz()))).createPanel();
+		JPanel j3 =(new ForeignPolish(new CloseAnswers(new Quiz()))).createPanel();
+		//jbasik.add(j2);
+		jbasik.add(j3);
+		j.add(jbasik);			
+		j.setVisible(true);
+		j.pack();
+		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
 	}
 	
+	public void startMainWindow()
+	{
+		MainWindow mainWindow = new MainWindow(this);
+	}
 	
+	public void openUserPanel()
+	{
+		UserPanel userPanel = new UserPanel(this);
+	}
+	
+	public boolean userExists(String name)
+	{
+		return false;
+	}
 	
 }

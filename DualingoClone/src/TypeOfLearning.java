@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.*;
@@ -17,7 +18,7 @@ abstract public class TypeOfLearning //extends JPanel
 		word = new Word();
 		word.translation = "polski";
 		word.word = "obcy";
-		panel.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));
+		//panel.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));
 	}
 	
 	public void SetWord(Word word)

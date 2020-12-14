@@ -7,7 +7,7 @@ public class PolishForeign extends LearningMode{
 		super(tol);
 		this.panel = new JPanel();
 		JLabel label = new JLabel(getQuestion());
-		panel.add(label);
+		this.panel.add(label);
 	}
 	
 	@Override
@@ -25,6 +25,6 @@ public class PolishForeign extends LearningMode{
 	@Override
 	public JPanel getQuestionPanel()
 	{
-		return panel;
+		return this.panel;
 	}
 }

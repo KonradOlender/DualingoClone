@@ -7,7 +7,7 @@ public class DataMediator {
 	private LearningSet learningSet;
 	
 	public SetOfWords getWords(int level) {
-		SetOfWords words = new SetOfWords();
+		SetOfWords words = new SetOfWords(1);
 		
 		return words;
 	}

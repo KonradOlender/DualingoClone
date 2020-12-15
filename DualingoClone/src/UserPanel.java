@@ -3,13 +3,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+//add here  the panel to manage database
 public class UserPanel extends JFrame implements ActionListener{
-	public JLabel username;
+	int level = 4;
 	private DataMediator mediator;
 	//Panel for learning
+	public JLabel username;
 	public JRadioButton[] levels = new JRadioButton[4];
 	public JButton startLearningButton;
-	int level = 4;
 	//Panel for managing database
 	
 	public UserPanel(DataMediator dm)

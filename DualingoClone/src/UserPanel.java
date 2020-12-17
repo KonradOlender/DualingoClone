@@ -12,7 +12,13 @@ public class UserPanel extends JFrame implements ActionListener{
 	public JRadioButton[] levels = new JRadioButton[4];
 	public JButton startLearningButton;
 	//Panel for managing database
-	
+	public JTextField word;
+	public JTextField translation;
+	public JButton addButton;
+	public JButton deleteButton;
+	private static int MAX_LEVEL = 3;
+
+	//spinner for levels
 	public UserPanel(DataMediator dm)
 	{
 		mediator = dm;
@@ -20,7 +26,9 @@ public class UserPanel extends JFrame implements ActionListener{
 		panel.setLayout(new BoxLayout(panel, 1));
 		panel.add(username);
 		RadioButtonListener rbl = new RadioButtonListener();
+		JTabbedPane tabbedPane = new JTabbedPane();
 		
+		//main tab
 		for(int i=0;i<3;i++)
 		{
 			levels[i] = new JRadioButton();
@@ -37,6 +45,32 @@ public class UserPanel extends JFrame implements ActionListener{
 		panel.add(startLearningButton);
 		
 		panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+		tabbedPane.add("nauka", panel);
+		
+		//adding word tab
+		JPanel addingPanel = new JPanel();
+		word = new JTextField();
+		translation = new JTextField();
+		addButton = new JButton();
+		addButton.addActionListener(new AddButtonListener());
+		SpinnerModel value =  
+	             new SpinnerNumberModel(1, //initial value  
+	                1, //minimum value  
+	                MAX_LEVEL, //maximum value  
+	                1); //step  
+	    JSpinner spinner = new JSpinner(value);   
+		addingPanel.add(word);
+		addingPanel.add(translation);
+		addingPanel.add(spinner);
+		addingPanel.add(addButton);
+		tabbedPane.add("dodaj s³ówko", addingPanel);
+		
+		//update and delete tab
+		JPanel updateAndDeletePanel = new JPanel();
+		deleteButton = new JButton();
+		deleteButton.addActionListener(new DeleteButtonListener());
+		tabbedPane.add("aktualizacja i usuwanie s³ówek", updateAndDeletePanel);
+		
 		this.add(panel);
 		this.setVisible(true);
 		this.pack();
@@ -60,7 +94,24 @@ public class UserPanel extends JFrame implements ActionListener{
 				level = 3;
 			else 
 				level = 4;
-			
+		}
+		
+	}
+	
+	private class AddButtonListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mediator.addWord(word.getText(), translation.getText(), 1);
+		}
+		
+	}
+	
+	private class DeleteButtonListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mediator.deleteWord(word.getText(), translation.getText(), 1);
 		}
 		
 	}

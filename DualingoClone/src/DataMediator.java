@@ -22,6 +22,16 @@ public class DataMediator {
 		//formularz do dowania slowek i moze dodawanie pojedynczo i przeklikuje dodaj nastepne uzytkownik
 	}
 	
+	public void addWord(String word, String translation, int level)
+	{
+		
+	}
+	
+	public void deleteWord(String word, String translation, int level)
+	{
+		
+	}
+	
 	public void deleteWord(Word w) {
 		//database operation after 
 	}
@@ -37,7 +47,7 @@ public class DataMediator {
 	public void startLearning(int level) {
 		//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
 		
-		/*JFrame j = new JFrame();
+		JFrame j = new JFrame();
 		JPanel jbasik = new JPanel();
 		//JPanel j2 =(new ForeignPolish(new OpenAnswers(new Quiz()))).createPanel();
 		JPanel j3 =(new ForeignPolish(new CloseAnswers(new Quiz()))).createPanel();
@@ -46,7 +56,7 @@ public class DataMediator {
 		j.add(jbasik);			
 		j.setVisible(true);
 		j.pack();
-		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
+		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public void startMainWindow()

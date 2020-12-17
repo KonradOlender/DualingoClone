@@ -27,5 +27,6 @@ public class User {
 	{
 		this.strategy = low;
 	}
+
 }
 

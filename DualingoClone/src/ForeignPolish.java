@@ -2,12 +2,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ForeignPolish extends LearningMode{
+	JLabel label;
 	
 	public ForeignPolish(TypeOfLearning tol)
 	{
 		super(tol);
 		this.panel = new JPanel();
-		JLabel label = new JLabel(getQuestion());
+		label = new JLabel(getQuestion());
 		this.panel.add(label);
 	}
 	

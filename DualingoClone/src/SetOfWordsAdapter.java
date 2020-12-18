@@ -1,7 +1,7 @@
 import javax.swing.table.AbstractTableModel;
 
 public class SetOfWordsAdapter extends AbstractTableModel{
-	SetOfWords words;
+	SetOfWords words = new SetOfWords(0);
 	
 	@Override
 	public int getRowCount()
@@ -29,6 +29,7 @@ public class SetOfWordsAdapter extends AbstractTableModel{
 	@Override
 	public String getColumnName(int column)
 	{
+		System.out.println("Helpful" + column);
 		if(column == 0)
 			return "Lp";
 		if(column == 1)

@@ -1,9 +1,9 @@
 import java.util.List;
 
 public class ArchivedUserStates {
-	private List<UserState> stateList;
+	private List<IUserState> stateList;
 	
-	public void addNewState(UserState userState)
+	public void addNewState(IUserState userState)
 	{
 		stateList.add(userState);
 	}
@@ -13,7 +13,7 @@ public class ArchivedUserStates {
 		
 	}
 	
-	public UserState getState(int level)
+	public IUserState getState(int level)
 	{
 		return stateList.get(0);
 	}

@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,6 +26,7 @@ public class UserPanel extends JFrame implements ActionListener{
 		mediator = dm;
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, 1));
+		username = new JLabel();
 		panel.add(username);
 		RadioButtonListener rbl = new RadioButtonListener();
 		JTabbedPane tabbedPane = new JTabbedPane();
@@ -40,7 +43,7 @@ public class UserPanel extends JFrame implements ActionListener{
 		levels[3].setText("Automatic Level");
 		levels[3].addActionListener(rbl);
 		
-		startLearningButton = new JButton();
+		startLearningButton = new JButton("Ucz siê");
 		startLearningButton.addActionListener(this);
 		panel.add(startLearningButton);
 		
@@ -49,30 +52,43 @@ public class UserPanel extends JFrame implements ActionListener{
 		
 		//adding word tab
 		JPanel addingPanel = new JPanel();
+		addingPanel.setLayout(new BoxLayout(addingPanel, 1));
 		word = new JTextField();
 		translation = new JTextField();
-		addButton = new JButton();
+		addButton = new JButton("Dodaj");
 		addButton.addActionListener(new AddButtonListener());
 		SpinnerModel value =  
 	             new SpinnerNumberModel(1, //initial value  
 	                1, //minimum value  
 	                MAX_LEVEL, //maximum value  
 	                1); //step  
-	    JSpinner spinner = new JSpinner(value);   
+	    JSpinner spinner = new JSpinner(value);
+	    addingPanel.add(new JLabel("Definicja:"));
 		addingPanel.add(word);
+		addingPanel.add(new JLabel("T³umaczenie:"));
 		addingPanel.add(translation);
+		addingPanel.add(new JLabel("Poziom:"));
 		addingPanel.add(spinner);
 		addingPanel.add(addButton);
+		addingPanel.setAlignmentX(JPanel.RIGHT_ALIGNMENT);
 		tabbedPane.add("dodaj s³ówko", addingPanel);
 		
 		//update and delete tab
 		JPanel updateAndDeletePanel = new JPanel();
-		deleteButton = new JButton();
+		deleteButton = new JButton("Usuñ");
 		deleteButton.addActionListener(new DeleteButtonListener());
+		SetOfWordsAdapter adapter =new SetOfWordsAdapter();
+	    JTable table = new JTable(adapter);
+	    updateAndDeletePanel.add(new JScrollPane(table));
+
+	    updateAndDeletePanel.add(deleteButton);
 		tabbedPane.add("aktualizacja i usuwanie s³ówek", updateAndDeletePanel);
 		
-		this.add(panel);
+		JPanel main = new JPanel();
+		main.add(tabbedPane);
+		this.add(main);
 		this.setVisible(true);
+		this.setLocationRelativeTo(null);
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

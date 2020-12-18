@@ -50,7 +50,7 @@ public class DataMediator {
 		JFrame j = new JFrame();
 		JPanel jbasik = new JPanel();
 		//JPanel j2 =(new ForeignPolish(new OpenAnswers(new Quiz()))).createPanel();
-		JPanel j3 =(new ForeignPolish(new CloseAnswers(new Quiz()))).createPanel();
+		JPanel j3 =(new ForeignPolish(new OpenAnswers(new Quiz()))).createPanel();
 		//jbasik.add(j2);
 		jbasik.add(j3);
 		j.add(jbasik);			

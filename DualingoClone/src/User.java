@@ -28,5 +28,19 @@ public class User {
 		this.strategy = low;
 	}
 
+	private class UserState implements IUserState {
+		private State state;
+		
+		public void setState(State state)
+		{
+			this.state = state;
+		}
+		
+		public State getState()
+		{
+			return state;
+		}
+	}
+
 }
 

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class SetOfWords {
@@ -7,6 +8,7 @@ public class SetOfWords {
 	public SetOfWords(int level)
 	{
 		this.level = level;
+		listOfWords = new ArrayList<Word>();
 	}
 	
 	public int getSize()

@@ -7,6 +7,6 @@ public class Main {
 		// TODO Auto-generated method stub
 		DataMediator m = new DataMediator();
 		m.startMainWindow();
-		m.openUserPanel();
+		//m.openUserPanel();
 	}
 }

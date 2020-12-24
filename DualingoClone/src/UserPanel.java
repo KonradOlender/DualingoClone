@@ -1,9 +1,14 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 //add here  the panel to manage database
 public class UserPanel extends JFrame implements ActionListener{
@@ -19,19 +24,60 @@ public class UserPanel extends JFrame implements ActionListener{
 	public JButton addButton;
 	public JButton deleteButton;
 	private static int MAX_LEVEL = 3;
+	SetOfWordsAdapter adapter;
+	JSpinner spinner;
+	JTable table;
+	JMenuBar menu;
 
-	//spinner for levels
 	public UserPanel(DataMediator dm)
 	{
 		mediator = dm;
+		createMenu();
+		JTabbedPane tabbedPane = new JTabbedPane();
+		
+		//main tab
+		tabbedPane.add("nauka", createMainPanel());
+		
+		//manage words
+		tabbedPane.add("zarz¹dzanie s³ówkami", createUpdateAndDeletePanel());
+		
+		tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
+            public void stateChanged(ChangeEvent e) {
+                if (e.getSource() instanceof JTabbedPane) {
+                    JTabbedPane pane = (JTabbedPane) e.getSource();
+                     if(pane.getTitleAt(pane.getSelectedIndex()).equals("zarz¹dzanie s³ówkami"))
+                    	 setJMenuBar(menu);
+                     else
+                    	 setJMenuBar(null);
+                }
+		}});
+		this.getContentPane().setLayout(new BorderLayout());
+		this.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		this.setVisible(true);
+		this.setLocationRelativeTo(null);
+		this.pack();
+		this.setTitle("MangePanel");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public void createMenu()
+	{
+		menu = new JMenuBar();
+		deleteButton = new JButton("Usuñ");
+		deleteButton.addActionListener(new DeleteButtonListener());
+		menu.add(deleteButton);
+		menu.setBorder(new EmptyBorder(10, 5, 2, 5));
+	}
+
+	public JPanel createMainPanel()
+	{
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, 1));
 		username = new JLabel();
 		panel.add(username);
 		RadioButtonListener rbl = new RadioButtonListener();
-		JTabbedPane tabbedPane = new JTabbedPane();
 		
-		//main tab
 		for(int i=0;i<3;i++)
 		{
 			levels[i] = new JRadioButton();
@@ -46,11 +92,13 @@ public class UserPanel extends JFrame implements ActionListener{
 		startLearningButton = new JButton("Ucz siê");
 		startLearningButton.addActionListener(this);
 		panel.add(startLearningButton);
-		
 		panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-		tabbedPane.add("nauka", panel);
 		
-		//adding word tab
+		return panel;
+	}
+	
+	public JPanel createAddingPanel()
+	{
 		JPanel addingPanel = new JPanel();
 		addingPanel.setLayout(new BoxLayout(addingPanel, 1));
 		word = new JTextField();
@@ -62,7 +110,7 @@ public class UserPanel extends JFrame implements ActionListener{
 	                1, //minimum value  
 	                MAX_LEVEL, //maximum value  
 	                1); //step  
-	    JSpinner spinner = new JSpinner(value);
+	    spinner = new JSpinner(value);
 	    addingPanel.add(new JLabel("Definicja:"));
 		addingPanel.add(word);
 		addingPanel.add(new JLabel("T³umaczenie:"));
@@ -71,28 +119,24 @@ public class UserPanel extends JFrame implements ActionListener{
 		addingPanel.add(spinner);
 		addingPanel.add(addButton);
 		addingPanel.setAlignmentX(JPanel.RIGHT_ALIGNMENT);
-		tabbedPane.add("dodaj s³ówko", addingPanel);
 		
-		//update and delete tab
-		JPanel updateAndDeletePanel = new JPanel();
-		deleteButton = new JButton("Usuñ");
-		deleteButton.addActionListener(new DeleteButtonListener());
-		SetOfWordsAdapter adapter =new SetOfWordsAdapter();
-	    JTable table = new JTable(adapter);
-	    updateAndDeletePanel.add(new JScrollPane(table));
-
-	    updateAndDeletePanel.add(deleteButton);
-		tabbedPane.add("aktualizacja i usuwanie s³ówek", updateAndDeletePanel);
-		
-		JPanel main = new JPanel();
-		main.add(tabbedPane);
-		this.add(main);
-		this.setVisible(true);
-		this.setLocationRelativeTo(null);
-		this.pack();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		return addingPanel;
 	}
-
+	
+	public JPanel createUpdateAndDeletePanel()
+	{
+		JPanel updateAndDeletePanel = new JPanel(new GridLayout());
+		adapter =new SetOfWordsAdapter();
+		adapter.setNewSet(mediator.getWords(1));
+	    table = new JTable(adapter);
+	    table.getTableHeader().setReorderingAllowed(false);
+	    updateAndDeletePanel.add(new JScrollPane(table));
+	    updateAndDeletePanel.add(createAddingPanel());
+	    //panel.add(deleteButton);
+	    
+	    return updateAndDeletePanel;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		mediator.startLearning(level);
@@ -119,6 +163,9 @@ public class UserPanel extends JFrame implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			mediator.addWord(word.getText(), translation.getText(), 1);
+			word.setText("");
+			translation.setText("");
+			adapter.setNewSet(mediator.getWords(1));
 		}
 		
 	}
@@ -127,7 +174,9 @@ public class UserPanel extends JFrame implements ActionListener{
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			mediator.deleteWord(word.getText(), translation.getText(), 1);
+			int row = table.getSelectedRow();
+			mediator.deleteWord((String)table.getValueAt(row, 1), (String)table.getValueAt(row, 2), 1);
+			adapter.setNewSet(mediator.getWords(1));
 		}
 		
 	}

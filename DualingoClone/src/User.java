@@ -27,6 +27,16 @@ public class User {
 	{
 		this.strategy = low;
 	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 
 	private class UserState implements IUserState {
 		private State state;

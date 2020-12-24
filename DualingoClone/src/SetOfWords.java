@@ -40,4 +40,5 @@ public class SetOfWords {
 	{
 		listOfWords.get(index).translation = value;
 	}
+	
 }

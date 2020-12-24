@@ -6,6 +6,7 @@ public class SetOfWordsAdapter extends AbstractTableModel{
 	@Override
 	public int getRowCount()
 	{
+		if(words == null) return 0;
 		return words.getSize();
 	}
 	
@@ -13,7 +14,7 @@ public class SetOfWordsAdapter extends AbstractTableModel{
 	public Object getValueAt(int row, int column)
 	{
 		if(column == 0)
-			return row;
+			return row + 1;
 		else if(column == 1)
 			return words.getDefinition(row);
 		else
@@ -29,7 +30,6 @@ public class SetOfWordsAdapter extends AbstractTableModel{
 	@Override
 	public String getColumnName(int column)
 	{
-		System.out.println("Helpful" + column);
 		if(column == 0)
 			return "Lp";
 		if(column == 1)

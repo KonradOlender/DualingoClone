@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 public class MainWindow extends JFrame implements ActionListener{
 	public JTextField usernameField;
 	public JButton loginButton;
+	public JButton registerButton;
 	public DataMediator mediator;
 	
 	public MainWindow(DataMediator dm)
@@ -15,17 +16,27 @@ public class MainWindow extends JFrame implements ActionListener{
 		JPanel panel = new JPanel();
 		usernameField = new JTextField();
 		loginButton = new JButton("Zaloguj siê");
+		registerButton = new JButton("Dodaj u¿ytkownika");
 		panel.setLayout(new BoxLayout(panel, 1));
 		panel.setBorder(new EmptyBorder(10, 5, 2, 5));
+		panel.setAlignmentX(CENTER_ALIGNMENT);
 		panel.add(usernameField);
-		panel.add(loginButton);
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.add(loginButton);		
+		buttonsPanel.add(registerButton);
+		panel.add(buttonsPanel);
+		
 		loginButton.addActionListener(this);
+		registerButton.addActionListener(new RegisterButtonListener());
 		JPanel main = new JPanel();
 		main.add(panel);
 		this.setLocationRelativeTo(null);
 		this.add(panel);
 		this.setVisible(true);
 		this.pack();
+		this.setSize(500, 100);
+		this.setResizable(false);
+		this.setTitle("Start Window");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
@@ -40,6 +51,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		if(mediator.userExists(enteredName))
 		{
 			mediator.getUser(enteredName);
+			((MainWindow)this).setVisible(false);
 			mediator.openUserPanel();
 		}	
 		else
@@ -47,6 +59,15 @@ public class MainWindow extends JFrame implements ActionListener{
     				"Nie ma takiego u¿ytkownika",
     				"Niepoprawna nazwa",
     				JOptionPane.WARNING_MESSAGE);
+		
+	}
+	
+	private class RegisterButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mediator.addUser(usernameField.getText());
+		}
 		
 	}
 }

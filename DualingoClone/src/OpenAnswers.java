@@ -27,4 +27,11 @@ public class OpenAnswers extends LearningMode{
 	{
 		return this.panel;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "Odpowiedzi otwarte";
+	}
 }
+

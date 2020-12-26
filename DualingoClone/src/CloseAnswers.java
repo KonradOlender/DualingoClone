@@ -52,4 +52,9 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 		System.out.println(usersAnswer);
 	}
 	
+	@Override
+	public String toString()
+	{
+		return "Odpowiedzi zamkniête";
+	}
 }

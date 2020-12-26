@@ -10,8 +10,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-//add here  the panel to manage database
-public class UserPanel extends JFrame implements ActionListener{
+//dodac wyszukiwanie s³ówka i dropdown z levelem i z jezykiem najprawdopodobiej
+public class UserPanel extends JFrame{
 	int level = 4;
 	private DataMediator mediator;
 	//Panel for learning
@@ -90,7 +90,8 @@ public class UserPanel extends JFrame implements ActionListener{
 		levels[3].addActionListener(rbl);
 		
 		startLearningButton = new JButton("Ucz siê");
-		startLearningButton.addActionListener(this);
+		startLearningButton.addActionListener(
+				mediator.getCreationQuizListener(this));
 		panel.add(startLearningButton);
 		panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 		
@@ -137,11 +138,6 @@ public class UserPanel extends JFrame implements ActionListener{
 	    return updateAndDeletePanel;
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		mediator.startLearning(level);
-	}
-	
 	private class RadioButtonListener implements ActionListener
 	{
 		@Override
@@ -179,5 +175,10 @@ public class UserPanel extends JFrame implements ActionListener{
 			adapter.setNewSet(mediator.getWords(1));
 		}
 		
+	}
+	
+	public int getChoosenLevel()
+	{
+		return level;
 	}
 }

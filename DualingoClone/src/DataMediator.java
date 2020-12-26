@@ -1,13 +1,18 @@
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class DataMediator {
+public class DataMediator{
 
 	private User currentUser;
 	private LearningSet learningSet;
 	private SetOfWords sow;
+	private TypeOfLearning currentQuiz;
 	
 	public SetOfWords getWords(int level) {
 		return sow;
@@ -69,16 +74,27 @@ public class DataMediator {
 	public void startLearning(int level) {
 		//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
 		
+		//level here should be also passed
+		currentUser.genereteWordToLearn(1);
+		
 		JFrame j = new JFrame();
-		JPanel jbasik = new JPanel();
-		//JPanel j2 =(new ForeignPolish(new OpenAnswers(new Quiz()))).createPanel();
-		JPanel j3 =(new ForeignPolish(new OpenAnswers(new Quiz()))).createPanel();
-		//jbasik.add(j2);
-		jbasik.add(j3);
-		j.add(jbasik);			
+		JPanel basicPanel = new JPanel();
+		basicPanel.add(currentQuiz.createPanel());
+		j.add(basicPanel);			
 		j.setVisible(true);
 		j.pack();
 		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+	}
+	
+	public Word nextLearningWord() {
+		// tu iterator
+		return new Word();
+	}
+	
+	public ActionListener getCreationQuizListener(JFrame frame)
+	{
+		return new CreationQuizDialog(frame);
 	}
 	
 	public void startMainWindow()
@@ -102,5 +118,64 @@ public class DataMediator {
 		if(currentUser.getName().equals(name))return true;
 		return false;
 	}
+	
+	
+	//Nas³uchuje wciœniêcia przycisku, który tworzy quiz
+	private class CreationQuizDialog implements ActionListener {
+		JFrame frame;
+		
+		public CreationQuizDialog(JFrame frame)
+		{
+			this.frame = frame;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			currentQuiz = null;
+	        Object option = JOptionPane.showInputDialog(
+	          frame,
+	          "Wybierz sposób nauki",
+	          "Ustwienie jêzyka",
+	          JOptionPane.QUESTION_MESSAGE,null,
+	         	new LearningMode[] { //prototyp tu
+	            new ForeignPolish(new Quiz()),
+	            new PolishForeign(new Quiz()),
+	        }, null);
+	        if(option == null)
+	        	 return;
+	        currentQuiz = (TypeOfLearning)option;
+	         
+	        option = JOptionPane.showInputDialog(
+	        	frame,
+	        	"Wybierz sposób nauki",
+	            "Rodzaj opcji odpowiedzi",
+	            JOptionPane.QUESTION_MESSAGE,null,
+	               	new LearningMode[] {
+	                new OpenAnswers(currentQuiz),
+	                new CloseAnswers(currentQuiz),
+	            }, null);
+	        if(option == null)
+	        	return;
+	        currentQuiz = (TypeOfLearning)option;
+	         
+	        option = JOptionPane.showInputDialog(
+	            frame,
+	            "Wybierz sposób nauki",
+	            "Wybierz rodzaj testu",
+	            JOptionPane.QUESTION_MESSAGE,null,
+	               	new LearningMode[] {
+	                new Practise(currentQuiz),
+	                new Test(currentQuiz),
+	            }, null);
+	         if(option == null)
+	        	 return;
+	         currentQuiz = (TypeOfLearning)option;
+	         
+	         startLearning(
+	        		 ((UserPanel)frame).getChoosenLevel());
+		}
+	}
+
 	
 }

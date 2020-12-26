@@ -14,4 +14,5 @@ public class Quiz extends TypeOfLearning{
 		nextQuestionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(nextQuestionButton);
 	}
+	
 }

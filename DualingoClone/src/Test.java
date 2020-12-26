@@ -1,6 +1,11 @@
 import java.awt.event.*;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 public class Test extends LearningMode implements ActionListener{
+	private int correctAnswers = 0;
+	private int incorrectAnswers = 0;
 	
 	public Test(TypeOfLearning tol)
 	{
@@ -11,6 +16,16 @@ public class Test extends LearningMode implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
-		//poprostu zmiana na nastepne slowo
+		if(!getCorrectAnswer().equals(getUserAnswer()))
+			incorrectAnswers ++;
+		else
+			correctAnswers ++;
+		//przechodzimy do nastepnego pytania
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "test";
 	}
 }

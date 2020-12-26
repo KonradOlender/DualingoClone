@@ -21,5 +21,13 @@ public class Practise extends LearningMode implements ActionListener{
     				"Niepoprawna odpowiedz",
     				JOptionPane.WARNING_MESSAGE);
 		}
+		//else
+			//przechodzimy do nastepnego pytania
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "praktyka";
 	}
 }

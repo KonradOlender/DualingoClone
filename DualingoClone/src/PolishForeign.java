@@ -28,4 +28,10 @@ public class PolishForeign extends LearningMode{
 	{
 		return this.panel;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "polski-obcy";
+	}
 }

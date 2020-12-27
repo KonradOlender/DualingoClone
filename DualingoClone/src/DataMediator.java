@@ -123,7 +123,7 @@ public class DataMediator{
 	
 	public ActionListener getCreationQuizListener(JFrame frame)
 	{
-		return new CreationQuizDialog(frame);
+		return new CreationQuizDialog(frame, this);
 	}
 	
 	public void startMainWindow()
@@ -166,10 +166,12 @@ public class DataMediator{
 	//Nas³uchuje wciœniêcia przycisku, który tworzy quiz
 	private class CreationQuizDialog implements ActionListener {
 		JFrame frame;
+		DataMediator mediator;
 		
-		public CreationQuizDialog(JFrame frame)
+		public CreationQuizDialog(JFrame frame, DataMediator mediator)
 		{
 			this.frame = frame;
+			this.mediator = mediator;
 		}
 		
 		@Override
@@ -208,8 +210,8 @@ public class DataMediator{
 	            "Wybierz rodzaj testu",
 	            JOptionPane.QUESTION_MESSAGE,null,
 	               	new LearningMode[] {
-	                new Practise(currentQuiz),
-	                new Test(currentQuiz),
+	                new Practise(currentQuiz, mediator),
+	                new Test(currentQuiz, mediator),
 	            }, null);
 	         if(option == null)
 	        	 return;

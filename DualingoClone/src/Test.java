@@ -7,22 +7,25 @@ import javax.swing.JOptionPane;
 public class Test extends LearningMode implements ActionListener{
 	private int correctAnswers = 0;
 	private int incorrectAnswers = 0;
+	private DataMediator mediator;
 	
-	public Test(TypeOfLearning tol)
+	public Test(TypeOfLearning tol, DataMediator mediator)
 	{
 		super(tol);
-		this.panel = this.getMainPanel();		
+		this.panel = this.getMainPanel();	
+		this.mediator = mediator;
+		System.out.println(mediator);
 		this.setNextButtonListener(this);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
-		if(!getCorrectAnswer().equals(getUserAnswer()))
+		if(getCorrectAnswer()!= null && !getCorrectAnswer().equals(getUserAnswer()))
 			incorrectAnswers ++;
 		else
 			correctAnswers ++;
-		((Test)this).SetWord(new Word());
+		((Test)this).SetWord(mediator.nextLearningWord());
 	}
 	
 	@Override

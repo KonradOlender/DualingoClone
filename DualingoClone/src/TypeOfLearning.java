@@ -1,5 +1,7 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -20,6 +22,8 @@ abstract public class TypeOfLearning //extends JPanel
 		word.word = "obcy";
 		//panel.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));
 	}
+	
+	abstract public void setNextButtonListener(ActionListener al);
 	
 	public void SetWord(Word word)
 	{

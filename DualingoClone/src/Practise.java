@@ -3,12 +3,14 @@ import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+//POPRAWIC POBIERANIE NASTEPNEGO S£OWA
 public class Practise extends LearningMode implements ActionListener{
 
 	public Practise(TypeOfLearning tol)
 	{
 		super(tol);
 		this.panel = this.getMainPanel();
+		this.setNextButtonListener(this);
 	}
 	
 	@Override

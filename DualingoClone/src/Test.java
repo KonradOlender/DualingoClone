@@ -3,6 +3,7 @@ import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+//TODO Poprawic pobiernaie nastepnego slowa
 public class Test extends LearningMode implements ActionListener{
 	private int correctAnswers = 0;
 	private int incorrectAnswers = 0;
@@ -10,7 +11,8 @@ public class Test extends LearningMode implements ActionListener{
 	public Test(TypeOfLearning tol)
 	{
 		super(tol);
-		this.panel = this.getMainPanel();
+		this.panel = this.getMainPanel();		
+		this.setNextButtonListener(this);
 	}
 	
 	@Override

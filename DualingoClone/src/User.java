@@ -1,7 +1,7 @@
 
 public class User {
 	private String name;
-	private State state;
+	private State state = new State();
 	private LearningMode recentLearningMode;
 	private TypeOfLearning recentTypeofLearning;
 	private LevelOfWordsToLearn strategy;
@@ -36,6 +36,17 @@ public class User {
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+	
+	public int getCurrentLevel()
+	{
+		return state.getCurrentUserLevel();
+	}
+	
+	//returns %
+	public double getCurrentProgress()
+	{
+		return state.getProgress();
 	}
 
 	private class UserState implements IUserState {

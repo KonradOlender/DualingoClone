@@ -12,9 +12,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-//do comboboxow trzeba pobierac z mediatora to co chcemy wlozyc, do glownego panelu trzbea dodac wybor jezyka, 
-//panel do zarzadzania swoimi poziomami (powiazanie z pami¹tk¹), w dekoratorze zrobic button next jakos listenera
-//poprawic w pamiatce test i practise
+//poprawic w dekoratorze test i practise
+//panel do zarzadzania swoimi poziomami (powiazanie z pami¹tk¹) - usprawnic
 public class UserPanel extends JFrame{
 	int level = 4;
 	private DataMediator mediator;
@@ -29,6 +28,7 @@ public class UserPanel extends JFrame{
 	public JButton addButton;
 	public JButton deleteButton;
 	public JButton searchButton;
+	public JButton revertLevelButton;
 	private static int MAX_LEVEL = 3;
 	SetOfWordsAdapter adapter;
 	JSpinner spinnerAdding;
@@ -37,6 +37,8 @@ public class UserPanel extends JFrame{
 	JMenuBar menu;
 	JComboBox languageListSearching;
 	JComboBox languageListAdding;
+	JComboBox languageListLearning;
+
 
 
 	public UserPanel(DataMediator dm)
@@ -44,6 +46,9 @@ public class UserPanel extends JFrame{
 		mediator = dm;
 		createMenu();
 		JTabbedPane tabbedPane = new JTabbedPane();
+		
+		//profile tab
+		tabbedPane.add("profil", createProfileManagementPanel());
 		
 		//main tab
 		tabbedPane.add("nauka", createMainPanel());
@@ -76,8 +81,7 @@ public class UserPanel extends JFrame{
 		menu = new JMenuBar();
 		JLabel label1 = new JLabel("Wybierz jêzyk:");
 		JLabel label2 = new JLabel("Wybierz poziom:");
-		languageListSearching = new JComboBox();
-		languageListSearching.addItem("Angielski");
+		languageListSearching = new JComboBox(mediator.getLanguages());
 		research = new JTextField("Wyszukaj s³owa");
 		research.addFocusListener(new FocusListener() {
 		    @Override
@@ -118,11 +122,12 @@ public class UserPanel extends JFrame{
 	{
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, 1));
-		username = new JLabel();
-		panel.add(username);
 		RadioButtonListener rbl = new RadioButtonListener();
 		ButtonGroup bg = new ButtonGroup();
-		
+		JLabel label1 = new JLabel("Wybierz jêzyk:");
+		languageListLearning = new JComboBox(mediator.getLanguages());
+		panel.add(label1);
+		panel.add(languageListLearning);
 		for(int i=0;i<3;i++)
 		{
 			levels[i] = new JRadioButton();
@@ -151,8 +156,7 @@ public class UserPanel extends JFrame{
 	{
 		JPanel addingPanel = new JPanel();
 		addingPanel.setLayout(new BoxLayout(addingPanel, 1));
-		languageListAdding = new JComboBox();
-		languageListAdding.addItem("Angielski");
+		languageListAdding = new JComboBox(mediator.getLanguages());
 		word = new JTextField();
 		translation = new JTextField();
 		addButton = new JButton("Dodaj");
@@ -191,6 +195,27 @@ public class UserPanel extends JFrame{
 	    return updateAndDeletePanel;
 	}
 	
+	public JPanel createProfileManagementPanel()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, 1));
+		username = new JLabel();
+		panel.add(username);
+		username.setText("Nazwa u¿ytkownika:   " + mediator.getUserName());
+		JLabel levelLabel = new JLabel();
+		panel.add(levelLabel);
+		levelLabel.setText("Poziom:   " + mediator.getUserLevel());
+		JLabel progressLabel = new JLabel();
+		panel.add(progressLabel);
+		double percentage = 100 - mediator.getUserProgress()*100; 
+		progressLabel.setText("Do nastêpnego poziomu brakuje:   " + percentage + " %");
+		revertLevelButton = new JButton("Cofnij siê do poprzedniego poziomu");
+		//list of 3 or 4 previous user states
+		panel.add(revertLevelButton);
+		return panel;
+	}
+	
+	
 	private class RadioButtonListener implements ActionListener
 	{
 		@Override
@@ -223,8 +248,10 @@ public class UserPanel extends JFrame{
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//searching through mediator
-			adapter.setNewSet(mediator.getWords(1));
+			String searchedPhrase = research.getText();
+			int level = (int)spinnerSearching.getValue();
+			String language = (String) languageListSearching.getSelectedItem();
+			adapter.setNewSet(mediator.getFilteredWords(10, level, searchedPhrase, language));
 		}
 		
 	}

@@ -24,4 +24,12 @@ public class State {
 	{
 		return currentUserLevel;
 	}
+	
+	public double getProgress()
+	{
+		double progress = (double) currentUsersProgress;
+		progress *= 100;
+		progress /= Math.pow(10, currentUserLevel + 1);
+		return progress;
+	}
 }

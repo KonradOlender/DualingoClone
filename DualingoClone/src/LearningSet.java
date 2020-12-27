@@ -19,4 +19,9 @@ public class LearningSet {
 	{
 		learningSet = strategy.generateWords();
 	}
+	
+	public Word getNextWord() 
+	{
+		return new Word();
+	}
 }

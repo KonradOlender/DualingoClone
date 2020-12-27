@@ -27,6 +27,35 @@ public class DataMediator{
 		//pobieranie uzytkownika z bazy danych po wczesniejszym wpisaniu nazwy uzytkownika
 		return currentUser;
 	}
+	
+	public String getUserName() {
+		if(currentUser == null) 
+		{
+			currentUser = new User();
+			currentUser.setName("first_user");
+		}
+		return currentUser.getName();
+	}
+	
+	public int getUserLevel() {
+		if(currentUser == null) 
+		{
+			currentUser = new User();
+			currentUser.setName("first_user");
+		}
+		return currentUser.getCurrentLevel();
+	}
+	
+	
+	public double getUserProgress() {
+		if(currentUser == null) 
+		{
+			currentUser = new User();
+			currentUser.setName("first_user");
+		}
+		return currentUser.getCurrentProgress();
+	}
+	
 	//crud actions concerning words are executed in a seperate jFrame
 	public void addWords(SetOfWords sow) {
 		//formularz do dowania slowek i moze dodawanie pojedynczo i przeklikuje dodaj nastepne uzytkownik
@@ -119,6 +148,20 @@ public class DataMediator{
 		return false;
 	}
 	
+	public String[] getLanguages()
+	{
+		List<String> x = new ArrayList<String>();
+		x.add("angielski");
+		String[] array = new String[1];
+		x.toArray(array);
+		return array;
+		
+	}
+	
+	public SetOfWords getFilteredWords(int size, int level, String searchedPhrase, String language)
+	{
+		return new SetOfWords(10);
+	}
 	
 	//Nas³uchuje wciœniêcia przycisku, który tworzy quiz
 	private class CreationQuizDialog implements ActionListener {
@@ -174,6 +217,7 @@ public class DataMediator{
 	         
 	         startLearning(
 	        		 ((UserPanel)frame).getChoosenLevel());
+	         frame.setVisible(false);
 		}
 	}
 

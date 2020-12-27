@@ -1,3 +1,5 @@
+import java.awt.event.ActionListener;
+
 import javax.swing.JPanel;
 
 abstract public class LearningMode extends TypeOfLearning{
@@ -50,4 +52,9 @@ abstract public class LearningMode extends TypeOfLearning{
 		return tol.getAnswerPanel();
 	}
 	
+	@Override
+	public void setNextButtonListener(ActionListener al) 
+	{
+		tol.setNextButtonListener(al);
+	}
 }

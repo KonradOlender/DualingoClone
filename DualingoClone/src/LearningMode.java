@@ -50,5 +50,4 @@ abstract public class LearningMode extends TypeOfLearning{
 		return tol.getAnswerPanel();
 	}
 	
-	
 }

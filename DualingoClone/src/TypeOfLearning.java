@@ -38,7 +38,7 @@ abstract public class TypeOfLearning //extends JPanel
 	
 	public String getUserAnswer()
 	{
-		return "to odpowiedz";
+		return "";
 	}
 	
 	public JPanel getMainPanel()

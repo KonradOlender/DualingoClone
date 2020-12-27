@@ -4,13 +4,17 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-//dodac wyszukiwanie s³ówka i dropdown z levelem i z jezykiem najprawdopodobiej
+//do comboboxow trzeba pobierac z mediatora to co chcemy wlozyc, do glownego panelu trzbea dodac wybor jezyka, 
+//panel do zarzadzania swoimi poziomami (powiazanie z pami¹tk¹), w dekoratorze zrobic button next jakos listenera
+//poprawic w pamiatce test i practise
 public class UserPanel extends JFrame{
 	int level = 4;
 	private DataMediator mediator;
@@ -21,13 +25,19 @@ public class UserPanel extends JFrame{
 	//Panel for managing database
 	public JTextField word;
 	public JTextField translation;
+	public JTextField research;
 	public JButton addButton;
 	public JButton deleteButton;
+	public JButton searchButton;
 	private static int MAX_LEVEL = 3;
 	SetOfWordsAdapter adapter;
-	JSpinner spinner;
+	JSpinner spinnerAdding;
+	JSpinner spinnerSearching;
 	JTable table;
 	JMenuBar menu;
+	JComboBox languageListSearching;
+	JComboBox languageListAdding;
+
 
 	public UserPanel(DataMediator dm)
 	{
@@ -64,8 +74,42 @@ public class UserPanel extends JFrame{
 	public void createMenu()
 	{
 		menu = new JMenuBar();
-		deleteButton = new JButton("Usuñ");
+		JLabel label1 = new JLabel("Wybierz jêzyk:");
+		JLabel label2 = new JLabel("Wybierz poziom:");
+		languageListSearching = new JComboBox();
+		languageListSearching.addItem("Angielski");
+		research = new JTextField("Wyszukaj s³owa");
+		research.addFocusListener(new FocusListener() {
+		    @Override
+		    public void focusGained(FocusEvent e) {
+		        if (research.getText().equals("Wyszukaj s³owa")) {
+		        	research.setText("");
+		        }
+		    }
+		    @Override
+		    public void focusLost(FocusEvent e) {
+		        if (research.getText().isEmpty()) {
+		        	research.setText("Wyszukaj s³owa");
+		        }
+		    }
+			
+		});
+		deleteButton = new JButton("Usuñ zaznaczony wyraz");
+		searchButton = new JButton("Wyszukaj");
+		searchButton.addActionListener(new SearchButtonListener());
 		deleteButton.addActionListener(new DeleteButtonListener());
+		SpinnerModel value =  
+	             new SpinnerNumberModel(1, //initial value  
+	                1, //minimum value  
+	                MAX_LEVEL, //maximum value  
+	                1); //step  
+	    spinnerSearching = new JSpinner(value);
+		menu.add(label1);
+		menu.add(languageListSearching);
+		menu.add(label2);
+		menu.add(spinnerSearching);
+		menu.add(research);
+		menu.add(searchButton);
 		menu.add(deleteButton);
 		menu.setBorder(new EmptyBorder(10, 5, 2, 5));
 	}
@@ -77,16 +121,21 @@ public class UserPanel extends JFrame{
 		username = new JLabel();
 		panel.add(username);
 		RadioButtonListener rbl = new RadioButtonListener();
+		ButtonGroup bg = new ButtonGroup();
 		
 		for(int i=0;i<3;i++)
 		{
 			levels[i] = new JRadioButton();
 			levels[i].setText("Level " + (i+1));
 			levels[i].addActionListener(rbl);
+			bg.add(levels[i]);
 			panel.add(levels[i]);
 		}    
 		levels[3] = new JRadioButton();
 		levels[3].setText("Automatic Level");
+		bg.add(levels[3]);
+		panel.add(levels[3]);
+		levels[3].setSelected(true);
 		levels[3].addActionListener(rbl);
 		
 		startLearningButton = new JButton("Ucz siê");
@@ -102,6 +151,8 @@ public class UserPanel extends JFrame{
 	{
 		JPanel addingPanel = new JPanel();
 		addingPanel.setLayout(new BoxLayout(addingPanel, 1));
+		languageListAdding = new JComboBox();
+		languageListAdding.addItem("Angielski");
 		word = new JTextField();
 		translation = new JTextField();
 		addButton = new JButton("Dodaj");
@@ -111,13 +162,15 @@ public class UserPanel extends JFrame{
 	                1, //minimum value  
 	                MAX_LEVEL, //maximum value  
 	                1); //step  
-	    spinner = new JSpinner(value);
+	    spinnerAdding = new JSpinner(value);
+		addingPanel.add(new JLabel("Jêzyk:"));
+		addingPanel.add(languageListAdding);
 	    addingPanel.add(new JLabel("Definicja:"));
 		addingPanel.add(word);
 		addingPanel.add(new JLabel("T³umaczenie:"));
 		addingPanel.add(translation);
 		addingPanel.add(new JLabel("Poziom:"));
-		addingPanel.add(spinner);
+		addingPanel.add(spinnerAdding);
 		addingPanel.add(addButton);
 		addingPanel.setAlignmentX(JPanel.RIGHT_ALIGNMENT);
 		
@@ -158,9 +211,19 @@ public class UserPanel extends JFrame{
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			mediator.addWord(word.getText(), translation.getText(), 1);
+			mediator.addWord(word.getText(), translation.getText(), (int)spinnerAdding.getValue());
 			word.setText("");
 			translation.setText("");
+			adapter.setNewSet(mediator.getWords(1));
+		}
+		
+	}
+	
+	private class SearchButtonListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//searching through mediator
 			adapter.setNewSet(mediator.getWords(1));
 		}
 		

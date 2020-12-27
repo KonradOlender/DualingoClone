@@ -21,8 +21,8 @@ public class Practise extends LearningMode implements ActionListener{
     				"Niepoprawna odpowiedz",
     				JOptionPane.WARNING_MESSAGE);
 		}
-		//else
-			//przechodzimy do nastepnego pytania
+		else
+			((Practise)this).SetWord(new Word());
 	}
 	
 	@Override

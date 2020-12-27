@@ -7,7 +7,7 @@ import javax.swing.*;
 public class CloseAnswers extends LearningMode implements ActionListener{
 
 	JRadioButton[] answers;
-	//ButtonGroup bg;
+	ButtonGroup bg;
 	int numberOfAnswers = 5;
 	String usersAnswer;
 	
@@ -17,13 +17,13 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 		answers = new JRadioButton[numberOfAnswers];
 		this.panel = new JPanel();
 		this.panel.setLayout(new BoxLayout(panel,1));
-		//bg=new ButtonGroup(); 
+		bg=new ButtonGroup(); 
 		for(int i=0 ;i < numberOfAnswers ; i++)
 		{
 			answers[i] = new JRadioButton();
 			answers[i].setText("Button" + i);
 			answers[i].addActionListener(this);
-			//bg.add(answers[i]);
+			bg.add(answers[i]);
 			this.panel.add(answers[i]);
 		}    
 		this.panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);

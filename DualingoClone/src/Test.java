@@ -20,7 +20,7 @@ public class Test extends LearningMode implements ActionListener{
 			incorrectAnswers ++;
 		else
 			correctAnswers ++;
-		//przechodzimy do nastepnego pytania
+		((Test)this).SetWord(new Word());
 	}
 	
 	@Override

@@ -23,4 +23,11 @@ public class ForeignPolish extends LearningMode{
 	{
 		return "obcy-polski";
 	}
+	
+	@Override
+	public void SetWord(Word word)
+	{
+		super.SetWord(word);
+		label.setText(getQuestion());
+	}
 }

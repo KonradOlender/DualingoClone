@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import model.StateModel;
+
 public class DataMediator{
 
 	private User currentUser;
@@ -25,6 +27,12 @@ public class DataMediator{
 			currentUser.setName("first_user");
 		}
 		//pobieranie uzytkownika z bazy danych po wczesniejszym wpisaniu nazwy uzytkownika
+		else {
+			int id = DatabaseAccess.getInstance().getUser(name).getId();
+			currentUser.setName(name);
+			List<StateModel> states = DatabaseAccess.getInstance().getUserStates(id);
+			//niedokoñczone
+		}
 		return currentUser;
 	}
 	

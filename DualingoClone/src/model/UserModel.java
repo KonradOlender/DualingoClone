@@ -1,6 +1,6 @@
 package model;
 
-public class Level {
+public class UserModel {
 	private int id;
     private String name;
 
@@ -17,8 +17,8 @@ public class Level {
         this.name = name;
     }
 
-    //public Level() { }
-    public Level(int id, String name) {
+    //public User() { }
+    public UserModel(int id, String name) {
         this.id = id;
         this.name = name;
     }

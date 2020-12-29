@@ -1,6 +1,6 @@
 package model;
 
-public class State {
+public class StateModel {
 	private int id;
     private int currentUserLevel;
     private int currentProgress;
@@ -32,7 +32,7 @@ public class State {
     }
 
     //public State() { }
-    public State(int id,int currentUserLevel,int currentProgress,int idUser) {
+    public StateModel(int id,int currentUserLevel,int currentProgress,int idUser) {
         this.id = id;
         this.currentUserLevel = currentUserLevel;
         this.currentProgress = currentProgress;

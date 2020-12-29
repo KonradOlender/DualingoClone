@@ -1,6 +1,6 @@
 package model;
 
-public class Word {
+public class WordModel {
 	private int id;
     private String polish;
     private String foreign;
@@ -32,7 +32,7 @@ public class Word {
     }
 
     //public Word() { }
-    public Word(int id, String polish, String foreign, int idLevel) {
+    public WordModel(int id, String polish, String foreign, int idLevel) {
         this.id = id;
         this.polish = polish;
         this.foreign = foreign;

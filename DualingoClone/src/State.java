@@ -32,4 +32,15 @@ public class State {
 		progress /= Math.pow(10, currentUserLevel + 1);
 		return progress;
 	}
+	
+	
+	//level i progress pobierany z bazy
+	public void setCurrentUserLevel(int cul)
+	{
+		this.currentUserLevel=cul;
+	}
+	public void setCurrentUserProgress(int cup)
+	{
+		this.currentUsersProgress=cup;
+	}
 }

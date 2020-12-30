@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -163,12 +164,18 @@ public class DataMediator{
 		String[] array = new String[1];
 		x.toArray(array);
 		return array;
-		
 	}
 	
 	public SetOfWords getFilteredWords(int size, int level, String searchedPhrase, String language)
 	{
 		return new SetOfWords(10);
+	}
+	
+	public State[] getCurrentUserStates() 
+	{
+		State[] array = new State[0];
+		new ArrayList<State>().toArray(array);
+		return array;
 	}
 	
 	//Nas³uchuje wciœniêcia przycisku, który tworzy quiz
@@ -191,9 +198,9 @@ public class DataMediator{
 	          "Wybierz sposób nauki",
 	          "Ustwienie jêzyka",
 	          JOptionPane.QUESTION_MESSAGE,null,
-	         	new LearningMode[] { //prototyp tu
-	            new ForeignPolish(new Quiz()),
-	            new PolishForeign(new Quiz()),
+	         	new LearningMode[] {
+	            new ForeignPolish(new Quiz(mediator)),
+	            new PolishForeign(new Quiz(mediator)),
 	        }, null);
 	        if(option == null)
 	        	 return;
@@ -218,8 +225,8 @@ public class DataMediator{
 	            "Wybierz rodzaj testu",
 	            JOptionPane.QUESTION_MESSAGE,null,
 	               	new LearningMode[] {
-	                new Practise(currentQuiz, mediator),
-	                new Test(currentQuiz, mediator),
+	                new Practise(currentQuiz),
+	                new Test(currentQuiz),
 	            }, null);
 	         if(option == null)
 	        	 return;
@@ -230,6 +237,5 @@ public class DataMediator{
 	         frame.setVisible(false);
 		}
 	}
-
 	
 }

@@ -7,12 +7,15 @@ import javax.swing.JButton;
 
 public class Quiz extends TypeOfLearning{
 	private JButton nextQuestionButton;
+	private DataMediator mediator;
 	
-	public Quiz()
+	public Quiz(DataMediator mediator)
 	{
 		super();
+		this.mediator = mediator;
 		nextQuestionButton = new JButton("Next Question >");
 		nextQuestionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
 		panel.add(nextQuestionButton);
 	}
 
@@ -20,6 +23,12 @@ public class Quiz extends TypeOfLearning{
 	public void setNextButtonListener(ActionListener al) 
 	{
 		nextQuestionButton.addActionListener(al);
+	}
+	
+	@Override
+	public DataMediator getDataMediator()
+	{
+		return mediator;
 	}
 	
 }

@@ -1,20 +1,15 @@
 import java.awt.event.*;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
-//TODO Poprawic pobiernaie nastepnego slowa
 public class Test extends LearningMode implements ActionListener{
 	private int correctAnswers = 0;
 	private int incorrectAnswers = 0;
-	private DataMediator mediator;
 	
-	public Test(TypeOfLearning tol, DataMediator mediator)
+	public Test(TypeOfLearning tol)
 	{
 		super(tol);
-		this.panel = this.getMainPanel();	
-		this.mediator = mediator;
-		System.out.println(mediator);
+		this.panel = this.getMainPanel();
 		this.setNextButtonListener(this);
 	}
 	
@@ -25,7 +20,21 @@ public class Test extends LearningMode implements ActionListener{
 			incorrectAnswers ++;
 		else
 			correctAnswers ++;
-		((Test)this).SetWord(mediator.nextLearningWord());
+		DataMediator mediator = getDataMediator();
+		Word newWord = mediator.nextLearningWord();
+		if(newWord != null)
+			((Test)this).SetWord(newWord);
+		else
+		{
+			JFrame frame = new JFrame();
+			JPanel panel = new JPanel();
+			int all = correctAnswers+incorrectAnswers;
+			JLabel correctLabel = new JLabel("Poprawne odpowiedzi: " + correctAnswers + "/" + all);
+			JLabel incorrectLabel = new JLabel("Niepoprawne odpowiedzi: " + incorrectAnswers + "/" + all);
+			frame.add(panel);
+			panel.add(correctLabel);
+			panel.add(incorrectLabel);
+		}
 	}
 	
 	@Override

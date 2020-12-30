@@ -25,6 +25,8 @@ abstract public class TypeOfLearning //extends JPanel
 	
 	abstract public void setNextButtonListener(ActionListener al);
 	
+	abstract public DataMediator getDataMediator();
+	
 	public void SetWord(Word word)
 	{
 		this.word = word;

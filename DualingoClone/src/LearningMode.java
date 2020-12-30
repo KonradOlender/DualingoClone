@@ -57,4 +57,10 @@ abstract public class LearningMode extends TypeOfLearning{
 	{
 		tol.setNextButtonListener(al);
 	}
+	
+	@Override
+	public DataMediator getDataMediator()
+	{
+		return tol.getDataMediator();
+	}
 }

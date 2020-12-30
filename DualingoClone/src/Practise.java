@@ -3,15 +3,13 @@ import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-//POPRAWIC POBIERANIE NASTEPNEGO S£OWA
-public class Practise extends LearningMode implements ActionListener{
-	private DataMediator mediator;
 
-	public Practise(TypeOfLearning tol,DataMediator mediator)
+public class Practise extends LearningMode implements ActionListener{
+
+	public Practise(TypeOfLearning tol)
 	{
 		super(tol);
 		this.panel = this.getMainPanel();
-		this.mediator = mediator;
 		this.setNextButtonListener(this);
 	}
 	
@@ -26,7 +24,11 @@ public class Practise extends LearningMode implements ActionListener{
     				JOptionPane.WARNING_MESSAGE);
 		}
 		else
+		{
+			DataMediator mediator = getDataMediator();
 			((Practise)this).SetWord(mediator.nextLearningWord());
+		}
+			
 	}
 	
 	@Override

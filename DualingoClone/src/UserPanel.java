@@ -12,7 +12,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-//poprawic w dekoratorze test i practise
 //panel do zarzadzania swoimi poziomami (powiazanie z pami¹tk¹) - usprawnic
 public class UserPanel extends JFrame{
 	int level = 4;
@@ -38,8 +37,7 @@ public class UserPanel extends JFrame{
 	JComboBox languageListSearching;
 	JComboBox languageListAdding;
 	JComboBox languageListLearning;
-
-
+	JComboBox stateList;
 
 	public UserPanel(DataMediator dm)
 	{
@@ -209,9 +207,12 @@ public class UserPanel extends JFrame{
 		panel.add(progressLabel);
 		double percentage = 100 - mediator.getUserProgress()*100; 
 		progressLabel.setText("Do nastêpnego poziomu brakuje:   " + percentage + " %");
+		JPanel revertPanel = new JPanel();
 		revertLevelButton = new JButton("Cofnij siê do poprzedniego poziomu");
-		//list of 3 or 4 previous user states
-		panel.add(revertLevelButton);
+		stateList = new JComboBox(mediator.getCurrentUserStates());
+		revertPanel.add(stateList);
+		revertPanel.add(revertLevelButton);
+		panel.add(revertPanel);
 		return panel;
 	}
 	

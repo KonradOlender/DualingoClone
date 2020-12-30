@@ -28,10 +28,21 @@ public class DataMediator{
 		}
 		//pobieranie uzytkownika z bazy danych po wczesniejszym wpisaniu nazwy uzytkownika
 		else {
-			int id = DatabaseAccess.getInstance().getUser(name).getId();
+			DatabaseAccess db = DatabaseAccess.getInstance();
+			int id = db.getUser(name).getId();
 			currentUser.setName(name);
-			List<StateModel> states = DatabaseAccess.getInstance().getUserStates(id);
-			//niedokoñczone
+			List<StateModel> states = db.getUserStates(id);
+			
+			int max=0; 
+			for(int i=0 ;i<states.size(); i++){
+				int k=states.get(i).getId();
+				if(k>max) max=k;
+			}
+			State state =new State();
+			state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
+			state.setCurrentUserProgress(states.get(max).getCurrentProgress());
+	//jak zmieniæ State na UserState ? 		
+			//currentUser.SetState((UserState)states.get(max));
 		}
 		return currentUser;
 	}
@@ -67,6 +78,7 @@ public class DataMediator{
 	//crud actions concerning words are executed in a seperate jFrame
 	public void addWords(SetOfWords sow) {
 		//formularz do dowania slowek i moze dodawanie pojedynczo i przeklikuje dodaj nastepne uzytkownik
+		
 	}
 	
 	public void addWord(String word, String translation, int level)
@@ -97,15 +109,20 @@ public class DataMediator{
 	
 	public void deleteWord(Word w) {
 		//database operation after 
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.deleteWord(w);
 	}
 	
 	public void updateUserState(User u) {
 		// after finishing learning it is updated
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.updateState(u);
 	}
 	
 	public void addUser(String name) {
 		//user chooses an option to add a user
-		
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.addUser(name);	
 	}
 	
 	public void startLearning(int level) {

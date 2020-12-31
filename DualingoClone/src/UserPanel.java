@@ -34,10 +34,10 @@ public class UserPanel extends JFrame{
 	JSpinner spinnerSearching;
 	JTable table;
 	JMenuBar menu;
-	JComboBox languageListSearching;
-	JComboBox languageListAdding;
-	JComboBox languageListLearning;
-	JComboBox stateList;
+	JComboBox<String> languageListSearching;
+	JComboBox<String> languageListAdding;
+	JComboBox<String> languageListLearning;
+	JComboBox<State> stateList;
 
 	public UserPanel(DataMediator dm)
 	{
@@ -79,7 +79,7 @@ public class UserPanel extends JFrame{
 		menu = new JMenuBar();
 		JLabel label1 = new JLabel("Wybierz jêzyk:");
 		JLabel label2 = new JLabel("Wybierz poziom:");
-		languageListSearching = new JComboBox(mediator.getLanguages());
+		languageListSearching = new JComboBox<String>(mediator.getLanguages());
 		research = new JTextField("Wyszukaj s³owa");
 		research.addFocusListener(new FocusListener() {
 		    @Override
@@ -123,7 +123,7 @@ public class UserPanel extends JFrame{
 		RadioButtonListener rbl = new RadioButtonListener();
 		ButtonGroup bg = new ButtonGroup();
 		JLabel label1 = new JLabel("Wybierz jêzyk:");
-		languageListLearning = new JComboBox(mediator.getLanguages());
+		languageListLearning = new JComboBox<String>(mediator.getLanguages());
 		panel.add(label1);
 		panel.add(languageListLearning);
 		for(int i=0;i<3;i++)
@@ -154,7 +154,7 @@ public class UserPanel extends JFrame{
 	{
 		JPanel addingPanel = new JPanel();
 		addingPanel.setLayout(new BoxLayout(addingPanel, 1));
-		languageListAdding = new JComboBox(mediator.getLanguages());
+		languageListAdding = new JComboBox<String>(mediator.getLanguages());
 		word = new JTextField();
 		translation = new JTextField();
 		addButton = new JButton("Dodaj");
@@ -209,7 +209,7 @@ public class UserPanel extends JFrame{
 		progressLabel.setText("Do nastêpnego poziomu brakuje:   " + percentage + " %");
 		JPanel revertPanel = new JPanel();
 		revertLevelButton = new JButton("Cofnij siê do poprzedniego poziomu");
-		stateList = new JComboBox(mediator.getCurrentUserStates());
+		stateList = new JComboBox<State>(mediator.getCurrentUserStates());
 		revertPanel.add(stateList);
 		revertPanel.add(revertLevelButton);
 		panel.add(revertPanel);

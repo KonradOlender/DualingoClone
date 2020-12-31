@@ -10,6 +10,7 @@ public class MainWindow extends JFrame implements ActionListener{
 	public JButton loginButton;
 	public JButton registerButton;
 	public DataMediator mediator;
+	public JLabel messageLabel;
 	
 	public MainWindow(DataMediator dm)
 	{
@@ -18,9 +19,11 @@ public class MainWindow extends JFrame implements ActionListener{
 		usernameField = new JTextField();
 		loginButton = new JButton("Zaloguj siê");
 		registerButton = new JButton("Dodaj u¿ytkownika");
+		messageLabel = new JLabel("");
 		panel.setLayout(new BoxLayout(panel, 1));
 		panel.setBorder(new EmptyBorder(10, 5, 2, 5));
 		panel.setAlignmentX(CENTER_ALIGNMENT);
+		panel.add(messageLabel);
 		panel.add(usernameField);
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.add(loginButton);		
@@ -49,6 +52,15 @@ public class MainWindow extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(!mediator.anyUserExists())
+		{
+			JOptionPane.showMessageDialog(new JFrame(),
+    				"Najpierw musisz stworzyæ u¿ytkownika",
+    				"Nie ma takiego u¿ytkownika",
+    				JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+			
 		String enteredName = getUserLogin();
 		if(mediator.userExists(enteredName))
 		{
@@ -58,8 +70,8 @@ public class MainWindow extends JFrame implements ActionListener{
 		}	
 		else
 			JOptionPane.showMessageDialog(new JFrame(),
-    				"Nie ma takiego u¿ytkownika",
     				"Niepoprawna nazwa",
+    				"Nie ma takiego u¿ytkownika",
     				JOptionPane.WARNING_MESSAGE);
 		
 	}
@@ -68,6 +80,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			messageLabel.setText("");
 			mediator.addUser(usernameField.getText());
 		}
 		

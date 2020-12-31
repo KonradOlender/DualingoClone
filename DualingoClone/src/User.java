@@ -6,23 +6,27 @@ public class User {
 	private TypeOfLearning recentTypeofLearning;
 	private LevelOfWordsToLearn strategy;
 	
-	public void SetState(UserState archivedState)
+	//memento
+	public void RestoreState(IUserState archivedState)
 	{
-		this.state = archivedState.getState();
+		this.state = ((UserState)archivedState).getState();
 	}
 	
-	public UserState CreateArchivedUserState()
+	//memento
+	public UserState ArchiveUserState()
 	{
 		UserState x = new UserState();
 		x.setState(state);
 		return x;
 	}
 	
+	//strategy
 	public LearningSet genereteWordToLearn(int size)
 	{
 		return new LearningSet(size);
 	}
 	
+	//strategy
 	public void setLevel(LevelOfWordsToLearn low)
 	{
 		this.strategy = low;
@@ -49,6 +53,7 @@ public class User {
 		return state.getProgress();
 	}
 
+	//memento
 	private class UserState implements IUserState {
 		private State state;
 		

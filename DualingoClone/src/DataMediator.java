@@ -13,6 +13,7 @@ import model.StateModel;
 public class DataMediator{
 
 	private User currentUser;
+	private ArchivedUserStates previousStates;
 	private LearningSet learningSet;
 	private SetOfWords sow;
 	private TypeOfLearning currentQuiz;
@@ -22,38 +23,48 @@ public class DataMediator{
 	}
 	
 	public User getUser(String name) {
-		if(currentUser == null) 
+		/*if(currentUser == null) 
 		{
 			currentUser = new User();
 			currentUser.setName("first_user");
 		}
 		//pobieranie uzytkownika z bazy danych po wczesniejszym wpisaniu nazwy uzytkownika
-		else {
-			DatabaseAccess db = DatabaseAccess.getInstance();
-			int id = db.getUser(name).getId();
-			currentUser.setName(name);
-			List<StateModel> states = db.getUserStates(id);
-			
-			int max=0; 
-			for(int i=0 ;i<states.size(); i++){
-				int k=states.get(i).getId();
-				if(k>max) max=k;
+		else {*/
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		int id = db.getUser(name).getId();
+		currentUser.setName(name);
+		List<StateModel> states = db.getUserStates(id);
+		
+		int max=0; 
+		for(int i=0 ;i<states.size(); i++){
+			int k=states.get(i).getId();
+			if(k>max) max=k;
+		}
+		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
+		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby yzutkownika
+		// w sensie jak sie loguje do programu
+		State state =new State();
+		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
+		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
+		
+		for(int i=0 ;i<states.size(); i++){
+			int k=states.get(i).getId();
+			if(k != max)
+			{
+				State archivedState = new State();
+				archivedState.setCurrentUserLevel(states.get(i).getCurrentUserLevel());
+				archivedState.setCurrentUserProgress(states.get(i).getCurrentProgress());
+				//previousStates.addNewState(archivedState);
 			}
-			State state =new State();
-			state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
-			state.setCurrentUserProgress(states.get(max).getCurrentProgress());
+		}
+			
+			
 	//jak zmieniæ State na UserState ? 		
 			//currentUser.SetState((UserState)states.get(max));
-		}
 		return currentUser;
 	}
 	
 	public String getUserName() {
-		if(currentUser == null) 
-		{
-			currentUser = new User();
-			currentUser.setName("first_user");
-		}
 		return currentUser.getName();
 	}
 	
@@ -130,7 +141,7 @@ public class DataMediator{
 		//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
 		
 		//level here should be also passed
-		currentUser.genereteWordToLearn(1);
+		currentUser.genereteWordToLearn(50);
 		
 		JFrame j = new JFrame();
 		JPanel basicPanel = new JPanel();
@@ -164,6 +175,7 @@ public class DataMediator{
 	
 	public boolean userExists(String name)
 	{
+		//czytanie z bazy danych, szukanie nazwy uzytkownika
 		if(currentUser == null) 
 		{
 			currentUser = new User();
@@ -171,6 +183,18 @@ public class DataMediator{
 		}
 		
 		if(currentUser.getName().equals(name))return true;
+		return false;
+	}
+	
+	public boolean anyUserExists()
+	{
+		//sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1
+		if(currentUser == null) 
+		{
+			currentUser = new User();
+			currentUser.setName("first_user");
+		}
+		
 		return false;
 	}
 	
@@ -193,6 +217,23 @@ public class DataMediator{
 		State[] array = new State[0];
 		new ArrayList<State>().toArray(array);
 		return array;
+	}
+	
+	public void removeState() 
+	{
+		//removes state from the database
+		//think how to do it
+	}
+	
+	public void restoreUserState(int level)
+	{
+		currentUser.RestoreState(
+				previousStates.RestoreState(level));
+	}
+	
+	public void archiveUsersState()
+	{
+		previousStates.addNewState(currentUser.ArchiveUserState());
 	}
 	
 	//Nas³uchuje wciœniêcia przycisku, który tworzy quiz
@@ -254,5 +295,6 @@ public class DataMediator{
 	         frame.setVisible(false);
 		}
 	}
-	
+
+
 }

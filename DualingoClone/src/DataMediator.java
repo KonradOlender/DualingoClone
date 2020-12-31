@@ -22,155 +22,9 @@ public class DataMediator{
 		return sow;
 	}
 	
-	public User getUser(String name) {
-		/*if(currentUser == null) 
-		{
-			currentUser = new User();
-			currentUser.setName("first_user");
-		}
-		//pobieranie uzytkownika z bazy danych po wczesniejszym wpisaniu nazwy uzytkownika
-		else {*/
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		int id = db.getUser(name).getId();
-		currentUser.setName(name);
-		List<StateModel> states = db.getUserStates(id);
-		
-		int max=0; 
-		for(int i=0 ;i<states.size(); i++){
-			int k=states.get(i).getId();
-			if(k>max) max=k;
-		}
-		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
-		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby yzutkownika
-		// w sensie jak sie loguje do programu
-		State state =new State();
-		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
-		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
-		
-		for(int i=0 ;i<states.size(); i++){
-			int k=states.get(i).getId();
-			if(k != max)
-			{
-				State archivedState = new State();
-				archivedState.setCurrentUserLevel(states.get(i).getCurrentUserLevel());
-				archivedState.setCurrentUserProgress(states.get(i).getCurrentProgress());
-				//previousStates.addNewState(archivedState);
-			}
-		}
-			
-			
-	//jak zmieniæ State na UserState ? 		
-			//currentUser.SetState((UserState)states.get(max));
-		return currentUser;
-	}
-	
-	public String getUserName() {
-		return currentUser.getName();
-	}
-	
-	public int getUserLevel() {
-		if(currentUser == null) 
-		{
-			currentUser = new User();
-			currentUser.setName("first_user");
-		}
-		return currentUser.getCurrentLevel();
-	}
-	
-	
-	public double getUserProgress() {
-		if(currentUser == null) 
-		{
-			currentUser = new User();
-			currentUser.setName("first_user");
-		}
-		return currentUser.getCurrentProgress();
-	}
-	
-	//crud actions concerning words are executed in a seperate jFrame
-	public void addWords(SetOfWords sow) {
-		//formularz do dowania slowek i moze dodawanie pojedynczo i przeklikuje dodaj nastepne uzytkownik
-		
-	}
-	
-	public void addWord(String word, String translation, int level)
+	public SetOfWords getFilteredWords(int size, int level, String searchedPhrase, String language)
 	{
-		if(sow == null)
-			sow = new SetOfWords(level);
-		
-		Word word2 = new Word();
-		word2.translation = translation;
-		word2.word = word;
-		sow.addWord(word2);
-		System.out.println(word + " + " + translation + " + " + level);
-	}
-	
-	public void deleteWord(String word, String translation, int level)
-	{
-		int index = -1;
-		List<Word> lista = sow.listOfWords;
-		for(int i = 0; i < sow.getSize(); i++)
-		{
-			Word word2 =lista.get(i);
-			if(word2.word.equals(word) && word2.translation.equals(translation))
-				index = i;
-		}
-		if(index > -1)
-			sow.listOfWords.remove(index);
-	}
-	
-	public void deleteWord(Word w) {
-		//database operation after 
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.deleteWord(w);
-	}
-	
-	public void updateUserState(User u) {
-		// after finishing learning it is updated
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.updateState(u);
-	}
-	
-	public void addUser(String name) {
-		//user chooses an option to add a user
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.addUser(name);	
-	}
-	
-	public void startLearning(int level) {
-		//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
-		
-		//level here should be also passed
-		currentUser.genereteWordToLearn(50);
-		
-		JFrame j = new JFrame();
-		JPanel basicPanel = new JPanel();
-		basicPanel.add(currentQuiz.createPanel());
-		j.add(basicPanel);			
-		j.setVisible(true);
-		j.pack();
-		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-	}
-	
-	public Word nextLearningWord() {
-		// tu iterator
-		return new Word();
-	}
-	
-	public ActionListener getCreationQuizListener(JFrame frame)
-	{
-		return new CreationQuizDialog(frame, this);
-	}
-	
-	public void startMainWindow()
-	{
-		MainWindow mainWindow = new MainWindow(this);
-	}
-	
-	public void openUserPanel()
-	{
-		UserPanel userPanel = new UserPanel(this);
+		return new SetOfWords(10);
 	}
 	
 	public boolean userExists(String name)
@@ -207,16 +61,143 @@ public class DataMediator{
 		return array;
 	}
 	
-	public SetOfWords getFilteredWords(int size, int level, String searchedPhrase, String language)
-	{
-		return new SetOfWords(10);
+	public User getUser(String name) {
+		/*if(currentUser == null) 
+		{
+			currentUser = new User();
+			currentUser.setName("first_user");
+		}
+		//pobieranie uzytkownika z bazy danych po wczesniejszym wpisaniu nazwy uzytkownika
+		else {*/
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		int id = db.getUser(name).getId();
+		currentUser.setName(name);
+		List<StateModel> states = db.getUserStates(id);
+		
+		int max=0; 
+		for(int i=0 ;i<states.size(); i++){
+			int k=states.get(i).getId();
+			if(k>max) max=k;
+		}
+		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
+		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby yzutkownika
+		// w sensie jak sie loguje do programu
+		State state =new State();
+		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
+		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
+		
+		previousStates = new ArchivedUserStates(this);
+		
+		for(int i=0 ;i<states.size(); i++){
+			int k=states.get(i).getId();
+			if(k != max)
+			{
+				State archivedState = new State();
+				archivedState.setCurrentUserLevel(states.get(i).getCurrentUserLevel());
+				archivedState.setCurrentUserProgress(states.get(i).getCurrentProgress());
+				currentUser.loadState(archivedState);
+				previousStates.addNewState(currentUser.ArchiveUserState());
+			}
+		}
+		currentUser.loadState(state);
+		return currentUser;
 	}
 	
-	public State[] getCurrentUserStates() 
+	public void addWord(String word, String translation, int level)
 	{
-		State[] array = new State[0];
-		new ArrayList<State>().toArray(array);
-		return array;
+		if(sow == null)
+			sow = new SetOfWords(level);
+		
+		Word word2 = new Word();
+		word2.translation = translation;
+		word2.word = word;
+		sow.addWord(word2);
+		System.out.println(word + " + " + translation + " + " + level);
+	}
+	
+	public void deleteWord(String word, String translation, int level)
+	{
+		int index = -1;
+		List<Word> lista = sow.listOfWords;
+		for(int i = 0; i < sow.getSize(); i++)
+		{
+			Word word2 =lista.get(i);
+			if(word2.word.equals(word) && word2.translation.equals(translation))
+				index = i;
+		}
+		if(index > -1)
+			sow.listOfWords.remove(index);
+	}
+	
+	public Word nextLearningWord() {
+		// tu iterator
+		return new Word();
+	}
+	
+	public String getUserName() {
+		return currentUser.getName();
+	}
+	
+	public int getUserLevel() {
+		return currentUser.getCurrentLevel();
+	}
+	
+	
+	public double getUserProgress() {
+		return currentUser.getCurrentProgress();
+	}
+	
+	public void deleteWord(Word w) {
+		//database operation after 
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.deleteWord(w);
+	}
+	
+	public void updateUserState(User u) {
+		// after finishing learning it is updated
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.updateState(u);
+	}
+
+	//user chooses an option to add a user
+	public void addUser(String name) {
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.addUser(name);	
+	}
+	
+	//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
+	public void startLearning(int level) {
+		//level here should be also passed
+		currentUser.genereteWordToLearn(50);
+		
+		JFrame j = new JFrame();
+		JPanel basicPanel = new JPanel();
+		basicPanel.add(currentQuiz.createPanel());
+		j.add(basicPanel);			
+		j.setVisible(true);
+		j.pack();
+		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+	}
+	
+	public ActionListener getCreationQuizListener(JFrame frame)
+	{
+		return new CreationQuizDialog(frame, this);
+	}
+	
+	public void startMainWindow()
+	{
+		MainWindow mainWindow = new MainWindow(this);
+	}
+	
+	public void openUserPanel()
+	{
+		UserPanel userPanel = new UserPanel(this);
+	}
+	
+	public IUserState[] getCurrentUserStates() 
+	{
+		return previousStates.getStatesArray();
 	}
 	
 	public void removeState() 
@@ -225,14 +206,15 @@ public class DataMediator{
 		//think how to do it
 	}
 	
-	public void restoreUserState(int level)
+	public void restoreUserState(int index)
 	{
 		currentUser.RestoreState(
-				previousStates.RestoreState(level));
+				previousStates.RestoreState(index));
 	}
 	
 	public void archiveUsersState()
 	{
+		//adding state into database here also
 		previousStates.addNewState(currentUser.ArchiveUserState());
 	}
 	

@@ -26,6 +26,11 @@ public class User {
 		return new LearningSet(size);
 	}
 	
+	public void loadState(State state)
+	{
+		this.state = state;
+	}
+	
 	//strategy
 	public void setLevel(LevelOfWordsToLearn low)
 	{

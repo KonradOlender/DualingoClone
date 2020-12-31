@@ -37,7 +37,7 @@ public class UserPanel extends JFrame{
 	JComboBox<String> languageListSearching;
 	JComboBox<String> languageListAdding;
 	JComboBox<String> languageListLearning;
-	JComboBox<State> stateList;
+	JComboBox<IUserState> stateList;
 
 	public UserPanel(DataMediator dm)
 	{
@@ -207,9 +207,26 @@ public class UserPanel extends JFrame{
 		panel.add(progressLabel);
 		double percentage = 100 - mediator.getUserProgress()*100; 
 		progressLabel.setText("Do nastêpnego poziomu brakuje:   " + percentage + " %");
+		JButton saveStateButton = new JButton("Zapisz aktualny stan");
+		panel.add(saveStateButton);
+		saveStateButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				mediator.archiveUsersState();
+			}
+		});
+		
 		JPanel revertPanel = new JPanel();
 		revertLevelButton = new JButton("Cofnij siê do poprzedniego poziomu");
-		stateList = new JComboBox<State>(mediator.getCurrentUserStates());
+		revertLevelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				mediator.restoreUserState(stateList.getSelectedIndex());
+			}
+		});
+		stateList = new JComboBox<IUserState>(mediator.getCurrentUserStates());
 		revertPanel.add(stateList);
 		revertPanel.add(revertLevelButton);
 		panel.add(revertPanel);

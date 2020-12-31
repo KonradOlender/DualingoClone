@@ -1,7 +1,8 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArchivedUserStates {
-	private List<IUserState> stateList;
+	private List<IUserState> stateList = new ArrayList<IUserState>();
 	private DataMediator mediator;
 	
 	public ArchivedUserStates(DataMediator mediator)
@@ -21,8 +22,15 @@ public class ArchivedUserStates {
 		stateList.remove(userState);
 	}
 	
-	public IUserState RestoreState(int level)
+	public IUserState RestoreState(int index)
 	{
-		return stateList.get(0);
+		return stateList.get(index);
+	}
+
+	public IUserState[] getStatesArray() 
+	{
+		IUserState[] array = new IUserState[stateList.size()];
+		stateList.toArray(array);
+		return array;
 	}
 }

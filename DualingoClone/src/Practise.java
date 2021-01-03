@@ -26,7 +26,13 @@ public class Practise extends LearningMode implements ActionListener{
 		else
 		{
 			DataMediator mediator = getDataMediator();
-			((Practise)this).SetWord(mediator.nextLearningWord());
+			Word newWord = mediator.nextLearningWord();
+			if(newWord == null)
+			{
+				mediator.endLearning();
+				return;
+			}
+			((Practise)this).SetWord(newWord);
 		}
 			
 	}

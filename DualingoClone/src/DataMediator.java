@@ -1,6 +1,8 @@
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.*;
 
 import javax.swing.ComboBoxModel;
@@ -122,12 +124,11 @@ public class DataMediator{
 		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
 		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby yzutkownika
 		// w sensie jak sie loguje do programu
+		previousStates = new ArchivedUserStates(this);
 		if(states.size() == 0) return currentUser;
 		State state =new State();
 		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
 		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
-		
-		previousStates = new ArchivedUserStates(this);
 		
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
@@ -142,6 +143,11 @@ public class DataMediator{
 		}
 		currentUser.loadState(state);
 		return currentUser;
+	}
+	
+	public void endLearning()
+	{
+		currentUser.increasePoints(learningSet.points);
 	}
 	
 	public String getUserName() {
@@ -178,7 +184,7 @@ public class DataMediator{
 	//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
 	public void startLearning(int level) {
 		//level here should be also passed
-		currentUser.genereteWordToLearn(50);
+		learningSet = currentUser.genereteWordToLearn(50);
 		
 		JFrame j = new JFrame();
 		JPanel basicPanel = new JPanel();
@@ -186,7 +192,33 @@ public class DataMediator{
 		j.add(basicPanel);			
 		j.setVisible(true);
 		j.pack();
-		j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		j.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		j.addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowClosing(WindowEvent e) 
+			{
+				openUserPanel();
+			}
+
+			@Override
+			public void windowOpened(WindowEvent e) { }
+			
+			@Override
+			public void windowClosed(WindowEvent e) { }
+
+			@Override
+			public void windowIconified(WindowEvent e) { }
+
+			@Override
+			public void windowDeiconified(WindowEvent e) { } 
+
+			@Override
+			public void windowActivated(WindowEvent e) { }
+
+			@Override
+			public void windowDeactivated(WindowEvent e) { }
+		});
 		
 	}
 	
@@ -203,12 +235,38 @@ public class DataMediator{
 	public void openUserPanel()
 	{
 		UserPanel userPanel = new UserPanel(this);
+		userPanel.addWindowListener(new WindowListener() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
+					archiveUsersState();
+			}
+
+			@Override
+			public void windowOpened(WindowEvent e) { }
+			
+			@Override
+			public void windowClosed(WindowEvent e) { }
+
+			@Override
+			public void windowIconified(WindowEvent e) { }
+
+			@Override
+			public void windowDeiconified(WindowEvent e) { } 
+
+			@Override
+			public void windowActivated(WindowEvent e) { }
+
+			@Override
+			public void windowDeactivated(WindowEvent e) { }
+		});
 	}
 	
 	public IUserState[] getCurrentUserStates() 
 	{
-		//return new IUserState[0];
-		return previousStates.getStatesArray();
+		return new IUserState[0];
+		//return previousStates.getStatesArray();
 	}
 	
 	public void removeState() 
@@ -279,7 +337,7 @@ public class DataMediator{
 	         
 	         startLearning(
 	        		 ((UserPanel)frame).getChoosenLevel());
-	         frame.setVisible(false);
+	         frame.dispose();
 		}
 	}
 

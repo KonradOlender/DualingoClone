@@ -2,7 +2,7 @@
 public class State {
 	private int currentUserLevel = 1;
 	private int currentUsersProgress = 0;
-	private static final int MAX_LEVEL = 4;
+	public static final int MAX_LEVEL = 4;
 	
 	private void advance()
 	{

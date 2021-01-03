@@ -4,6 +4,7 @@ public class LearningSet {
 	private int size;
 	private LevelOfWordsToLearn strategy;
 	private List<Word> learningSet;
+	public int points = 1;
 	
 	public LearningSet(int size)
 	{

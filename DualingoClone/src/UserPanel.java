@@ -202,7 +202,10 @@ public class UserPanel extends JFrame{
 		username.setText("Nazwa u¿ytkownika:   " + mediator.getUserName());
 		JLabel levelLabel = new JLabel();
 		panel.add(levelLabel);
-		levelLabel.setText("Poziom:   " + mediator.getUserLevel());
+		int numberUsersLevel = mediator.getUserLevel();
+		UserLevelsNames usersLevel = 
+				UserLevelsNames.getLevelsName(numberUsersLevel);
+		levelLabel.setText("Poziom:   " + usersLevel);
 		JLabel progressLabel = new JLabel();
 		panel.add(progressLabel);
 		double percentage = 100 - mediator.getUserProgress()*100; 

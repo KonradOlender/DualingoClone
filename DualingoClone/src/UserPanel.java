@@ -265,7 +265,8 @@ public class UserPanel extends JFrame{
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			mediator.addWord(word.getText(), translation.getText(), (int)spinnerAdding.getValue());
+			String language = (String) languageListSearching.getSelectedItem();
+			mediator.addWord(word.getText(), translation.getText(), (int)spinnerAdding.getValue(), language);
 			word.setText("");
 			translation.setText("");
 			updateListOfWords();

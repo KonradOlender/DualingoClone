@@ -45,7 +45,7 @@ public class Database {
     public boolean createTables()  {
     	
     	String createLevel = "CREATE TABLE IF NOT EXISTS level (id_level INTEGER PRIMARY KEY AUTOINCREMENT, name_level varchar(100))";
-    	String createWord = "CREATE TABLE IF NOT EXISTS word (id_word INTEGER PRIMARY KEY AUTOINCREMENT, polish varchar(100), foreign varchar(100), idLevel int";
+    	String createWord = "CREATE TABLE IF NOT EXISTS word (id_word INTEGER PRIMARY KEY AUTOINCREMENT, word VARCHAR(100), translation VARCHAR(100), idLevel int)";
     	String createUser = "CREATE TABLE IF NOT EXISTS user (id_user INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(100))";
     	String createState = "CREATE TABLE IF NOT EXISTS state (id_state INTEGER PRIMARY KEY AUTOINCREMENT, currentUserLevel int, currentProgress int, idUser int)";
     	
@@ -60,6 +60,17 @@ public class Database {
             return false;
         }
         return true;
+    }
+    
+    //usuwanie wybranej tabeli
+    public void dropTable(String name) {
+  	  try {
+            stat.execute("DROP TABLE "+ name);
+            
+        } catch (SQLException e) {
+            System.err.println("Blad przy usuwaniu tabeli " + name);
+            e.printStackTrace();
+        }
     }
     
     //dodawanie danych
@@ -77,12 +88,12 @@ public class Database {
         return true;
     }
 
-    public boolean insertWord(String polish, String foreign, int idLevel) {
+    public boolean insertWord(String word, String translation, int idLevel) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
                     "insert into word values (NULL, ?, ?, ?);");
-            prepStmt.setString(1, polish);
-            prepStmt.setString(2, foreign);
+            prepStmt.setString(1, word);
+            prepStmt.setString(2, translation);
             prepStmt.setInt(3, idLevel);
             prepStmt.execute();
         } catch (SQLException e) {
@@ -147,13 +158,13 @@ public class Database {
         try {
             ResultSet result = stat.executeQuery("SELECT * FROM word");
             int id, idLevel;
-            String polish, foreign;
+            String word, translation;
             while(result.next()) {
                 id = result.getInt("id_word");
-                polish = result.getString("polish");
-                foreign = result.getString("foreign");
+                word = result.getString("word");
+                translation = result.getString("translation");
                 idLevel = result.getInt("idLevel");
-                words.add(new WordModel(id, polish, foreign, idLevel));
+                words.add(new WordModel(id, word, translation, idLevel));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -205,13 +216,13 @@ public class Database {
   	  try {
             ResultSet result = stat.executeQuery("SELECT * FROM word WHERE idLevel=\""+level+"\"");
             int id, idLevel;
-            String polish, foreign;
+            String word, translation;
             while(result.next()) {
                 id = result.getInt("id_word");
-                polish = result.getString("polish");
-                foreign = result.getString("foreign");
+                word = result.getString("word");
+                translation = result.getString("translation");
                 idLevel = result.getInt("idLevel");
-                words.add(new WordModel(id, polish, foreign, idLevel));
+                words.add(new WordModel(id, word, translation, idLevel));
             }
         } catch (SQLException e) {
             e.printStackTrace();

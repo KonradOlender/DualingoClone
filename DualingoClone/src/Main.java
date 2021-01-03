@@ -8,5 +8,7 @@ public class Main {
 		DataMediator m = new DataMediator();
 		m.startMainWindow();
 		//m.openUserPanel();
+		
+		m.allDatabase();
 	}
 }

@@ -40,6 +40,12 @@ public class DataMediator{
 		return false;
 	}
 	
+//sprawdzanie bazy
+	public void allDatabase() {
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.printAll();
+	}
+	
 	public boolean anyUserExists()
 	{
 		//sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1

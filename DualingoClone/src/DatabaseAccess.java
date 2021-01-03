@@ -1,5 +1,6 @@
 import java.util.List;
 
+import model.LevelModel;
 import model.StateModel;
 import model.UserModel;
 import model.WordModel;
@@ -10,6 +11,10 @@ public class DatabaseAccess {
 	
 	private DatabaseAccess() { 
 		data = new Database();
+		
+		
+		//data.dropTable("user");
+		//data = new Database();
 	}
 	
 	public static DatabaseAccess getInstance()
@@ -24,6 +29,34 @@ public class DatabaseAccess {
 		return users.get(0);
 	}
 	
+//SPRAWDZENIE BAZY
+	//pobieranie wszytkich u¿ytkowników
+	public List<UserModel> getUsers() {
+		List<UserModel> users = data.selectUsers();
+		return users;
+	}
+	public void printAll() {
+        System.out.println("Level table");
+		List<LevelModel> levels = data.selectLevels();
+        for(LevelModel c: levels)
+            System.out.println(c);
+        
+        System.out.println("Word table");
+		List<WordModel> words = data.selectWords();
+        for(WordModel c: words)
+            System.out.println(c);
+
+        System.out.println("User table");
+		List<UserModel> users = data.selectUsers();
+        for(UserModel c: users)
+            System.out.println(c);
+
+        System.out.println("State table");
+		List<StateModel> states = data.selectStates();
+        for(StateModel c: states)
+            System.out.println(c);
+	}
+	
 	//pobieranie stanów u¿ytkownika
 	public List<StateModel> getUserStates(int id) {
 		List<StateModel> states = data.selectStateWhereUserId(id);
@@ -34,7 +67,7 @@ public class DatabaseAccess {
 	public void deleteWord(Word word) {
 		List<WordModel> words = data.selectWords();
 		for(WordModel wm: words) {
-			if(wm.getPolish() == word.getTranslation() && wm.getForeign() == word.getTranslation()) {
+			if(wm.getTranslation() == word.getTranslation() && wm.getWord() == word.getTranslation()) {
 				int id = wm.getId();
 				data.deleteWordWhereId(id);
 			}

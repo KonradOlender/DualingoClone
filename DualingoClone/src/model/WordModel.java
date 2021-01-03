@@ -2,8 +2,8 @@ package model;
 
 public class WordModel {
 	private int id;
-    private String polish;
-    private String foreign;
+    private String word;   //foreign
+    private String translation;   //polish
     private int idLevel;
 
     public int getId() {
@@ -12,17 +12,17 @@ public class WordModel {
     public void setId(int id) {
         this.id = id;
     }
-    public String getPolish() {
-        return polish;
+    public String getWord() {
+        return word;
     }
-    public void setPolish(String polish) {
-        this.polish = polish;
+    public void setWord(String word) {
+        this.word = word;
     }
-    public String getForeign() {
-        return foreign;
+    public String getTranslation() {
+        return translation;
     }
-    public void setForeign(String foreign) {
-        this.foreign = foreign;
+    public void setTranslation(String translation) {
+        this.translation = translation;
     }
     public int getIdLevel() {
         return idLevel;
@@ -32,15 +32,15 @@ public class WordModel {
     }
 
     //public Word() { }
-    public WordModel(int id, String polish, String foreign, int idLevel) {
+    public WordModel(int id, String word, String translation, int idLevel) {
         this.id = id;
-        this.polish = polish;
-        this.foreign = foreign;
+        this.word = word;
+        this.translation = translation;
         this.idLevel = idLevel;
     }
 
     @Override
     public String toString() {
-        return "["+id+"] - "+polish+" "+foreign+" - "+idLevel;
+        return "["+id+"] - "+translation+" "+translation+" - "+idLevel;
     }
 }

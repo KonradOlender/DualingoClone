@@ -58,6 +58,11 @@ public class User {
 		return state.getProgress();
 	}
 
+	public void increasePoints(int points)
+	{
+		state.increaseProgress(points);
+	}
+	
 	//memento
 	private class UserState implements IUserState {
 		private State state;

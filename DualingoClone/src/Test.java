@@ -34,6 +34,7 @@ public class Test extends LearningMode implements ActionListener{
 			frame.add(panel);
 			panel.add(correctLabel);
 			panel.add(incorrectLabel);
+			mediator.endLearning();
 		}
 	}
 	

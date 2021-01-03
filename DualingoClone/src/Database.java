@@ -8,7 +8,8 @@
   import java.util.LinkedList;
   import java.util.List;
 
-  import model.LevelModel;
+import model.LanguageModel;
+import model.LevelModel;
   import model.StateModel;
   import model.UserModel;
   import model.WordModel;
@@ -45,15 +46,17 @@ public class Database {
     public boolean createTables()  {
     	
     	String createLevel = "CREATE TABLE IF NOT EXISTS level (id_level INTEGER PRIMARY KEY AUTOINCREMENT, name_level varchar(100))";
-    	String createWord = "CREATE TABLE IF NOT EXISTS word (id_word INTEGER PRIMARY KEY AUTOINCREMENT, word VARCHAR(100), translation VARCHAR(100), idLevel int)";
+    	String createWord = "CREATE TABLE IF NOT EXISTS word (id_word INTEGER PRIMARY KEY AUTOINCREMENT, word VARCHAR(100), translation VARCHAR(100), idLevel int, idLanguage int)";
     	String createUser = "CREATE TABLE IF NOT EXISTS user (id_user INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(100))";
     	String createState = "CREATE TABLE IF NOT EXISTS state (id_state INTEGER PRIMARY KEY AUTOINCREMENT, currentUserLevel int, currentProgress int, idUser int)";
+    	String createLanguage = "CREATE TABLE IF NOT EXISTS language (id_language INTEGER PRIMARY KEY AUTOINCREMENT, name_language varchar(100))";
     	
     	try {
             stat.execute(createLevel);
             stat.execute(createWord);
             stat.execute(createUser);
             stat.execute(createState);
+            stat.execute(createLanguage);
         } catch (SQLException e) {
             System.err.println("Blad przy tworzeniu tabeli");
             e.printStackTrace();
@@ -88,13 +91,14 @@ public class Database {
         return true;
     }
 
-    public boolean insertWord(String word, String translation, int idLevel) {
+    public boolean insertWord(String word, String translation, int idLevel, int idLanguage) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into word values (NULL, ?, ?, ?);");
+                    "insert into word values (NULL, ?, ?, ?, ?);");
             prepStmt.setString(1, word);
             prepStmt.setString(2, translation);
             prepStmt.setInt(3, idLevel);
+            prepStmt.setInt(4, idLanguage);
             prepStmt.execute();
         } catch (SQLException e) {
             System.err.println("Blad przy dodawaniu slowa do bazy");
@@ -133,6 +137,20 @@ public class Database {
         }
         return true;
     }
+
+    public boolean insertLanguage(String name) {
+        try {
+            PreparedStatement prepStmt = conn.prepareStatement(
+                    "insert into language values (NULL, ?);");
+            prepStmt.setString(1, name);
+            prepStmt.execute();
+        } catch (SQLException e) {
+            System.err.println("Blad przy dodawaniu jezyka do bazy");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
     
     //zwracanie list wszytkiego co jest w bazie 
     public List<LevelModel> selectLevels() {
@@ -157,14 +175,15 @@ public class Database {
         List<WordModel> words = new LinkedList<WordModel>();
         try {
             ResultSet result = stat.executeQuery("SELECT * FROM word");
-            int id, idLevel;
+            int id, idLevel, idLanguage;
             String word, translation;
             while(result.next()) {
                 id = result.getInt("id_word");
                 word = result.getString("word");
                 translation = result.getString("translation");
                 idLevel = result.getInt("idLevel");
-                words.add(new WordModel(id, word, translation, idLevel));
+                idLanguage = result.getInt("idLanguage");
+                words.add(new WordModel(id, word, translation, idLevel, idLanguage));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -209,20 +228,39 @@ public class Database {
         }
         return states;
     }
+
+    public List<LanguageModel> selectLanguages() {
+        List<LanguageModel> languages = new LinkedList<LanguageModel>();
+        try {
+            ResultSet result = stat.executeQuery("SELECT * FROM language");
+            int id;
+            String name;
+            while(result.next()) {
+                id = result.getInt("id_language");
+                name = result.getString("name");
+                languages.add(new LanguageModel(id, name));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return languages;
+    }
     
     //wybieranie z warunkiem - zwracane s¹ listy 
-    public List<WordModel> selectWordWhereLevel(int level) {
+    public List<WordModel> selectWordsWhereLevel(int level) {
   	  List<WordModel> words = new LinkedList<WordModel>();
   	  try {
             ResultSet result = stat.executeQuery("SELECT * FROM word WHERE idLevel=\""+level+"\"");
-            int id, idLevel;
+            int id, idLevel, idLanguage;
             String word, translation;
             while(result.next()) {
                 id = result.getInt("id_word");
                 word = result.getString("word");
                 translation = result.getString("translation");
                 idLevel = result.getInt("idLevel");
-                words.add(new WordModel(id, word, translation, idLevel));
+                idLanguage = result.getInt("idLanguage");
+                words.add(new WordModel(id, word, translation, idLevel, idLanguage));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -230,6 +268,30 @@ public class Database {
         }
         return words;
     }
+
+    //wyszukiwanie s³ow o podanych warunkach
+    public List<WordModel> selectWordsWhereConditions(int level, String searchedPhrase, String language) {
+    	List<WordModel> words = new LinkedList<WordModel>();
+    	  try {
+              ResultSet result = stat.executeQuery("SELECT * FROM word WHERE idLevel=\""+level+"\", idLanguage=\""+language+"\", ( word=\"%"+searchedPhrase+"%\" OR translation=\"%"+searchedPhrase+"%\")");
+              int id, idLevel, idLanguage;
+              String word, translation;
+              while(result.next()) {
+                  id = result.getInt("id_word");
+                  word = result.getString("word");
+                  translation = result.getString("translation");
+                  idLevel = result.getInt("idLevel");
+                  idLanguage = result.getInt("idLanguage");
+                  words.add(new WordModel(id, word, translation, idLevel, idLanguage));
+              }
+          } catch (SQLException e) {
+              e.printStackTrace();
+              return null;
+          }
+          return words;
+    }
+    
+    
 
     public List<UserModel> selectUserWhereName(String user_name) {
   	  List<UserModel> users = new LinkedList<UserModel>();
@@ -299,6 +361,15 @@ public class Database {
     public void deleteStateWhereId(int id) {
   	  try {
             stat.execute("DELETE FROM state WHERE id_state=\"" +id +"\"");
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteLanguageWhereId(int id) {
+  	  try {
+            stat.execute("DELETE FROM language WHERE id_language=\"" +id +"\"");
             
         } catch (SQLException e) {
             e.printStackTrace();

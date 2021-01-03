@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 import model.LevelModel;
@@ -13,8 +14,8 @@ public class DatabaseAccess {
 		data = new Database();
 		
 		
-		//data.dropTable("user");
-		//data = new Database();
+		data.dropTable("word");
+		data = new Database();
 	}
 	
 	public static DatabaseAccess getInstance()
@@ -23,28 +24,49 @@ public class DatabaseAccess {
 		return database;
 	}
 	
-	//pobieranie u¿ytkownika
-	public UserModel getUser(String name) {
-		List<UserModel> users = data.selectUserWhereName(name);
-		return users.get(0);
+	
+	//pobieranie wszytkich u¿ytkowników
+	public List<UserModel> getUsers() {
+		List<UserModel> users = data.selectUsers();
+		if(users.size()==0) return null;
+		return users;
 	}
 
+	//pobieranie u¿ytkowników o podanym imieniu
+	public List<User> getUser(String name) {
+		List<UserModel> usersModel = data.selectUserWhereName(name);
+		List<User> users = new ArrayList<User>();
+		User user;
+		for(UserModel um : usersModel) {
+			user = new User();
+			user.setName(um.getName());
+			users.add(user);
+		}
+		return users;
+	}
+
+	//pobieranie ID u¿ytkowników o podanym imieniu
+	public List<Integer> getUserId(String name) {
+		List<UserModel> usersModel = data.selectUserWhereName(name);
+		List<Integer> users = new ArrayList<Integer>();
+		int id;
+		for(UserModel um : usersModel) {
+			id = um.getId();
+			users.add(id);
+		}
+		return users;
+	}
+	
+	//dodawanie u¿ytkownika
+	public void addUser(String name) {
+		data.insertUser(name);
+	}
+	
 	
 	//pobieranie stanów u¿ytkownika
 	public List<StateModel> getUserStates(int id) {
 		List<StateModel> states = data.selectStateWhereUserId(id);
 		return states;
-	}
-	
-	//usuwanie s³owa z bazy 
-	public void deleteWord(Word word) {
-		List<WordModel> words = data.selectWords();
-		for(WordModel wm: words) {
-			if(wm.getTranslation() == word.getTranslation() && wm.getWord() == word.getTranslation()) {
-				int id = wm.getId();
-				data.deleteWordWhereId(id);
-			}
-		}
 	}
 	
 	//aktualizowanie stanu - dodanie nowego stanu do bazy 
@@ -72,17 +94,46 @@ public class DatabaseAccess {
 		data.insertState(currentUserLevel, currentProgress, idUser);
 	}
 	
-	//dodawanie u¿ytkownika
-	public void addUser(String name) {
-		data.insertUser(name);
+	
+	//usuwanie s³owa z bazy 
+	public void deleteWord(Word word) {
+		List<WordModel> words = data.selectWords();
+		for(WordModel wm: words) {
+			if(wm.getTranslation() == word.getTranslation() && wm.getWord() == word.getWord()) {
+				int id = wm.getId();
+				data.deleteWordWhereId(id);
+			}
+		}
 	}
 	
-	//pobieranie wszytkich u¿ytkowników
-	public List<UserModel> getUsers() {
-		List<UserModel> users = data.selectUsers();
-		if(users.size()==0) return null;
-		return users;
-	}
+	//pobieranie s³ow z bazy spelniajacych podane warunki
+    public SetOfWords selectWordsWhereConditions(int level, String searchedPhrase, String language) {
+		List<WordModel> words = data.selectWordsWhereConditions(level, searchedPhrase, language);
+		SetOfWords sow = new SetOfWords(level);
+		Word word;
+		for(WordModel wm : words) {
+			word = new Word(wm.getWord(), wm.getTranslation());
+			sow.addWord(word);
+		}
+		return sow;
+    }
+
+	//pobieranie s³ow z bazy z danego poziomu
+    public SetOfWords selectWordsWhereLevel(int level) {
+		List<WordModel> words = data.selectWordsWhereLevel(level);
+		SetOfWords sow = new SetOfWords(level);
+		Word word;
+		for(WordModel wm : words) {
+			word = new Word(wm.getWord(), wm.getTranslation());
+			sow.addWord(word);
+		}
+		return sow;
+    }
+	
+
+    public void closeConnection() {
+    	data.closeConnection();
+    }
 	
 //SPRAWDZENIE BAZY
 	public void printAll() {

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import model.LanguageModel;
 import model.LevelModel;
 import model.StateModel;
 import model.UserModel;
@@ -62,6 +63,11 @@ public class DatabaseAccess {
 		data.insertUser(name);
 	}
 	
+
+	//dodawanie stanu
+	public void addState(int currentUserLevel, int currentProgress, int idUser) {
+		data.insertState(currentUserLevel, currentProgress, idUser);
+	}
 	
 	//pobieranie stanów u¿ytkownika
 	public List<StateModel> getUserStates(int id) {
@@ -94,6 +100,12 @@ public class DatabaseAccess {
 		data.insertState(currentUserLevel, currentProgress, idUser);
 	}
 	
+	
+	//dodawanie s³owa z bazy 
+		public void addWord(String word, String translation, int idLevel, String language) {
+			int idLanguage = data.selectLanguageWhereName(language).get(0).getId();
+			data.insertWord(word, translation, idLevel, idLanguage);
+		}
 	
 	//usuwanie s³owa z bazy 
 	public void deleteWord(Word word) {
@@ -130,10 +142,25 @@ public class DatabaseAccess {
 		return sow;
     }
 	
+    
+    //pobieranie nazw wszytkich jêzyków
+    public String[] selectLanguages() {
+    	List<LanguageModel> list = data.selectLanguages();
+    	String[] languages = new String[list.size()];
+    	
+    	for(int i=0; i<list.size(); i++) {
+    		languages[i] = list.get(i).getName();
+    	}
+    	
+    	return languages;
+    }
 
+    
+    
     public void closeConnection() {
     	data.closeConnection();
     }
+    
 	
 //SPRAWDZENIE BAZY
 	public void printAll() {

@@ -254,7 +254,8 @@ public class UserPanel extends JFrame{
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			mediator.addWord(word.getText(), translation.getText(), (int)spinnerAdding.getValue());
+			String language = (String) languageListSearching.getSelectedItem();
+			mediator.addWord(word.getText(), translation.getText(), (int)spinnerAdding.getValue(), language);
 			word.setText("");
 			translation.setText("");
 			adapter.setNewSet(mediator.getWords(1));
@@ -269,7 +270,7 @@ public class UserPanel extends JFrame{
 			String searchedPhrase = research.getText();
 			int level = (int)spinnerSearching.getValue();
 			String language = (String) languageListSearching.getSelectedItem();
-			adapter.setNewSet(mediator.getFilteredWords(10, level, searchedPhrase, language));
+			adapter.setNewSet(mediator.getFilteredWords(level, searchedPhrase, language));
 		}
 		
 	}

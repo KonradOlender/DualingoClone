@@ -291,8 +291,6 @@ public class Database {
           return words;
     }
     
-    
-
     public List<UserModel> selectUserWhereName(String user_name) {
   	  List<UserModel> users = new LinkedList<UserModel>();
   	  try {
@@ -329,6 +327,26 @@ public class Database {
         }
         return states;
     }
+
+    public List<LanguageModel> selectLanguageWhereName(String nameL) {
+  	  List<LanguageModel> languages = new LinkedList<LanguageModel>();
+  	  try {
+            ResultSet result = stat.executeQuery("SELECT * FROM language WHERE name=\""+nameL+"\"");
+            int id;
+            String name;
+            while(result.next()) {
+                id = result.getInt("id_language");
+                name = result.getString("name");
+                languages.add(new LanguageModel(id, name));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return languages;
+    }
+    
+    
 
     //usuwanie po id
     public void deleteLevelWhereId(int id) {

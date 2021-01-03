@@ -33,21 +33,24 @@ public class DataMediator{
 		db.printAll();
 	}	
 	
-	//DB dodawanie stanu do bazy danych
+	// + DB dodawanie stanu do bazy danych 
 	public void archiveUsersState()
 	{
 		//adding state into database here also
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), db.getUserId(currentUser.getName()).get(0));
+		
 		previousStates.addNewState(currentUser.ArchiveUserState());
 	}
 	
-	//DB wyszukiwanie i wrzucanie do setOfWords s³ów o danych warunkach
+	// + DB wyszukiwanie i wrzucanie do setOfWords s³ów o danych warunkach
 	public SetOfWords getFilteredWords(int level, String searchedPhrase, String language)
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		return db.selectWordsWhereConditions(level, searchedPhrase, language);
 	}
 	
-	//DB tworzyc s³owo i usuwac z bazy pasujace
+	// + DB tworzyc s³owo i usuwac z bazy pasujace
 	public void deleteWord(String word, String translation, int level)
 	{
 		int index = -1;
@@ -58,12 +61,18 @@ public class DataMediator{
 			if(word2.word.equals(word) && word2.translation.equals(translation))
 				index = i;
 		}
-		if(index > -1)
+		if(index > -1) {
+			//usuwanie z bazy
+			DatabaseAccess db = DatabaseAccess.getInstance();
+			db.deleteWord(lista.get(index));
+			
 			sow.listOfWords.remove(index);
+		}
+		
 	}
 	
-	//DB tworzyc s³owo i dodawac do bazy
-	public void addWord(String word, String translation, int level)
+	// + DB tworzyc s³owo i dodawac do bazy
+	public void addWord(String word, String translation, int level, String language)
 	{
 		if(sow == null)
 			sow = new SetOfWords(level);
@@ -72,6 +81,10 @@ public class DataMediator{
 		word2.translation = translation;
 		word2.word = word;
 		sow.addWord(word2);
+		
+		//dodawanie do bazy
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.addWord(word, translation, sow.level, language);		
 	}
 	 
 	//czytanie z bazy danych, szukanie nazwy uzytkownika
@@ -90,17 +103,21 @@ public class DataMediator{
 		return false;
 	}
 
-	//DB odczytywac tablice z bazy
+	// + DB odczytywac tablice z bazy
 	public String[] getLanguages()
 	{
-		List<String> x = new ArrayList<String>();
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		return db.selectLanguages();
+
+//to by³o nwm czy mam to usun¹æ?????????????????????????????????
+		/*List<String> x = new ArrayList<String>();
 		x.add("angielski");
 		String[] array = new String[1];
 		x.toArray(array);
-		return array;
+		return array;*/
 	}
 		
-	//sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1
+	// + sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1
 	public boolean anyUserExists()
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
@@ -122,7 +139,7 @@ public class DataMediator{
 			if(k>max) max=k;
 		}
 		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
-		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby yzutkownika
+		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby uzutkownika
 		// w sensie jak sie loguje do programu
 		if(states.size() == 0) return currentUser;
 		State state =new State();
@@ -217,6 +234,7 @@ public class DataMediator{
 	{
 		//removes state from the database
 		//think how to do it
+		
 	}
 	
 	public void restoreUserState(int index)

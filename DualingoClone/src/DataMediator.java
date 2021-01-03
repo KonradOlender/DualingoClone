@@ -22,6 +22,12 @@ public class DataMediator{
 		return sow;
 	}
 	
+//sprawdzanie bazy
+	public void allDatabase() {
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.printAll();
+	}	
+	
 	public SetOfWords getFilteredWords(int size, int level, String searchedPhrase, String language)
 	{
 		return new SetOfWords(10);
@@ -33,29 +39,24 @@ public class DataMediator{
 		if(currentUser == null) 
 		{
 			currentUser = new User();
-			currentUser.setName("first_user");
+			//currentUser.setName("first_user");
+			DatabaseAccess db = DatabaseAccess.getInstance();
+			int id = db.getUser(name).getId();
+			currentUser.setName(name);
 		}
 		
 		if(currentUser.getName().equals(name))return true;
 		return false;
 	}
-	
-//sprawdzanie bazy
-	public void allDatabase() {
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.printAll();
-	}
+
 	
 	public boolean anyUserExists()
 	{
 		//sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1
-		if(currentUser == null) 
-		{
-			currentUser = new User();
-			currentUser.setName("first_user");
-		}
+		DatabaseAccess db = DatabaseAccess.getInstance();
 		
-		return false;
+		if(db.getUsers() == null) return false;
+		return true;
 	}
 	
 	public String[] getLanguages()

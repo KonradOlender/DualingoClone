@@ -28,34 +28,7 @@ public class DatabaseAccess {
 		List<UserModel> users = data.selectUserWhereName(name);
 		return users.get(0);
 	}
-	
-//SPRAWDZENIE BAZY
-	//pobieranie wszytkich u¿ytkowników
-	public List<UserModel> getUsers() {
-		List<UserModel> users = data.selectUsers();
-		return users;
-	}
-	public void printAll() {
-        System.out.println("Level table");
-		List<LevelModel> levels = data.selectLevels();
-        for(LevelModel c: levels)
-            System.out.println(c);
-        
-        System.out.println("Word table");
-		List<WordModel> words = data.selectWords();
-        for(WordModel c: words)
-            System.out.println(c);
 
-        System.out.println("User table");
-		List<UserModel> users = data.selectUsers();
-        for(UserModel c: users)
-            System.out.println(c);
-
-        System.out.println("State table");
-		List<StateModel> states = data.selectStates();
-        for(StateModel c: states)
-            System.out.println(c);
-	}
 	
 	//pobieranie stanów u¿ytkownika
 	public List<StateModel> getUserStates(int id) {
@@ -104,5 +77,34 @@ public class DatabaseAccess {
 		data.insertUser(name);
 	}
 	
+	//pobieranie wszytkich u¿ytkowników
+	public List<UserModel> getUsers() {
+		List<UserModel> users = data.selectUsers();
+		if(users.size()==0) return null;
+		return users;
+	}
+	
+//SPRAWDZENIE BAZY
+	public void printAll() {
+        System.out.println("Level table");
+		List<LevelModel> levels = data.selectLevels();
+        for(LevelModel c: levels)
+            System.out.println(c);
+        
+        System.out.println("Word table");
+		List<WordModel> words = data.selectWords();
+        for(WordModel c: words)
+            System.out.println(c);
+
+        System.out.println("User table");
+		List<UserModel> users = data.selectUsers();
+        for(UserModel c: users)
+            System.out.println(c);
+
+        System.out.println("State table");
+		List<StateModel> states = data.selectStates();
+        for(StateModel c: states)
+            System.out.println(c);
+	}	
 	
 }

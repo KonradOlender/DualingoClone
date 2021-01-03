@@ -95,6 +95,12 @@ public class DataMediator{
 		db.addUser(name);	
 	}
 	
+	//adding languages
+	public void addLanguage(String language)
+	{
+		
+	}
+	
 	//odczytywac tablice z bazy
 	public String[] getLanguages()
 	{
@@ -140,6 +146,10 @@ public class DataMediator{
 		currentUser.setName(name);
 		List<StateModel> states = db.getUserStates(id);
 		
+		previousStates = new ArchivedUserStates(this);
+		if(states == null || states.size() == 0) 
+			return currentUser;
+		
 		int max=0; 
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
@@ -148,8 +158,8 @@ public class DataMediator{
 		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
 		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby uzutkownika
 		// w sensie jak sie loguje do programu
-		previousStates = new ArchivedUserStates(this);
-		if(states.size() == 0) return currentUser;
+		
+		
 		State state =new State();
 		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
 		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
@@ -301,6 +311,14 @@ public class DataMediator{
 		return new CreationQuizDialog(frame, this);
 	}
 	
+	public void displayNoLanguagesWarning()
+	{
+		JOptionPane.showMessageDialog(new JFrame(),
+				"Najpierw musisz dodaæ jêzyk",
+				"Nie ma ¿adnego jêzyka",
+				JOptionPane.WARNING_MESSAGE);
+	}
+	
 	//---------------------------------------------------------------------------------------------------------->ITERATOR
 	
 	public Word nextLearningWord() {
@@ -339,11 +357,17 @@ public class DataMediator{
 		{
 			this.frame = frame;
 			this.mediator = mediator;
+			
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) 
 		{
+			if(getLanguages().length == 0)
+			{
+				displayNoLanguagesWarning();
+				return;
+			}
 			currentQuiz = null;
 	        Object option = JOptionPane.showInputDialog(
 	          frame,

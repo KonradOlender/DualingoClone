@@ -24,6 +24,7 @@ public class UserPanel extends JFrame{
 	public JTextField word;
 	public JTextField translation;
 	public JTextField research;
+	public JTextField createLanguageField;
 	public JButton addButton;
 	public JButton deleteButton;
 	public JButton searchButton;
@@ -48,11 +49,14 @@ public class UserPanel extends JFrame{
 		//profile tab
 		tabbedPane.add("profil", createProfileManagementPanel());
 		
-		//main tab
-		tabbedPane.add("nauka", createMainPanel());
+		//language management tab
+		tabbedPane.add("dodawanie jêzyków", createLanguagePanel());
 		
 		//manage words
 		tabbedPane.add("zarz¹dzanie s³ówkami", createUpdateAndDeletePanel());
+		
+		//main tab
+		tabbedPane.add("nauka", createMainPanel());
 		
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
@@ -183,7 +187,7 @@ public class UserPanel extends JFrame{
 	{
 		JPanel updateAndDeletePanel = new JPanel(new GridLayout());
 		adapter =new SetOfWordsAdapter();
-		updateListOfWords();
+		//updateListOfWords();
 	    table = new JTable(adapter);
 	    table.getTableHeader().setReorderingAllowed(false);
 	    updateAndDeletePanel.add(new JScrollPane(table));
@@ -236,6 +240,40 @@ public class UserPanel extends JFrame{
 		return panel;
 	}
 	
+	public JPanel createLanguagePanel()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, 1));
+		createLanguageField = new JTextField("Jêzyk");
+		JButton createButton = new JButton("Dodaj jêzyk");
+		createLanguageField.addFocusListener(new FocusListener() {
+		    @Override
+		    public void focusGained(FocusEvent e) {
+		        if (createLanguageField.getText().equals("Jêzyk")) {
+		        	createLanguageField.setText("");
+		        }
+		    }
+		    @Override
+		    public void focusLost(FocusEvent e) {
+		        if (createLanguageField.getText().isEmpty()) {
+		        	createLanguageField.setText("Jêzyk");
+		        }
+		    }
+			
+		});
+		createLanguageField.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String language = createLanguageField.getText();
+				mediator.addLanguage(language);
+			}
+		});
+		panel.add(createLanguageField);
+		panel.add(createButton);
+		return panel;
+	}
+	
 	
 	private class RadioButtonListener implements ActionListener
 	{
@@ -266,6 +304,11 @@ public class UserPanel extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String language = (String) languageListSearching.getSelectedItem();
+			if(language == null)
+			{
+				mediator.displayNoLanguagesWarning();
+				return;
+			}
 			mediator.addWord(word.getText(), translation.getText(), (int)spinnerAdding.getValue(), language);
 			word.setText("");
 			translation.setText("");

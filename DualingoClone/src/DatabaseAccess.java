@@ -183,6 +183,11 @@ public class DatabaseAccess {
 		List<StateModel> states = data.selectStates();
         for(StateModel c: states)
             System.out.println(c);
+
+        System.out.println("Language table");
+		List<LanguageModel> languages = data.selectLanguages();
+        for(LanguageModel c: languages)
+            System.out.println(c);
 	}	
 	
 }

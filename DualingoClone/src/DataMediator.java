@@ -20,71 +20,104 @@ public class DataMediator{
 	private SetOfWords sow;
 	private TypeOfLearning currentQuiz;
 	
-	public Word nextLearningWord() {
-		// tu iterator
-		return new Word();
-	}
-	
+	//---------------------------------------------------------------------------------------------------------->DATABASE METHODS
 	//sprawdzanie bazy
 	public void allDatabase() {
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		db.printAll();
 	}	
 	
-	// + DB dodawanie stanu do bazy danych 
-	public void archiveUsersState()
-	{
-		//adding state into database here also
+	//zamykanie po³¹czenia z baz¹
+    public void closeConnection() {
 		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), db.getUserId(currentUser.getName()).get(0));
-		
-		previousStates.addNewState(currentUser.ArchiveUserState());
-	}
+		db.closeConnection();
+    }
 	
-	// + DB wyszukiwanie i wrzucanie do setOfWords s³ów o danych warunkach
+    //tworzyc s³owo i dodawac do bazy
+  	public void addWord(String word, String translation, int level, String language)
+  	{
+  		/*if(sow == null)
+  			sow = new SetOfWords(level);
+  		
+  		Word word2 = new Word();
+  		word2.translation = translation;
+  		word2.word = word;
+  		sow.addWord(word2);*/
+  		
+  		//dodawanie do bazy
+  		DatabaseAccess db = DatabaseAccess.getInstance();
+  		db.addWord(word, translation, sow.level, language);		
+  	}
+  	
+  	//tworzyc s³owo i usuwac z bazy pasujace
+  	public void deleteWord(String word, String translation, int level)
+  	{
+  		int index = -1;
+  		List<Word> lista = sow.listOfWords;
+  		for(int i = 0; i < sow.getSize(); i++)
+  		{
+  			Word word2 =lista.get(i);
+  			if(word2.word.equals(word) && word2.translation.equals(translation))
+  				index = i;
+  		}
+  		if(index > -1) {
+  			//usuwanie z bazy
+  			DatabaseAccess db = DatabaseAccess.getInstance();
+  			db.deleteWord(lista.get(index));
+  			
+  			sow.listOfWords.remove(index);
+  		}
+  		
+  	}
+    
+	//wyszukiwanie i wrzucanie do setOfWords s³ów o danych warunkach
 	public SetOfWords getFilteredWords(int level, String searchedPhrase, String language)
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		return db.selectWordsWhereConditions(level, searchedPhrase, language);
 	}
 	
-	// + DB tworzyc s³owo i usuwac z bazy pasujace
-	public void deleteWord(String word, String translation, int level)
-	{
-		int index = -1;
-		List<Word> lista = sow.listOfWords;
-		for(int i = 0; i < sow.getSize(); i++)
-		{
-			Word word2 =lista.get(i);
-			if(word2.word.equals(word) && word2.translation.equals(translation))
-				index = i;
-		}
-		if(index > -1) {
-			//usuwanie z bazy
-			DatabaseAccess db = DatabaseAccess.getInstance();
-			db.deleteWord(lista.get(index));
-			
-			sow.listOfWords.remove(index);
-		}
-		
+	public void deleteWord(Word w) {
+		//database operation after 
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.deleteWord(w);
 	}
 	
-	// + DB tworzyc s³owo i dodawac do bazy
-	public void addWord(String word, String translation, int level, String language)
-	{
-		if(sow == null)
-			sow = new SetOfWords(level);
-		
-		Word word2 = new Word();
-		word2.translation = translation;
-		word2.word = word;
-		sow.addWord(word2);
-		
-		//dodawanie do bazy
+	public void updateUserState(User u) {
+		// after finishing learning it is updated
 		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.addWord(word, translation, sow.level, language);		
+		db.updateState(u);
 	}
-	 
+
+	//user chooses an option to add a user
+	public void addUser(String name) {
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.addUser(name);	
+	}
+	
+	//odczytywac tablice z bazy
+	public String[] getLanguages()
+	{
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		return db.selectLanguages();
+
+		//prototyp
+		/*List<String> x = new ArrayList<String>();
+		x.add("angielski");
+		String[] array = new String[1];
+		x.toArray(array);
+		return array;*/
+	}
+	
+	//sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1
+	public boolean anyUserExists()
+	{
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		
+		if(db.getUsers() == null) return false;
+		return true;
+	}
+	
 	//czytanie z bazy danych, szukanie nazwy uzytkownika
 	public boolean userExists(String name)
 	{
@@ -92,36 +125,12 @@ public class DataMediator{
 		{
 			currentUser = new User();
 			DatabaseAccess db = DatabaseAccess.getInstance();
-			//co jesli jest kilku uzytkownikow o tej samej nazwie?
 			int id = db.getUserId(name).get(0);
 			currentUser.setName(name);
 		}
 		
 		if(currentUser.getName().equals(name))return true;
 		return false;
-	}
-
-	// + DB odczytywac tablice z bazy
-	public String[] getLanguages()
-	{
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		return db.selectLanguages();
-
-//to by³o nwm czy mam to usun¹æ?????????????????????????????????????
-		/*List<String> x = new ArrayList<String>();
-		x.add("angielski");
-		String[] array = new String[1];
-		x.toArray(array);
-		return array;*/
-	}
-		
-	// + sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1
-	public boolean anyUserExists()
-	{
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		
-		if(db.getUsers() == null) return false;
-		return true;
 	}
 	
 	public User getUser(String name) {
@@ -160,40 +169,67 @@ public class DataMediator{
 		return currentUser;
 	}
 	
-	public void endLearning()
+	//---------------------------------------------------------------------------------------------------------->USER STATES MANAGEMENT METHODS
+	
+	//dodawanie stanu do bazy danych 
+	public void archiveUsersState()
 	{
-		currentUser.increasePoints(learningSet.points);
-	}
-	
-	public String getUserName() {
-		return currentUser.getName();
-	}
-	
-	public int getUserLevel() {
-		return currentUser.getCurrentLevel();
-	}
-	
-	
-	public double getUserProgress() {
-		return currentUser.getCurrentProgress();
-	}
-	
-	public void deleteWord(Word w) {
-		//database operation after 
+		//adding state into database here also
 		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.deleteWord(w);
+		db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), db.getUserId(currentUser.getName()).get(0));
+		
+		previousStates.addNewState(currentUser.ArchiveUserState());
 	}
 	
-	public void updateUserState(User u) {
-		// after finishing learning it is updated
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.updateState(u);
+	public void restoreUserState(int index)
+	{
+		currentUser.RestoreState(
+				previousStates.RestoreState(index));
 	}
+	 
+	public void removeState() 
+	{
+		//removes state from the database
+		//think how to do it
+		
+	}
+	
+	//---------------------------------------------------------------------------------------------------------->WINDOWS METHODS
+	
+	public void startMainWindow()
+	{
+		MainWindow mainWindow = new MainWindow(this);
+	}
+	
+	public void openUserPanel()
+	{
+		UserPanel userPanel = new UserPanel(this);
+		userPanel.addWindowListener(new WindowListener() {
 
-	//user chooses an option to add a user
-	public void addUser(String name) {
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.addUser(name);	
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
+					archiveUsersState();
+			}
+
+			@Override
+			public void windowOpened(WindowEvent e) { }
+			
+			@Override
+			public void windowClosed(WindowEvent e) { }
+
+			@Override
+			public void windowIconified(WindowEvent e) { }
+
+			@Override
+			public void windowDeiconified(WindowEvent e) { } 
+
+			@Override
+			public void windowActivated(WindowEvent e) { }
+
+			@Override
+			public void windowDeactivated(WindowEvent e) { }
+		});
 	}
 	
 	//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
@@ -255,45 +291,35 @@ public class DataMediator{
 		
 	}
 	
+	public void endLearning()
+	{
+		currentUser.increasePoints(learningSet.points);
+	}
+	
 	public ActionListener getCreationQuizListener(JFrame frame)
 	{
 		return new CreationQuizDialog(frame, this);
 	}
 	
-	public void startMainWindow()
-	{
-		MainWindow mainWindow = new MainWindow(this);
+	//---------------------------------------------------------------------------------------------------------->ITERATOR
+	
+	public Word nextLearningWord() {
+		// tu iterator
+		return new Word();
 	}
 	
-	public void openUserPanel()
-	{
-		UserPanel userPanel = new UserPanel(this);
-		userPanel.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
-					archiveUsersState();
-			}
-
-			@Override
-			public void windowOpened(WindowEvent e) { }
-			
-			@Override
-			public void windowClosed(WindowEvent e) { }
-
-			@Override
-			public void windowIconified(WindowEvent e) { }
-
-			@Override
-			public void windowDeiconified(WindowEvent e) { } 
-
-			@Override
-			public void windowActivated(WindowEvent e) { }
-
-			@Override
-			public void windowDeactivated(WindowEvent e) { }
-		});
+	//---------------------------------------------------------------------------------------------------------->ACCESSING DATA FROM THE CLASS
+	
+	public String getUserName() {
+		return currentUser.getName();
+	}
+	
+	public int getUserLevel() {
+		return currentUser.getCurrentLevel();
+	}
+	
+	public double getUserProgress() {
+		return currentUser.getCurrentProgress();
 	}
 	
 	public IUserState[] getCurrentUserStates() 
@@ -302,18 +328,7 @@ public class DataMediator{
 		//return previousStates.getStatesArray();
 	}
 	
-	public void removeState() 
-	{
-		//removes state from the database
-		//think how to do it
-		
-	}
-	
-	public void restoreUserState(int index)
-	{
-		currentUser.RestoreState(
-				previousStates.RestoreState(index));
-	}
+	//---------------------------------------------------------------------------------------------------------->LISTENERS CLASSES
 	
 	//Nas³uchuje wciœniêcia przycisku, który tworzy quiz
 	private class CreationQuizDialog implements ActionListener {
@@ -374,11 +389,5 @@ public class DataMediator{
 	         frame.dispose();
 		}
 	}
-
-	//zamykanie po³¹czenia z baz¹
-    public void closeConnection() {
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.closeConnection();
-    }
 
 }

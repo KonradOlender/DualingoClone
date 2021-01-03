@@ -183,7 +183,7 @@ public class UserPanel extends JFrame{
 	{
 		JPanel updateAndDeletePanel = new JPanel(new GridLayout());
 		adapter =new SetOfWordsAdapter();
-		adapter.setNewSet(mediator.getWords(1));
+		updateListOfWords();
 	    table = new JTable(adapter);
 	    table.getTableHeader().setReorderingAllowed(false);
 	    updateAndDeletePanel.add(new JScrollPane(table));
@@ -253,6 +253,14 @@ public class UserPanel extends JFrame{
 		
 	}
 	
+	private void updateListOfWords()
+	{
+		String searchedPhrase = research.getText();
+		int level = (int)spinnerSearching.getValue();
+		String language = (String) languageListSearching.getSelectedItem();
+		adapter.setNewSet(mediator.getFilteredWords(level, searchedPhrase, language));
+	}
+	
 	private class AddButtonListener implements ActionListener
 	{
 		@Override
@@ -260,7 +268,7 @@ public class UserPanel extends JFrame{
 			mediator.addWord(word.getText(), translation.getText(), (int)spinnerAdding.getValue());
 			word.setText("");
 			translation.setText("");
-			adapter.setNewSet(mediator.getWords(1));
+			updateListOfWords();
 		}
 		
 	}
@@ -269,10 +277,7 @@ public class UserPanel extends JFrame{
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String searchedPhrase = research.getText();
-			int level = (int)spinnerSearching.getValue();
-			String language = (String) languageListSearching.getSelectedItem();
-			adapter.setNewSet(mediator.getFilteredWords(level, searchedPhrase, language));
+			updateListOfWords();
 		}
 		
 	}
@@ -283,7 +288,7 @@ public class UserPanel extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			int row = table.getSelectedRow();
 			mediator.deleteWord((String)table.getValueAt(row, 1), (String)table.getValueAt(row, 2), 1);
-			adapter.setNewSet(mediator.getWords(1));
+			updateListOfWords();
 		}
 		
 	}

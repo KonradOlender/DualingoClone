@@ -25,10 +25,6 @@ public class DataMediator{
 		return new Word();
 	}
 	
-	public SetOfWords getWords(int level) {
-		return sow;
-	}
-	
 	//sprawdzanie bazy
 	public void allDatabase() {
 		DatabaseAccess db = DatabaseAccess.getInstance();
@@ -185,7 +181,25 @@ public class DataMediator{
 	
 	//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
 	public void startLearning(int level) {
-		//level here should be also passed
+		switch (level)
+		{
+			case 1:
+				currentUser.setLevel(new Level1());
+				break;
+				
+			case 2:
+				currentUser.setLevel(new Level2());
+				break;
+				
+			case 3:
+				currentUser.setLevel(new Level3());
+				break;
+				
+			default:
+				currentUser.setLevel(new AutomaticLevel());
+				break;
+			
+		}
 		learningSet = currentUser.genereteWordToLearn(50);
 		
 		JFrame j = new JFrame();

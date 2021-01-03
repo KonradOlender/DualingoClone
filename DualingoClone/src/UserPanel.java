@@ -272,7 +272,7 @@ public class UserPanel extends JFrame{
 			String searchedPhrase = research.getText();
 			int level = (int)spinnerSearching.getValue();
 			String language = (String) languageListSearching.getSelectedItem();
-			adapter.setNewSet(mediator.getFilteredWords(10, level, searchedPhrase, language));
+			adapter.setNewSet(mediator.getFilteredWords(level, searchedPhrase, language));
 		}
 		
 	}

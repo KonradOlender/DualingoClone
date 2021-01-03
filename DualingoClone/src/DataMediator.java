@@ -18,28 +18,67 @@ public class DataMediator{
 	private SetOfWords sow;
 	private TypeOfLearning currentQuiz;
 	
+	public Word nextLearningWord() {
+		// tu iterator
+		return new Word();
+	}
+	
 	public SetOfWords getWords(int level) {
 		return sow;
 	}
 	
-//sprawdzanie bazy
+	//sprawdzanie bazy
 	public void allDatabase() {
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		db.printAll();
 	}	
 	
+	//DB dodawanie stanu do bazy danych
+	public void archiveUsersState()
+	{
+		//adding state into database here also
+		previousStates.addNewState(currentUser.ArchiveUserState());
+	}
+	
+	//DB wyszukiwanie i wrzucanie do setOfWords s³ów o danych warunkach
 	public SetOfWords getFilteredWords(int size, int level, String searchedPhrase, String language)
 	{
 		return new SetOfWords(10);
 	}
 	
+	//DB tworzyc s³owo i usuwac z bazy pasujace
+	public void deleteWord(String word, String translation, int level)
+	{
+		int index = -1;
+		List<Word> lista = sow.listOfWords;
+		for(int i = 0; i < sow.getSize(); i++)
+		{
+			Word word2 =lista.get(i);
+			if(word2.word.equals(word) && word2.translation.equals(translation))
+				index = i;
+		}
+		if(index > -1)
+			sow.listOfWords.remove(index);
+	}
+	
+	//DB tworzyc s³owo i dodawac do bazy
+	public void addWord(String word, String translation, int level)
+	{
+		if(sow == null)
+			sow = new SetOfWords(level);
+		
+		Word word2 = new Word();
+		word2.translation = translation;
+		word2.word = word;
+		sow.addWord(word2);
+	}
+	 
+	//czytanie z bazy danych, szukanie nazwy uzytkownika
 	public boolean userExists(String name)
 	{
-		//czytanie z bazy danych, szukanie nazwy uzytkownika
 		if(currentUser == null) 
 		{
 			currentUser = new User();
-			//currentUser.setName("first_user");
 			DatabaseAccess db = DatabaseAccess.getInstance();
 			int id = db.getUser(name).getId();
 			currentUser.setName(name);
@@ -49,16 +88,7 @@ public class DataMediator{
 		return false;
 	}
 
-	
-	public boolean anyUserExists()
-	{
-		//sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		
-		if(db.getUsers() == null) return false;
-		return true;
-	}
-	
+	//DB odczytywac tablice z bazy
 	public String[] getLanguages()
 	{
 		List<String> x = new ArrayList<String>();
@@ -67,15 +97,18 @@ public class DataMediator{
 		x.toArray(array);
 		return array;
 	}
+		
+	//sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1
+	public boolean anyUserExists()
+	{
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		
+		if(db.getUsers() == null) return false;
+		return true;
+	}
 	
 	public User getUser(String name) {
-		/*if(currentUser == null) 
-		{
-			currentUser = new User();
-			currentUser.setName("first_user");
-		}
-		//pobieranie uzytkownika z bazy danych po wczesniejszym wpisaniu nazwy uzytkownika
-		else {*/
+		
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		int id = db.getUser(name).getId();
 		currentUser.setName(name);
@@ -89,6 +122,7 @@ public class DataMediator{
 		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
 		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby yzutkownika
 		// w sensie jak sie loguje do programu
+		if(states.size() == 0) return currentUser;
 		State state =new State();
 		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
 		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
@@ -108,37 +142,6 @@ public class DataMediator{
 		}
 		currentUser.loadState(state);
 		return currentUser;
-	}
-	
-	public void addWord(String word, String translation, int level)
-	{
-		if(sow == null)
-			sow = new SetOfWords(level);
-		
-		Word word2 = new Word();
-		word2.translation = translation;
-		word2.word = word;
-		sow.addWord(word2);
-		System.out.println(word + " + " + translation + " + " + level);
-	}
-	
-	public void deleteWord(String word, String translation, int level)
-	{
-		int index = -1;
-		List<Word> lista = sow.listOfWords;
-		for(int i = 0; i < sow.getSize(); i++)
-		{
-			Word word2 =lista.get(i);
-			if(word2.word.equals(word) && word2.translation.equals(translation))
-				index = i;
-		}
-		if(index > -1)
-			sow.listOfWords.remove(index);
-	}
-	
-	public Word nextLearningWord() {
-		// tu iterator
-		return new Word();
 	}
 	
 	public String getUserName() {
@@ -204,6 +207,7 @@ public class DataMediator{
 	
 	public IUserState[] getCurrentUserStates() 
 	{
+		//return new IUserState[0];
 		return previousStates.getStatesArray();
 	}
 	
@@ -217,12 +221,6 @@ public class DataMediator{
 	{
 		currentUser.RestoreState(
 				previousStates.RestoreState(index));
-	}
-	
-	public void archiveUsersState()
-	{
-		//adding state into database here also
-		previousStates.addNewState(currentUser.ArchiveUserState());
 	}
 	
 	//Nas³uchuje wciœniêcia przycisku, który tworzy quiz

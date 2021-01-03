@@ -41,9 +41,10 @@ public class DataMediator{
 	}
 	
 	//DB wyszukiwanie i wrzucanie do setOfWords s³ów o danych warunkach
-	public SetOfWords getFilteredWords(int size, int level, String searchedPhrase, String language)
+	public SetOfWords getFilteredWords(int level, String searchedPhrase, String language)
 	{
-		return new SetOfWords(10);
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		return db.selectWordsWhereConditions(level, searchedPhrase, language);
 	}
 	
 	//DB tworzyc s³owo i usuwac z bazy pasujace
@@ -80,7 +81,8 @@ public class DataMediator{
 		{
 			currentUser = new User();
 			DatabaseAccess db = DatabaseAccess.getInstance();
-			int id = db.getUser(name).getId();
+			//co jesli jest kilku uzytkownikow o tej samej nazwie?
+			int id = db.getUserId(name).get(0);
 			currentUser.setName(name);
 		}
 		
@@ -110,7 +112,7 @@ public class DataMediator{
 	public User getUser(String name) {
 		
 		DatabaseAccess db = DatabaseAccess.getInstance();
-		int id = db.getUser(name).getId();
+		int id = db.getUserId(name).get(0);
 		currentUser.setName(name);
 		List<StateModel> states = db.getUserStates(id);
 		
@@ -283,5 +285,10 @@ public class DataMediator{
 		}
 	}
 
+	//zamykanie po³¹czenia z baz¹
+    public void closeConnection() {
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.closeConnection();
+    }
 
 }

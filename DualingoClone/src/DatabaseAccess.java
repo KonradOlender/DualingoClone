@@ -75,6 +75,11 @@ public class DatabaseAccess {
 		return states;
 	}
 	
+	//pobieranie id ostatnio dodanego stanu u¿ytkownika
+	public int getLastUserState(int id) {
+		return data.selectLastStateWhereUserId(id);
+	}
+	
 	//aktualizowanie stanu - dodanie nowego stanu do bazy 
 	public void updateState(User u) {
 		List<UserModel> users = data.selectUsers();
@@ -98,6 +103,17 @@ public class DatabaseAccess {
 	//³apanie wyj¹tku?
 		if(idUser < 0) return;
 		data.insertState(currentUserLevel, currentProgress, idUser);
+	}
+
+	//usuwanie stanu z bazy 
+	public void deleteState(int currentUserLevel, int currentProgress, int idUser) {
+		List<StateModel> states = data.selectStates();
+		for(StateModel sm: states) {
+			if(sm.getCurrentUserLevel() == currentUserLevel && sm.getCurrentProgress() == currentProgress && sm.getIdUser() == idUser) {
+				int id = sm.getId();
+				data.deleteStateWhereId(id);
+			}
+		}
 	}
 	
 	

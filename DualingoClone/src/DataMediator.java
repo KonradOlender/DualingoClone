@@ -98,7 +98,8 @@ public class DataMediator{
 	//adding languages
 	public void addLanguage(String language)
 	{
-		
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.addLanguage(language);
 	}
 	
 	//odczytywac tablice z bazy
@@ -144,9 +145,9 @@ public class DataMediator{
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		int id = db.getUserId(name).get(0);
 		currentUser.setName(name);
-		List<StateModel> states = db.getUserStates(id);
-		
 		previousStates = new ArchivedUserStates(this);
+		
+		/*List<StateModel> states = db.getUserStates(id);
 		if(states == null || states.size() == 0) 
 			return currentUser;
 		
@@ -155,6 +156,7 @@ public class DataMediator{
 			int k=states.get(i).getId();
 			if(k>max) max=k;
 		}
+		
 		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
 		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby uzutkownika
 		// w sensie jak sie loguje do programu
@@ -174,7 +176,18 @@ public class DataMediator{
 				currentUser.loadState(archivedState);
 				previousStates.addNewState(currentUser.ArchiveUserState());
 			}
-		}
+		}*/
+		
+		//zamiast tego zakomentowanego wyzej - spr czy dziala
+		int max = db.getLastUserState(id);
+		if(max<0) return currentUser;
+
+		State state =new State();
+		state.setCurrentUserLevel(db.getUserStates(id).get(max-1).getCurrentUserLevel());
+		state.setCurrentUserProgress(db.getUserStates(id).get(max-1).getCurrentProgress());
+		
+		
+		
 		currentUser.loadState(state);
 		return currentUser;
 	}
@@ -202,6 +215,8 @@ public class DataMediator{
 		//removes state from the database
 		//think how to do it
 		
+		//DatabaseAccess db = DatabaseAccess.getInstance();
+		//db.deleteState(currentUserLevel, currentProgress, idUser); 
 	}
 	
 	//---------------------------------------------------------------------------------------------------------->WINDOWS METHODS
@@ -220,6 +235,9 @@ public class DataMediator{
 			public void windowClosing(WindowEvent e) {
 				if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
 					archiveUsersState();
+				
+				//zamykanie polaczenia z baza
+				closeConnection();
 			}
 
 			@Override

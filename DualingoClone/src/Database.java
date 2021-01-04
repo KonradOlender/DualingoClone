@@ -309,6 +309,7 @@ public class Database {
         return users;
     }
     
+    //wyszukiwanie stanu po id uzytkownika
     public List<StateModel> selectStateWhereUserId(int userId) {
   	  List<StateModel> states = new LinkedList<StateModel>();
   	  try {
@@ -326,6 +327,19 @@ public class Database {
             return null;
         }
         return states;
+    }
+    
+    //wyszukiwanie osattnio dodanego stanu
+    public int selectLastStateWhereUserId(int userId) {
+    	int maxId = -1;
+    	  try {
+              ResultSet result = stat.executeQuery("SELECT MAX(id_state) AS Max FROM state WHERE idUser=\""+userId+"\"");
+              maxId = result.getInt(1);
+          } catch (SQLException e) {
+              e.printStackTrace();
+              return -1;
+          }
+          return maxId;
     }
 
     public List<LanguageModel> selectLanguageWhereName(String nameL) {

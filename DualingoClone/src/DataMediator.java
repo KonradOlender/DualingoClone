@@ -159,7 +159,7 @@ public class DataMediator{
 		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby uzutkownika
 		// w sensie jak sie loguje do programu
 		
-		
+		max=max-1;
 		State state =new State();
 		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
 		state.setCurrentUserProgress(states.get(max).getCurrentProgress());

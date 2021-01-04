@@ -216,10 +216,10 @@ public class Database {
             ResultSet result = stat.executeQuery("SELECT * FROM state");
             int id, idUser, currentUserLevel, currentProgress;
             while(result.next()) {
-                id = result.getInt("id_word");
-                idUser = result.getInt("idUser");
+                id = result.getInt("id_state");
                 currentUserLevel = result.getInt("currentUserLevel");
                 currentProgress = result.getInt("currentProgress");
+                idUser = result.getInt("idUser");
                 states.add(new StateModel(id, currentUserLevel, currentProgress, idUser));
             }
         } catch (SQLException e) {
@@ -237,7 +237,7 @@ public class Database {
             String name;
             while(result.next()) {
                 id = result.getInt("id_language");
-                name = result.getString("name");
+                name = result.getString("name_language");
                 languages.add(new LanguageModel(id, name));
             }
         } catch (SQLException e) {
@@ -273,7 +273,7 @@ public class Database {
     public List<WordModel> selectWordsWhereConditions(int level, String searchedPhrase, String language) {
     	List<WordModel> words = new LinkedList<WordModel>();
     	  try {
-              ResultSet result = stat.executeQuery("SELECT * FROM word WHERE idLevel=\""+level+"\", idLanguage=\""+language+"\", ( word=\"%"+searchedPhrase+"%\" OR translation=\"%"+searchedPhrase+"%\")");
+              ResultSet result = stat.executeQuery("SELECT * FROM word WHERE idLevel=\""+level+"\" AND idLanguage=\""+language+"\" AND ( word=\"%"+searchedPhrase+"%\" OR translation=\"%"+searchedPhrase+"%\")");
               int id, idLevel, idLanguage;
               String word, translation;
               while(result.next()) {
@@ -315,10 +315,10 @@ public class Database {
             ResultSet result = stat.executeQuery("SELECT * FROM state WHERE idUser=\""+userId+"\"");
             int id, idUser, currentUserLevel, currentProgress;
             while(result.next()) {
-                id = result.getInt("id_word");
-                idUser = result.getInt("idUser");
+                id = result.getInt("id_state");
                 currentUserLevel = result.getInt("currentUserLevel");
                 currentProgress = result.getInt("currentProgress");
+                idUser = result.getInt("idUser");
                 states.add(new StateModel(id, currentUserLevel, currentProgress, idUser));
             }
         } catch (SQLException e) {
@@ -331,12 +331,12 @@ public class Database {
     public List<LanguageModel> selectLanguageWhereName(String nameL) {
   	  List<LanguageModel> languages = new LinkedList<LanguageModel>();
   	  try {
-            ResultSet result = stat.executeQuery("SELECT * FROM language WHERE name=\""+nameL+"\"");
+            ResultSet result = stat.executeQuery("SELECT * FROM language WHERE name_language=\""+nameL+"\"");
             int id;
             String name;
             while(result.next()) {
                 id = result.getInt("id_language");
-                name = result.getString("name");
+                name = result.getString("name_language");
                 languages.add(new LanguageModel(id, name));
             }
         } catch (SQLException e) {
@@ -395,9 +395,9 @@ public class Database {
     }
     
     //edytowanie s³owa
-    public void updateWordWhereId(int id, String new_polish, String new_foreign) {
+    public void updateWordWhereId(int id, String word, String translation) {
   	  try {
-            stat.execute("UPDATE word SET polish=\""+new_polish+"\", foreign=\""+new_foreign+"\" WHERE id_ksiazki=\"" + id +"\"");
+            stat.execute("UPDATE word SET translation=\""+translation+"\", word=\""+word+"\" WHERE id_word=\"" + id +"\"");
             
         } catch (SQLException e) {
             e.printStackTrace();

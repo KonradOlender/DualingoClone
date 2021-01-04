@@ -15,8 +15,8 @@ public class DatabaseAccess {
 		data = new Database();
 		
 		
-		data.dropTable("word");
-		data = new Database();
+		//data.dropTable("word");
+		//data = new Database();
 	}
 	
 	public static DatabaseAccess getInstance()

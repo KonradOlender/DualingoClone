@@ -76,6 +76,12 @@ public class User {
 		{
 			return state;
 		}
+		
+		@Override
+		public String toString()
+		{
+			return "Level: " + state.getCurrentUserLevel() + " progress: " + state.getProgress();
+		}
 	}
 
 }

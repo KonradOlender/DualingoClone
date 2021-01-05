@@ -187,7 +187,7 @@ public class UserPanel extends JFrame{
 	{
 		JPanel updateAndDeletePanel = new JPanel(new GridLayout());
 		adapter =new SetOfWordsAdapter();
-		//updateListOfWords();
+		updateListOfWords();
 	    table = new JTable(adapter);
 	    table.getTableHeader().setReorderingAllowed(false);
 	    updateAndDeletePanel.add(new JScrollPane(table));
@@ -221,6 +221,8 @@ public class UserPanel extends JFrame{
 			public void actionPerformed(ActionEvent e) 
 			{
 				mediator.archiveUsersState();
+				DefaultComboBoxModel<IUserState> model = new DefaultComboBoxModel<>(mediator.getCurrentUserStates());
+				stateList.setModel(model);
 			}
 		});
 		
@@ -232,8 +234,10 @@ public class UserPanel extends JFrame{
 			{
 				mediator.restoreUserState(stateList.getSelectedIndex());
 			}
-		});
-		stateList = new JComboBox<IUserState>(mediator.getCurrentUserStates());
+		});System.out.println(mediator.getCurrentUserStates().length);
+		DefaultComboBoxModel<IUserState> model = new DefaultComboBoxModel<>(mediator.getCurrentUserStates());
+		stateList = new JComboBox<IUserState>(model);
+
 		revertPanel.add(stateList);
 		revertPanel.add(revertLevelButton);
 		panel.add(revertPanel);
@@ -261,12 +265,16 @@ public class UserPanel extends JFrame{
 		    }
 			
 		});
-		createLanguageField.addActionListener(new ActionListener() {
+		createButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String language = createLanguageField.getText();
 				mediator.addLanguage(language);
+				DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(mediator.getLanguages());
+				languageListSearching.setModel(model);
+				languageListAdding.setModel(model);
+				languageListLearning.setModel(model);
 			}
 		});
 		panel.add(createLanguageField);
@@ -295,7 +303,7 @@ public class UserPanel extends JFrame{
 	{
 		String searchedPhrase = research.getText();
 		int level = (int)spinnerSearching.getValue();
-		String language = (String) languageListSearching.getSelectedItem();
+		String language = (String)languageListSearching.getSelectedItem();
 		adapter.setNewSet(mediator.getFilteredWords(level, searchedPhrase, language));
 	}
 	
@@ -340,5 +348,10 @@ public class UserPanel extends JFrame{
 	public int getChoosenLevel()
 	{
 		return level;
+	}
+	
+	public String getLanguage()
+	{
+		return (String)languageListLearning.getSelectedItem();
 	}
 }

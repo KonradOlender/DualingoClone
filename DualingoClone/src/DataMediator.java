@@ -46,7 +46,7 @@ public class DataMediator{
   		
   		//dodawanie do bazy
   		DatabaseAccess db = DatabaseAccess.getInstance();
-  		db.addWord(word, translation, sow.level, language);		
+  		db.addWord(word, translation, level, language);		
   	}
   	
   	//tworzyc s³owo i usuwac z bazy pasujace
@@ -107,7 +107,7 @@ public class DataMediator{
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		return db.selectLanguages();
-
+		
 		//prototyp
 		/*List<String> x = new ArrayList<String>();
 		x.add("angielski");
@@ -147,24 +147,29 @@ public class DataMediator{
 		currentUser.setName(name);
 		previousStates = new ArchivedUserStates(this);
 		
-		/*List<StateModel> states = db.getUserStates(id);
+		List<StateModel> states = db.getUserStates(id);
 		if(states == null || states.size() == 0) 
 			return currentUser;
 		
 		int max=0; 
+		int index = 0;
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
-			if(k>max) max=k;
+			if(k>max) {
+				max=k;
+				index = i;
+			}
 		}
 		
+		System.out.println(states.size());
 		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
 		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby uzutkownika
 		// w sensie jak sie loguje do programu
 		
 		max=max-1;
 		State state =new State();
-		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
-		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
+		state.setCurrentUserLevel(states.get(index).getCurrentUserLevel());
+		state.setCurrentUserProgress(states.get(index).getCurrentProgress());
 		
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
@@ -176,11 +181,13 @@ public class DataMediator{
 				currentUser.loadState(archivedState);
 				previousStates.addNewState(currentUser.ArchiveUserState());
 			}
-		}*/
+		}
 		
 		//zamiast tego zakomentowanego wyzej - spr czy dziala
-		int max = db.getLastUserState(id);
+		/*int max = db.getLastUserState(id);
 		if(max<1) return currentUser;
+		int max = db.getLastUserState(id);
+		if(max<0) return currentUser;
 
 		State state =new State();
 		state.setCurrentUserLevel(db.getUserStates(id).get(max-1).getCurrentUserLevel());
@@ -188,7 +195,7 @@ public class DataMediator{
 		
 		
 		
-		currentUser.loadState(state);
+		currentUser.loadState(state);*/
 		return currentUser;
 	}
 	
@@ -280,9 +287,9 @@ public class DataMediator{
 			public void windowDeactivated(WindowEvent e) { }
 		});
 	}
-	
-	//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
-	public void startLearning(int level) {
+
+	//create here new Thread that learning and passing learning set into a constructor and also the level is chosen here
+	public void startLearning(int level, String language, int isTest) {
 		switch (level)
 		{
 			case 1:
@@ -381,8 +388,8 @@ public class DataMediator{
 	
 	public IUserState[] getCurrentUserStates() 
 	{
-		return new IUserState[0];
-		//return previousStates.getStatesArray();
+		//return new IUserState[0];
+		return previousStates.getStatesArray();
 	}
 	
 	//---------------------------------------------------------------------------------------------------------->LISTENERS CLASSES
@@ -446,9 +453,20 @@ public class DataMediator{
 	         if(option == null)
 	        	 return;
 	         currentQuiz = (TypeOfLearning)option;
-	         
-	         startLearning(
-	        		 ((UserPanel)frame).getChoosenLevel());
+
+	         if (currentQuiz instanceof Practise) {
+	        	 startLearning(
+		        		 ((UserPanel)frame).getChoosenLevel(),
+		        		 ((UserPanel)frame).getLanguage(),
+		        		 0
+		        );
+	         }
+	         else
+		         startLearning(
+		        		 ((UserPanel)frame).getChoosenLevel(),
+		        		 ((UserPanel)frame).getLanguage(),
+		        		 1
+		     );
 	         frame.dispose();
 		}
 	}

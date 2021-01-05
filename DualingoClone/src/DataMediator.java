@@ -180,6 +180,8 @@ public class DataMediator{
 		
 		//zamiast tego zakomentowanego wyzej - spr czy dziala
 		/*int max = db.getLastUserState(id);
+		if(max<1) return currentUser;
+		int max = db.getLastUserState(id);
 		if(max<0) return currentUser;
 
 		State state =new State();
@@ -196,15 +198,31 @@ public class DataMediator{
 	public void archiveUsersState()
 	{
 		//sprawdzanie czy identyczny stan nie istnieje ju¿ w bazie
-		DatabaseAccess db = DatabaseAccess.getInstance();
-		List<State> states = db.getStatesWhereConditions(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), db.getUserId(currentUser.getName()).get(0));
-
-		if(states == null || states.size() == 0) {
+		/*DatabaseAccess db = DatabaseAccess.getInstance();
+		int id = db.getUserId(currentUser.getName()).get(0);
+		List<State> states = db.getStatesWhereConditions(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
+		if(states == null || states.size() == 0 || db.getUserStates(id) == null || db.getUserStates(id).size() == 0) {
 			//adding state into database here also
-			db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), db.getUserId(currentUser.getName()).get(0));
+			db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
+			
+			previousStates.addNewState(currentUser.ArchiveUserState());
+		}*/
+        System.out.println("wywo³ano archive user state");
+		
+		//sprawdzanie czy ostatnio dodany stan jest taki sam
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		int id = db.getUserId(currentUser.getName()).get(0);
+		int max = db.getLastUserState(id);
+		
+		if((db.getUserStates(id).get(max-1).getCurrentUserLevel()!=currentUser.getCurrentLevel() && 
+				db.getUserStates(id).get(max-1).getCurrentProgress()!=(int) currentUser.getCurrentProgress()) || max<0) {
+			//adding state into database here also
+			db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
+	        System.out.println("dodano archive user state");
 			
 			previousStates.addNewState(currentUser.ArchiveUserState());
 		}
+		
 	}
 	
 	public void restoreUserState(int index)

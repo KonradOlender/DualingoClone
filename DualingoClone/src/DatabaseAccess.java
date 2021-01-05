@@ -149,7 +149,8 @@ public class DatabaseAccess {
 	
 	//pobieranie s³ow z bazy spelniajacych podane warunki
     public SetOfWords selectWordsWhereConditions(int level, String searchedPhrase, String language) {
-		List<WordModel> words = data.selectWordsWhereConditions(level, searchedPhrase, language);
+    	int idLanguage = data.selectLanguageWhereName(language).get(0).getId();
+		List<WordModel> words = data.selectWordsWhereConditions(level, searchedPhrase, idLanguage);
 		SetOfWords sow = new SetOfWords(level);
 		Word word;
 		for(WordModel wm : words) {

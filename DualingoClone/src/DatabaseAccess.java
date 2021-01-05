@@ -75,6 +75,19 @@ public class DatabaseAccess {
 		return states;
 	}
 	
+	//pobieranie stanów u¿ytkownika
+	public List<State> getStatesWhereConditions(int cul, int cup, int id) {
+		List<StateModel> statesModel = data.selectStateWhereConditions(cul, cup, id);
+		List<State> states = new ArrayList();
+		State s=new State();
+		for(StateModel sm: statesModel) {
+			s.setCurrentUserLevel(sm.getCurrentUserLevel());
+			s.setCurrentUserProgress(sm.getCurrentProgress());
+			states.add(s);
+		}
+		return states;
+	}
+	
 	//pobieranie id ostatnio dodanego stanu u¿ytkownika
 	public int getLastUserState(int id) {
 		return data.selectLastStateWhereUserId(id);

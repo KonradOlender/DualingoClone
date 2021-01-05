@@ -15,9 +15,8 @@ import model.StateModel;
 public class DataMediator{
 
 	private User currentUser;
-	private ArchivedUserStates previousStates = new ArchivedUserStates(this);
-	private Iterator<Word> wordIterator;
-	private int pointsForLearningSet = 1;
+	private ArchivedUserStates previousStates;
+	private LearningSet learningSet;
 	private SetOfWords sow;
 	private TypeOfLearning currentQuiz;
 	
@@ -94,11 +93,6 @@ public class DataMediator{
 	public void addUser(String name) {
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		db.addUser(name);	
-		
-		currentUser = new User();
-		currentUser.setName(name);
-		archiveUsersState();
-		currentUser = null;
 	}
 	
 	//adding languages
@@ -153,18 +147,14 @@ public class DataMediator{
 		currentUser.setName(name);
 		previousStates = new ArchivedUserStates(this);
 		
-		List<StateModel> states = db.getUserStates(id);
+		/*List<StateModel> states = db.getUserStates(id);
 		if(states == null || states.size() == 0) 
 			return currentUser;
 		
 		int max=0; 
-		int index = 0;
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
-			if(k>max) {
-				max=k;
-				index = i;
-			}
+			if(k>max) max=k;
 		}
 		
 		System.out.println(states.size());
@@ -174,8 +164,8 @@ public class DataMediator{
 		
 		max=max-1;
 		State state =new State();
-		state.setCurrentUserLevel(states.get(index).getCurrentUserLevel());
-		state.setCurrentUserProgress(states.get(index).getCurrentProgress());
+		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
+		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
 		
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
@@ -187,17 +177,19 @@ public class DataMediator{
 				currentUser.loadState(archivedState);
 				previousStates.addNewState(currentUser.ArchiveUserState());
 			}
-		}
+		}*/
 		
 		//zamiast tego zakomentowanego wyzej - spr czy dziala
-		/*int max = db.getLastUserState(id);
+		int max = db.getLastUserState(id);
 		if(max<0) return currentUser;
 
-		State state = new State();
+		State state =new State();
 		state.setCurrentUserLevel(db.getUserStates(id).get(max-1).getCurrentUserLevel());
 		state.setCurrentUserProgress(db.getUserStates(id).get(max-1).getCurrentProgress());
 		
-		currentUser.loadState(state);*/
+		
+		
+		currentUser.loadState(state);
 		return currentUser;
 	}
 	
@@ -206,10 +198,16 @@ public class DataMediator{
 	//dodawanie stanu do bazy danych 
 	public void archiveUsersState()
 	{
+		//sprawdzanie czy identyczny stan nie istnieje ju¿ w bazie
 		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), db.getUserId(currentUser.getName()).get(0));
-		
-		previousStates.addNewState(currentUser.ArchiveUserState());
+		List<State> states = db.getStatesWhereConditions(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), db.getUserId(currentUser.getName()).get(0));
+
+		if(states == null || states.size() == 0) {
+			//adding state into database here also
+			db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), db.getUserId(currentUser.getName()).get(0));
+			
+			previousStates.addNewState(currentUser.ArchiveUserState());
+		}
 	}
 	
 	public void restoreUserState(int index)
@@ -267,7 +265,7 @@ public class DataMediator{
 			public void windowDeactivated(WindowEvent e) { }
 		});
 	}
-	
+
 	//create here new Thread that learning and passing learning set into a constructor and also the level is chosen here
 	public void startLearning(int level, String language, int isTest) {
 		switch (level)
@@ -289,8 +287,7 @@ public class DataMediator{
 				break;
 			
 		}
-		LearningSet learningSet = currentUser.genereteWordToLearn(50);
-		wordIterator = learningSet.iterator(isTest);
+		learningSet = currentUser.genereteWordToLearn(50);
 		
 		JFrame j = new JFrame();
 		JPanel basicPanel = new JPanel();
@@ -330,7 +327,7 @@ public class DataMediator{
 	
 	public void endLearning()
 	{
-		currentUser.increasePoints(pointsForLearningSet);
+		currentUser.increasePoints(learningSet.points);
 	}
 	
 	public ActionListener getCreationQuizListener(JFrame frame)
@@ -349,7 +346,8 @@ public class DataMediator{
 	//---------------------------------------------------------------------------------------------------------->ITERATOR
 	
 	public Word nextLearningWord() {
-		return wordIterator.next();
+		// tu iterator
+		return new Word();
 	}
 	
 	//---------------------------------------------------------------------------------------------------------->ACCESSING DATA FROM THE CLASS
@@ -433,7 +431,7 @@ public class DataMediator{
 	         if(option == null)
 	        	 return;
 	         currentQuiz = (TypeOfLearning)option;
-	         
+
 	         if (currentQuiz instanceof Practise) {
 	        	 startLearning(
 		        		 ((UserPanel)frame).getChoosenLevel(),

@@ -328,8 +328,28 @@ public class Database {
         }
         return states;
     }
+
+    //wyszukiwanie stanu o podanych warunkach 
+    public List<StateModel> selectStateWhereConditions(int cul, int cup, int userId) {
+  	  List<StateModel> states = new LinkedList<StateModel>();
+  	  try {
+            ResultSet result = stat.executeQuery("SELECT * FROM state WHERE currentUserLevel=\"" +cul+"\" AND currentProgress=\"" +cup+"\" AND idUser=\""+userId+"\"");
+            int id, idUser, currentUserLevel, currentProgress;
+            while(result.next()) {
+                id = result.getInt("id_state");
+                currentUserLevel = result.getInt("currentUserLevel");
+                currentProgress = result.getInt("currentProgress");
+                idUser = result.getInt("idUser");
+                states.add(new StateModel(id, currentUserLevel, currentProgress, idUser));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return states;
+    }
     
-    //wyszukiwanie osattnio dodanego stanu
+    //wyszukiwanie osatatnio dodanego stanu
     public int selectLastStateWhereUserId(int userId) {
     	int maxId = -1;
     	  try {

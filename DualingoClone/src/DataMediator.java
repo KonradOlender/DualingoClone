@@ -47,7 +47,7 @@ public class DataMediator{
   		
   		//dodawanie do bazy
   		DatabaseAccess db = DatabaseAccess.getInstance();
-  		db.addWord(word, translation, sow.level, language);		
+  		db.addWord(word, translation, level, language);		
   	}
   	
   	//tworzyc s³owo i usuwac z bazy pasujace
@@ -113,7 +113,7 @@ public class DataMediator{
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		return db.selectLanguages();
-
+		
 		//prototyp
 		/*List<String> x = new ArrayList<String>();
 		x.add("angielski");
@@ -167,6 +167,7 @@ public class DataMediator{
 			}
 		}
 		
+		System.out.println(states.size());
 		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
 		// poprostu przywracanie bedzie dzia³aæ podczas sesji jakby uzutkownika
 		// w sensie jak sie loguje do programu
@@ -268,7 +269,7 @@ public class DataMediator{
 	}
 	
 	//create here new Thread that learning and passing learning set into a constructor and also the level is chosen here
-	public void startLearning(int level, int isTest) {
+	public void startLearning(int level, String language, int isTest) {
 		switch (level)
 		{
 			case 1:
@@ -367,8 +368,8 @@ public class DataMediator{
 	
 	public IUserState[] getCurrentUserStates() 
 	{
-		return new IUserState[0];
-		//return previousStates.getStatesArray();
+		//return new IUserState[0];
+		return previousStates.getStatesArray();
 	}
 	
 	//---------------------------------------------------------------------------------------------------------->LISTENERS CLASSES
@@ -435,11 +436,17 @@ public class DataMediator{
 	         
 	         if (currentQuiz instanceof Practise) {
 	        	 startLearning(
-		        		 ((UserPanel)frame).getChoosenLevel(), 0);
+		        		 ((UserPanel)frame).getChoosenLevel(),
+		        		 ((UserPanel)frame).getLanguage(),
+		        		 0
+		        );
 	         }
 	         else
 		         startLearning(
-		        		 ((UserPanel)frame).getChoosenLevel(), 1);
+		        		 ((UserPanel)frame).getChoosenLevel(),
+		        		 ((UserPanel)frame).getLanguage(),
+		        		 1
+		     );
 	         frame.dispose();
 		}
 	}

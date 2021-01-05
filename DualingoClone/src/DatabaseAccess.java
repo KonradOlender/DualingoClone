@@ -187,6 +187,16 @@ public class DatabaseAccess {
     	return languages;
     }
 
+    public List<String> selectLanguagesList() {
+    	List<LanguageModel> list = data.selectLanguages();
+    	List<String> languages = new ArrayList<String>();
+    	
+    	for(int i=0; i<list.size(); i++) {
+    		languages.add(list.get(i).getName());
+    	}
+    	
+    	return languages;
+    }
     
     
     public void closeConnection() {

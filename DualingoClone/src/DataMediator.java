@@ -147,14 +147,18 @@ public class DataMediator{
 		currentUser.setName(name);
 		previousStates = new ArchivedUserStates(this);
 		
-		/*List<StateModel> states = db.getUserStates(id);
+		List<StateModel> states = db.getUserStates(id);
 		if(states == null || states.size() == 0) 
 			return currentUser;
 		
 		int max=0; 
+		int index = 0;
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
-			if(k>max) max=k;
+			if(k>max) {
+				max=k;
+				index = i;
+			}
 		}
 		
 		System.out.println(states.size());
@@ -164,8 +168,8 @@ public class DataMediator{
 		
 		max=max-1;
 		State state =new State();
-		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
-		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
+		state.setCurrentUserLevel(states.get(index).getCurrentUserLevel());
+		state.setCurrentUserProgress(states.get(index).getCurrentProgress());
 		
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
@@ -177,10 +181,10 @@ public class DataMediator{
 				currentUser.loadState(archivedState);
 				previousStates.addNewState(currentUser.ArchiveUserState());
 			}
-		}*/
+		}
 		
 		//zamiast tego zakomentowanego wyzej - spr czy dziala
-		int max = db.getLastUserState(id);
+		/*int max = db.getLastUserState(id);
 		if(max<0) return currentUser;
 
 		State state =new State();
@@ -189,7 +193,7 @@ public class DataMediator{
 		
 		
 		
-		currentUser.loadState(state);
+		currentUser.loadState(state);*/
 		return currentUser;
 	}
 	

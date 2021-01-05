@@ -27,11 +27,11 @@ public class LearningSet {
 		learningSet = strategy.generateWords();
 	}
 	
-	public class TestIterator implements Iterator<Word>{
+	public class PractiseIterator implements Iterator<Word>{
 
 		private int index;
 		private boolean a,b,c;
-		public TestIterator() {
+		public PractiseIterator() {
 			this.index = 0;
 			a = false;
 			b = false;
@@ -59,6 +59,10 @@ public class LearningSet {
 			return learningSet.get(index++);
 		}
 		
+		public Word currentItem()
+		{
+			return learningSet.get(index);
+		}
 	}
 	
 	public class RandomIterator implements Iterator<Word>{
@@ -84,11 +88,15 @@ public class LearningSet {
 			return learningSetcopy.get(index++);
 		}
 		
+		public Word currentItem()
+		{
+			return learningSet.get(index);
+		}
 	}
 	
 	public Iterator<Word> iterator(int i){
 		if(i == 0) {
-			return new TestIterator();
+			return new PractiseIterator();
 		}
 		else {
 			return new RandomIterator();

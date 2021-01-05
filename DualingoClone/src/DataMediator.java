@@ -15,8 +15,9 @@ import model.StateModel;
 public class DataMediator{
 
 	private User currentUser;
-	private ArchivedUserStates previousStates;
-	private LearningSet learningSet;
+	private ArchivedUserStates previousStates = new ArchivedUserStates(this);
+	private Iterator<Word> wordIterator;
+	private int pointsForLearningSet = 1;
 	private SetOfWords sow;
 	private TypeOfLearning currentQuiz;
 	
@@ -93,6 +94,11 @@ public class DataMediator{
 	public void addUser(String name) {
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		db.addUser(name);	
+		
+		currentUser = new User();
+		currentUser.setName(name);
+		archiveUsersState();
+		currentUser = null;
 	}
 	
 	//adding languages
@@ -147,14 +153,18 @@ public class DataMediator{
 		currentUser.setName(name);
 		previousStates = new ArchivedUserStates(this);
 		
-		/*List<StateModel> states = db.getUserStates(id);
+		List<StateModel> states = db.getUserStates(id);
 		if(states == null || states.size() == 0) 
 			return currentUser;
 		
 		int max=0; 
+		int index = 0;
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
-			if(k>max) max=k;
+			if(k>max) {
+				max=k;
+				index = i;
+			}
 		}
 		
 		//moze bedzie trzeba zmienic bo to co nizej jest nie moze dzia³aæ
@@ -163,8 +173,8 @@ public class DataMediator{
 		
 		max=max-1;
 		State state =new State();
-		state.setCurrentUserLevel(states.get(max).getCurrentUserLevel());
-		state.setCurrentUserProgress(states.get(max).getCurrentProgress());
+		state.setCurrentUserLevel(states.get(index).getCurrentUserLevel());
+		state.setCurrentUserProgress(states.get(index).getCurrentProgress());
 		
 		for(int i=0 ;i<states.size(); i++){
 			int k=states.get(i).getId();
@@ -176,19 +186,17 @@ public class DataMediator{
 				currentUser.loadState(archivedState);
 				previousStates.addNewState(currentUser.ArchiveUserState());
 			}
-		}*/
+		}
 		
 		//zamiast tego zakomentowanego wyzej - spr czy dziala
-		int max = db.getLastUserState(id);
+		/*int max = db.getLastUserState(id);
 		if(max<0) return currentUser;
 
-		State state =new State();
+		State state = new State();
 		state.setCurrentUserLevel(db.getUserStates(id).get(max-1).getCurrentUserLevel());
 		state.setCurrentUserProgress(db.getUserStates(id).get(max-1).getCurrentProgress());
 		
-		
-		
-		currentUser.loadState(state);
+		currentUser.loadState(state);*/
 		return currentUser;
 	}
 	
@@ -197,7 +205,6 @@ public class DataMediator{
 	//dodawanie stanu do bazy danych 
 	public void archiveUsersState()
 	{
-		//adding state into database here also
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), db.getUserId(currentUser.getName()).get(0));
 		
@@ -260,8 +267,8 @@ public class DataMediator{
 		});
 	}
 	
-	//create here new Thread that start learning and passing learning set into a constructor and also the level is chosen here
-	public void startLearning(int level) {
+	//create here new Thread that learning and passing learning set into a constructor and also the level is chosen here
+	public void startLearning(int level, int isTest) {
 		switch (level)
 		{
 			case 1:
@@ -281,7 +288,8 @@ public class DataMediator{
 				break;
 			
 		}
-		learningSet = currentUser.genereteWordToLearn(50);
+		LearningSet learningSet = currentUser.genereteWordToLearn(50);
+		wordIterator = learningSet.iterator(isTest);
 		
 		JFrame j = new JFrame();
 		JPanel basicPanel = new JPanel();
@@ -321,7 +329,7 @@ public class DataMediator{
 	
 	public void endLearning()
 	{
-		currentUser.increasePoints(learningSet.points);
+		currentUser.increasePoints(pointsForLearningSet);
 	}
 	
 	public ActionListener getCreationQuizListener(JFrame frame)
@@ -340,8 +348,7 @@ public class DataMediator{
 	//---------------------------------------------------------------------------------------------------------->ITERATOR
 	
 	public Word nextLearningWord() {
-		// tu iterator
-		return new Word();
+		return wordIterator.next();
 	}
 	
 	//---------------------------------------------------------------------------------------------------------->ACCESSING DATA FROM THE CLASS
@@ -426,8 +433,13 @@ public class DataMediator{
 	        	 return;
 	         currentQuiz = (TypeOfLearning)option;
 	         
-	         startLearning(
-	        		 ((UserPanel)frame).getChoosenLevel());
+	         if (currentQuiz instanceof Practise) {
+	        	 startLearning(
+		        		 ((UserPanel)frame).getChoosenLevel(), 0);
+	         }
+	         else
+		         startLearning(
+		        		 ((UserPanel)frame).getChoosenLevel(), 1);
 	         frame.dispose();
 		}
 	}

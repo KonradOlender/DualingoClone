@@ -14,7 +14,7 @@ import model.StateModel;
 
 public class DataMediator{
 
-	private User currentUser;
+	private User currentUser = new User();
 	private ArchivedUserStates previousStates;
 	private LearningSet learningSet;
 	private SetOfWords sow;
@@ -129,16 +129,11 @@ public class DataMediator{
 	//czytanie z bazy danych, szukanie nazwy uzytkownika
 	public boolean userExists(String name)
 	{
-		if(currentUser == null) 
-		{
-			currentUser = new User();
-			DatabaseAccess db = DatabaseAccess.getInstance();
-			int id = db.getUserId(name).get(0);
-			currentUser.setName(name);
-		}
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		List<Integer> usersIds = db.getUserId(name);
+		if(usersIds.size() == 0) return false;
 		
-		if(currentUser.getName().equals(name))return true;
-		return false;
+		return true;
 	}
 	
 	public User getUser(String name) {
@@ -208,7 +203,7 @@ public class DataMediator{
 			
 			previousStates.addNewState(currentUser.ArchiveUserState());
 		}*/
-        System.out.println("wywo³ano archive user state");
+        //System.out.println("wywo³ano archive user state");
 		
 		//sprawdzanie czy ostatnio dodany stan jest taki sam
 		DatabaseAccess db = DatabaseAccess.getInstance();
@@ -273,7 +268,7 @@ public class DataMediator{
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
-					//archiveUsersState();
+					archiveUsersState();
 				
 				//zamykanie polaczenia z baza
 				closeConnection();

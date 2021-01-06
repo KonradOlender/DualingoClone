@@ -10,11 +10,19 @@ public class LearningSet {
 	private int size;
 	private LevelOfWordsToLearn strategy;
 	private List<Word> learningSet;
-	public int points = 1;
+	public int points = 10;
 	
 	public LearningSet(int size)
 	{
 		this.size = size;
+		
+		for(int i=1; i<11; i++)
+		{
+			Word w = new Word();
+			w.translation = "t³umaczenie" + i;
+			w.word = "slowko" + i;
+			learningSet.add(w);
+		}
 	}
 	
 	public void setLevel(LevelOfWordsToLearn level)

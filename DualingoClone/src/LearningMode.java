@@ -63,4 +63,9 @@ abstract public class LearningMode extends TypeOfLearning{
 	{
 		return tol.getDataMediator();
 	}
+	
+	public void setUpQuiz() 
+	{
+		tol.setUpQuiz();
+	};
 }

@@ -15,7 +15,7 @@ public class LearningSet {
 	public LearningSet(int size)
 	{
 		this.size = size;
-		
+		learningSet = new ArrayList<Word>();
 		for(int i=1; i<11; i++)
 		{
 			Word w = new Word();

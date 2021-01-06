@@ -15,8 +15,10 @@ import model.StateModel;
 public class DataMediator{
 
 	private User currentUser = new User();
-	private ArchivedUserStates previousStates;
-	private LearningSet learningSet;
+	private ArchivedUserStates previousStates = new ArchivedUserStates(this);
+	private Iterator<Word> wordIterator;
+	private int pointsForLearningSet = 1;
+	//private LearningSet learningSet;
 	private SetOfWords sow;
 	private TypeOfLearning currentQuiz;
 	
@@ -267,8 +269,8 @@ public class DataMediator{
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
-					archiveUsersState();
+				//if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
+				//	archiveUsersState();
 				
 				//zamykanie polaczenia z baza
 				closeConnection();
@@ -315,7 +317,10 @@ public class DataMediator{
 				break;
 			
 		}
-		learningSet = currentUser.genereteWordToLearn(50);
+		LearningSet learningSet = currentUser.genereteWordToLearn(50);
+		wordIterator = learningSet.iterator(isTest);
+		pointsForLearningSet = learningSet.points;
+		currentQuiz.SetWord(nextLearningWord());
 		
 		JFrame j = new JFrame();
 		JPanel basicPanel = new JPanel();
@@ -330,6 +335,7 @@ public class DataMediator{
 			public void windowClosing(WindowEvent e) 
 			{
 				openUserPanel();
+				currentQuiz = null;
 			}
 
 			@Override
@@ -355,7 +361,7 @@ public class DataMediator{
 	
 	public void endLearning()
 	{
-		currentUser.increasePoints(learningSet.points);
+		currentUser.increasePoints(pointsForLearningSet);
 	}
 	
 	public ActionListener getCreationQuizListener(JFrame frame)
@@ -374,8 +380,9 @@ public class DataMediator{
 	//---------------------------------------------------------------------------------------------------------->ITERATOR
 	
 	public Word nextLearningWord() {
-		// tu iterator
-		return new Word();
+		if(!wordIterator.hasNext())
+			return null;
+		return wordIterator.next();
 	}
 	
 	//---------------------------------------------------------------------------------------------------------->ACCESSING DATA FROM THE CLASS
@@ -473,6 +480,7 @@ public class DataMediator{
 		        		 ((UserPanel)frame).getLanguage(),
 		        		 1
 		     );
+	         currentQuiz.setUpQuiz();
 	         frame.dispose();
 		}
 	}

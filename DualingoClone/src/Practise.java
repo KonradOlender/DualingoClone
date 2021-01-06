@@ -10,7 +10,6 @@ public class Practise extends LearningMode implements ActionListener{
 	{
 		super(tol);
 		this.panel = this.getMainPanel();
-		this.setNextButtonListener(this);
 	}
 	
 	@Override
@@ -35,6 +34,12 @@ public class Practise extends LearningMode implements ActionListener{
 			((Practise)this).SetWord(newWord);
 		}
 			
+	}
+	
+	@Override
+	public void setUpQuiz()
+	{
+		this.setNextButtonListener(this);
 	}
 	
 	@Override

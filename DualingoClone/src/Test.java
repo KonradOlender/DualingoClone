@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -10,7 +11,6 @@ public class Test extends LearningMode implements ActionListener{
 	{
 		super(tol);
 		this.panel = this.getMainPanel();
-		this.setNextButtonListener(this);
 	}
 	
 	@Override
@@ -28,6 +28,8 @@ public class Test extends LearningMode implements ActionListener{
 		{
 			JFrame frame = new JFrame();
 			JPanel panel = new JPanel();
+			panel.setLayout(new BoxLayout(panel, 1));
+			panel.setPreferredSize(new Dimension(300,100));
 			int all = correctAnswers+incorrectAnswers;
 			JLabel correctLabel = new JLabel("Poprawne odpowiedzi: " + correctAnswers + "/" + all);
 			JLabel incorrectLabel = new JLabel("Niepoprawne odpowiedzi: " + incorrectAnswers + "/" + all);
@@ -35,7 +37,16 @@ public class Test extends LearningMode implements ActionListener{
 			panel.add(correctLabel);
 			panel.add(incorrectLabel);
 			mediator.endLearning();
+			frame.setVisible(true);
+			frame.pack();
+			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		}
+	}
+	
+	@Override
+	public void setUpQuiz()
+	{
+		this.setNextButtonListener(this);
 	}
 	
 	@Override

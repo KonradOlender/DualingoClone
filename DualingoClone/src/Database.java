@@ -272,9 +272,17 @@ public class Database {
     //wyszukiwanie s³ow o podanych warunkach
     public List<WordModel> selectWordsWhereConditions(int level, String searchedPhrase, int language) {
     	List<WordModel> words = new LinkedList<WordModel>();
+                  System.out.println("wywo³ano selectWordsWhereConditions");
+//zamiast pustego searchedPhrase przekazywane jest wyszukaj s³owo
+                  System.out.println("searchedPhrase= " + searchedPhrase);
     	  try {
-              ResultSet result = stat.executeQuery("SELECT * FROM word WHERE idLevel=\""+level+"\" AND idLanguage=\""+language+"\" AND ( word=\"%"+searchedPhrase+"%\" OR translation=\"%"+searchedPhrase+"%\")");
-              int id, idLevel, idLanguage;
+    		  ResultSet result;
+    		  if(searchedPhrase == null || searchedPhrase=="" ) {
+    			  result = stat.executeQuery("SELECT * FROM word WHERE idLevel=\""+level+"\" AND idLanguage=\""+language+"\"");
+    		  }
+    		  else result = stat.executeQuery("SELECT * FROM word WHERE idLevel=\""+level+"\" AND idLanguage=\""+language+"\" AND ( word LIKE \"%"+searchedPhrase+"%\" OR translation LIKE \"%"+searchedPhrase+"%\")");
+              
+    		  int id, idLevel, idLanguage;
               String word, translation;
               while(result.next()) {
                   id = result.getInt("id_word");

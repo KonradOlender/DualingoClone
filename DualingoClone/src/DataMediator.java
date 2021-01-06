@@ -74,7 +74,8 @@ public class DataMediator{
 	public SetOfWords getFilteredWords(int level, String searchedPhrase, String language)
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
-		return db.selectWordsWhereConditions(level, searchedPhrase, language);
+		sow = db.selectWordsWhereConditions(level, searchedPhrase, language);
+		return sow;
 	}
 	
 	public void deleteWord(Word w) {
@@ -272,7 +273,7 @@ public class DataMediator{
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
-					archiveUsersState();
+					//archiveUsersState();
 				
 				//zamykanie polaczenia z baza
 				closeConnection();

@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SetOfWords {
+	String language;
 	int level;
 	List<Word> listOfWords;
 	

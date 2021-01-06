@@ -301,7 +301,8 @@ public class UserPanel extends JFrame{
 	
 	private void updateListOfWords()
 	{
-		String searchedPhrase = research.getText();
+		String searchedPhrase = 
+				("Wyszukaj s³owa").equals(research.getText()) ? "" : research.getText();
 		int level = (int)spinnerSearching.getValue();
 		String language = (String)languageListSearching.getSelectedItem();
 		adapter.setNewSet(mediator.getFilteredWords(level, searchedPhrase, language));

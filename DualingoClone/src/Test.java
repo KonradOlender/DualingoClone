@@ -41,6 +41,7 @@ public class Test extends LearningMode implements ActionListener{
 			frame.pack();
 			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		}
+		this.cleanAnswers();
 	}
 	
 	@Override

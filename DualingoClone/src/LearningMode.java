@@ -67,5 +67,10 @@ abstract public class LearningMode extends TypeOfLearning{
 	public void setUpQuiz() 
 	{
 		tol.setUpQuiz();
-	};
+	}
+	
+	public void cleanAnswers()
+	{
+		tol.cleanAnswers();
+	}
 }

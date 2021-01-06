@@ -38,14 +38,6 @@ public class DataMediator{
     //tworzyc s³owo i dodawac do bazy
   	public void addWord(String word, String translation, int level, String language)
   	{
-  		/*if(sow == null)
-  			sow = new SetOfWords(level);
-  		
-  		Word word2 = new Word();
-  		word2.translation = translation;
-  		word2.word = word;
-  		sow.addWord(word2);*/
-  		
   		//dodawanie do bazy
   		DatabaseAccess db = DatabaseAccess.getInstance();
   		db.addWord(word, translation, level, language);		
@@ -110,13 +102,6 @@ public class DataMediator{
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		return db.selectLanguages();
-		
-		//prototyp
-		/*List<String> x = new ArrayList<String>();
-		x.add("angielski");
-		String[] array = new String[1];
-		x.toArray(array);
-		return array;*/
 	}
 	
 	//sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1

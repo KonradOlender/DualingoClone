@@ -33,5 +33,11 @@ public class OpenAnswers extends LearningMode{
 	{
 		return "Odpowiedzi otwarte";
 	}
+	
+	@Override
+	public void cleanAnswers()
+	{
+		answerField.setText("");
+	}
 }
 

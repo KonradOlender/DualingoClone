@@ -31,6 +31,7 @@ public class Quiz extends TypeOfLearning{
 		return mediator;
 	}
 	
-	public void setUpQuiz() { };
+	public void setUpQuiz() { }
+	public void cleanAnswers() { }
 	
 }

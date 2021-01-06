@@ -27,6 +27,8 @@ abstract public class TypeOfLearning //extends JPanel
 	
 	abstract public void setUpQuiz();
 
+	abstract public void cleanAnswers();
+	
 	abstract public DataMediator getDataMediator();
 	
 	public void SetWord(Word word)
@@ -71,5 +73,5 @@ abstract public class TypeOfLearning //extends JPanel
 		mainPanel.add(getAnswerPanel());
 		return mainPanel;
 	}
-	
+
 }

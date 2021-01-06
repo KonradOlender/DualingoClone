@@ -57,4 +57,10 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 	{
 		return "Odpowiedzi zamkniête";
 	}
+	
+	@Override
+	public void cleanAnswers()
+	{
+		bg.clearSelection();
+	}
 }

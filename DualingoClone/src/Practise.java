@@ -24,6 +24,7 @@ public class Practise extends LearningMode implements ActionListener{
 		}
 		else
 		{
+			this.cleanAnswers();
 			DataMediator mediator = getDataMediator();
 			Word newWord = mediator.nextLearningWord();
 			if(newWord == null)

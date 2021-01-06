@@ -329,6 +329,27 @@ public class Database {
         return states;
     }
 
+    //wyszukiwanie stanu po id uzytkownika - bez duplikatow
+    public List<State> selectDistinctStateWhereUserId(int userId) {
+  	  List<State> states = new LinkedList<State>();
+  	  try {
+            ResultSet result = stat.executeQuery("SELECT DISTINCT currentUserLevel, currentProgress FROM state WHERE idUser=\""+userId+"\"");
+            int id, idUser, currentUserLevel, currentProgress;
+            while(result.next()) {
+                currentUserLevel = result.getInt("currentUserLevel");
+                currentProgress = result.getInt("currentProgress");
+                State s = new State();
+    			s.setCurrentUserLevel(currentUserLevel);
+    			s.setCurrentUserProgress(currentProgress);
+    			states.add(s);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return states;
+    }
+    
     //wyszukiwanie stanu o podanych warunkach 
     public List<StateModel> selectStateWhereConditions(int cul, int cup, int userId) {
   	  List<StateModel> states = new LinkedList<StateModel>();

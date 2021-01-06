@@ -213,9 +213,14 @@ public class DataMediator{
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		int id = db.getUserId(currentUser.getName()).get(0);
 		int max = db.getLastUserState(id);
-		
-		if((db.getUserStates(id).get(max-1).getCurrentUserLevel()!=currentUser.getCurrentLevel() && 
-				db.getUserStates(id).get(max-1).getCurrentProgress()!=(int) currentUser.getCurrentProgress()) || max<0) {
+		if(max<1) {
+			db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
+	        System.out.println("dodano archive user state");
+			
+			previousStates.addNewState(currentUser.ArchiveUserState());			
+		}
+		else if((db.getUserStates(id).get(max-1).getCurrentUserLevel()!=currentUser.getCurrentLevel() && 
+				db.getUserStates(id).get(max-1).getCurrentProgress()!=(int) currentUser.getCurrentProgress())) {
 			//adding state into database here also
 			db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
 	        System.out.println("dodano archive user state");
@@ -240,6 +245,18 @@ public class DataMediator{
 		//db.deleteState(currentUserLevel, currentProgress, idUser); 
 	}
 	
+	//lista stanow uzytkownika
+	public List<State> getUserStates(int id) {
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		return db.getUserStatesList(id);
+	}
+	
+	//lista stanow uzytkownika - bez duplikatow
+	public List<State> getDistinctUserStates(int id) {
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		return db.getDistinctUserStatesList(id);
+	}
+
 	//---------------------------------------------------------------------------------------------------------->WINDOWS METHODS
 	
 	public void startMainWindow()

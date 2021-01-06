@@ -75,7 +75,7 @@ public class DatabaseAccess {
 		return states;
 	}
 	
-	//pobieranie stanów u¿ytkownika
+	//pobieranie stanów u¿ytkownika o podanych warunkach
 	public List<State> getStatesWhereConditions(int cul, int cup, int id) {
 		List<StateModel> statesModel = data.selectStateWhereConditions(cul, cup, id);
 		List<State> states = new ArrayList();
@@ -85,6 +85,25 @@ public class DatabaseAccess {
 			s.setCurrentUserProgress(sm.getCurrentProgress());
 			states.add(s);
 		}
+		return states;
+	}
+
+	//pobieranie stanów u¿ytkownika - lista State
+	public List<State> getUserStatesList(int id) {
+		List<StateModel> statesModel = data.selectStateWhereUserId(id);
+		List<State> states = new ArrayList();
+		State s=new State();
+		for(StateModel sm: statesModel) {
+			s.setCurrentUserLevel(sm.getCurrentUserLevel());
+			s.setCurrentUserProgress(sm.getCurrentProgress());
+			states.add(s);
+		}
+		return states;
+	}
+
+	//pobieranie stanów u¿ytkownika - lista State BEZ DUPLIKATOW
+	public List<State> getDistinctUserStatesList(int id) {
+		List<State> states = data.selectDistinctStateWhereUserId(id);
 		return states;
 	}
 	
@@ -130,7 +149,7 @@ public class DatabaseAccess {
 	}
 	
 	
-	//dodawanie s³owa z bazy 
+	//dodawanie s³owa do bazy 
 	public void addWord(String word, String translation, int idLevel, String language) {
 		int idLanguage = data.selectLanguageWhereName(language).get(0).getId();
 		data.insertWord(word, translation, idLevel, idLanguage);
@@ -149,13 +168,16 @@ public class DatabaseAccess {
 	
 	//pobieranie s³ow z bazy spelniajacych podane warunki
     public SetOfWords selectWordsWhereConditions(int level, String searchedPhrase, String language) {
-    	int idLanguage = data.selectLanguageWhereName(language).get(0).getId();
-		List<WordModel> words = data.selectWordsWhereConditions(level, searchedPhrase, idLanguage);
+    	List<LanguageModel> lm = data.selectLanguageWhereName(language);
 		SetOfWords sow = new SetOfWords(level);
-		Word word;
-		for(WordModel wm : words) {
-			word = new Word(wm.getWord(), wm.getTranslation());
-			sow.addWord(word);
+    	if(lm.size()>0) {
+	    	int idLanguage = lm.get(0).getId();
+			List<WordModel> words = data.selectWordsWhereConditions(level, searchedPhrase, idLanguage);
+			Word word;
+			for(WordModel wm : words) {
+				word = new Word(wm.getWord(), wm.getTranslation());
+				sow.addWord(word);
+			}
 		}
 		return sow;
     }
@@ -239,6 +261,14 @@ public class DatabaseAccess {
 		List<StateModel> states = data.selectStates();
         for(StateModel c: states)
             System.out.println(c);
+        
+        System.out.println("State table - bez powtorzen");
+        System.out.println("level - progress - userId");
+        for(UserModel u : data.selectUsers()) {
+			List<State> statesD = data.selectDistinctStateWhereUserId(u.getId());
+	        for(State c: statesD)
+	            System.out.println(c.getCurrentUserLevel()+" - "+c.getProgress()+" - "+u.getId());
+        }
 
         System.out.println("Language table");
 		List<LanguageModel> languages = data.selectLanguages();

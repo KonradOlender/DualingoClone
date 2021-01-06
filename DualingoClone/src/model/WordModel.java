@@ -49,6 +49,6 @@ public class WordModel {
 
     @Override
     public String toString() {
-        return "["+id+"] - "+translation+" "+translation+" - "+idLevel+" - "+idLanguage;
+        return "["+id+"] - "+word+" "+translation+" - "+idLevel+" - "+idLanguage;
     }
 }

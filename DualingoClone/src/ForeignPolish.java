@@ -13,7 +13,7 @@ public class ForeignPolish extends LearningMode{
 	}
 	
 	@Override
-	public JPanel getQuestionPanel()
+	protected JPanel getQuestionPanel()
 	{
 		return this.panel;
 	}

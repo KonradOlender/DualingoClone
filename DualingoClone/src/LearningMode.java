@@ -11,7 +11,7 @@ abstract public class LearningMode extends TypeOfLearning{
 	}
 	
 	@Override
-	public JPanel getMainPanel()
+	protected JPanel getMainPanel()
 	{
 		return tol.getMainPanel();
 	}
@@ -41,19 +41,19 @@ abstract public class LearningMode extends TypeOfLearning{
 	}
 
 	@Override
-	public JPanel getQuestionPanel()
+	protected JPanel getQuestionPanel()
 	{
 		return tol.getQuestionPanel();
 	}
 	
 	@Override
-	public JPanel getAnswerPanel()
+	protected JPanel getAnswerPanel()
 	{
 		return tol.getAnswerPanel();
 	}
 	
 	@Override
-	public void setNextButtonListener(ActionListener al) 
+	protected void setNextButtonListener(ActionListener al) 
 	{
 		tol.setNextButtonListener(al);
 	}
@@ -69,7 +69,7 @@ abstract public class LearningMode extends TypeOfLearning{
 		tol.setUpQuiz();
 	}
 	
-	public void cleanAnswers()
+	protected void cleanAnswers()
 	{
 		tol.cleanAnswers();
 	}

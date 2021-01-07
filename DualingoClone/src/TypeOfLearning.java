@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 abstract public class TypeOfLearning //extends JPanel
 {
@@ -16,18 +17,18 @@ abstract public class TypeOfLearning //extends JPanel
 	{
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, 1));
-		//panel.setLayout(null);
+		panel.setBorder(new EmptyBorder(10, 5, 2, 5));
 		word = new Word();
-		word.translation = "polski";
-		word.word = "obcy";
+		word.translation = word.word = "";
+		//panel.setLayout(null);
 		//panel.setPreferredSize(new Dimension(WINDOW_WIDTH,WINDOW_HEIGHT));
 	}
 	
-	abstract public void setNextButtonListener(ActionListener al);
+	abstract protected void setNextButtonListener(ActionListener al);
 	
 	abstract public void setUpQuiz();
 
-	abstract public void cleanAnswers();
+	abstract protected void cleanAnswers();
 	
 	abstract public DataMediator getDataMediator();
 	
@@ -51,17 +52,17 @@ abstract public class TypeOfLearning //extends JPanel
 		return "";
 	}
 	
-	public JPanel getMainPanel()
+	protected JPanel getMainPanel()
 	{
 		return panel;
 	}
 	
-	public JPanel getQuestionPanel()
+	protected JPanel getQuestionPanel()
 	{
 		return new JPanel();
 	}
 	
-	public JPanel getAnswerPanel()
+	protected JPanel getAnswerPanel()
 	{
 		return new JPanel();
 	}

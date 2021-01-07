@@ -310,6 +310,7 @@ public class DataMediator{
 		JFrame j = new JFrame();
 		JPanel basicPanel = new JPanel();
 		basicPanel.add(currentQuiz.createPanel());
+		j.setPreferredSize(basicPanel.getPreferredSize());
 		j.add(basicPanel);			
 		j.setVisible(true);
 		j.pack();
@@ -452,6 +453,7 @@ public class DataMediator{
 	        	 return;
 	         currentQuiz = (TypeOfLearning)option;
 
+	         currentQuiz.setUpQuiz();
 	         if (currentQuiz instanceof Practise) {
 	        	 startLearning(
 		        		 ((UserPanel)frame).getChoosenLevel(),
@@ -465,7 +467,6 @@ public class DataMediator{
 		        		 ((UserPanel)frame).getLanguage(),
 		        		 1
 		     );
-	         currentQuiz.setUpQuiz();
 	         frame.dispose();
 		}
 	}

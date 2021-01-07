@@ -20,7 +20,7 @@ public class Quiz extends TypeOfLearning{
 	}
 
 	@Override
-	public void setNextButtonListener(ActionListener al) 
+	protected void setNextButtonListener(ActionListener al) 
 	{
 		nextQuestionButton.addActionListener(al);
 	}
@@ -32,6 +32,6 @@ public class Quiz extends TypeOfLearning{
 	}
 	
 	public void setUpQuiz() { }
-	public void cleanAnswers() { }
+	protected void cleanAnswers() { }
 	
 }

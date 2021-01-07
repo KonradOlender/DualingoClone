@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class OpenAnswers extends LearningMode{
 	private JTextField answerField;
@@ -14,6 +15,7 @@ public class OpenAnswers extends LearningMode{
 		this.panel.setLayout(new BoxLayout(panel, 1));
 		answerField = new JTextField();
 		this.panel.add(answerField);
+		this.panel.setBorder(new EmptyBorder(10, 0, 0, 0));
 	}
 	
 	@Override
@@ -23,7 +25,7 @@ public class OpenAnswers extends LearningMode{
 	}
 	
 	@Override
-	public JPanel getAnswerPanel()
+	protected JPanel getAnswerPanel()
 	{
 		return this.panel;
 	}
@@ -35,7 +37,7 @@ public class OpenAnswers extends LearningMode{
 	}
 	
 	@Override
-	public void cleanAnswers()
+	protected void cleanAnswers()
 	{
 		answerField.setText("");
 	}

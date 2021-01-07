@@ -340,8 +340,18 @@ public class UserPanel extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int row = table.getSelectedRow();
-			mediator.deleteWord((String)table.getValueAt(row, 1), (String)table.getValueAt(row, 2), 1);
-			updateListOfWords();
+			try {
+				mediator.deleteWord((String)table.getValueAt(row, 1), (String)table.getValueAt(row, 2), 1);
+				updateListOfWords();
+			}
+			catch(Exception exp)
+			{
+				System.out.println("User " + mediator.getUserName() + " didn't chooose the word to delete");
+				JOptionPane.showMessageDialog(new JFrame(),
+	    				"Aby usun¹æ s³owo musisz je zaznaczyæ na liœcie",
+	    				"Nie wybrano s³owa",
+	    				JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		
 	}

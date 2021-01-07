@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class CloseAnswers extends LearningMode implements ActionListener{
 
@@ -28,6 +29,7 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 		}    
 		this.panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 		this.panel.setBackground(Color.green);
+		this.panel.setBorder(new EmptyBorder(10, 5, 2, 5));
 	}
 	
 	@Override
@@ -40,7 +42,7 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 	}
 	
 	@Override
-	public JPanel getAnswerPanel()
+	protected JPanel getAnswerPanel()
 	{
 		return this.panel;
 	}
@@ -49,7 +51,6 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 	public void actionPerformed(ActionEvent event)
 	{
 		usersAnswer = event.getActionCommand();
-		System.out.println(usersAnswer);
 	}
 	
 	@Override
@@ -59,7 +60,7 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 	}
 	
 	@Override
-	public void cleanAnswers()
+	protected void cleanAnswers()
 	{
 		bg.clearSelection();
 	}

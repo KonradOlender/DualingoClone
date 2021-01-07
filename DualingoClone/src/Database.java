@@ -272,9 +272,6 @@ public class Database {
     //wyszukiwanie s³ow o podanych warunkach
     public List<WordModel> selectWordsWhereConditions(int level, String searchedPhrase, int language) {
     	List<WordModel> words = new LinkedList<WordModel>();
-                  System.out.println("wywo³ano selectWordsWhereConditions");
-//zamiast pustego searchedPhrase przekazywane jest wyszukaj s³owo
-                  System.out.println("searchedPhrase= " + searchedPhrase);
     	  try {
     		  ResultSet result;
     		  if(searchedPhrase == null || searchedPhrase=="" ) {

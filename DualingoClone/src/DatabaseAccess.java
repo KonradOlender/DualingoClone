@@ -159,7 +159,7 @@ public class DatabaseAccess {
 	public void deleteWord(Word word) {
 		List<WordModel> words = data.selectWords();
 		for(WordModel wm: words) {
-			if(wm.getTranslation() == word.getTranslation() && wm.getWord() == word.getWord()) {
+			if(wm.getTranslation().equals(word.getTranslation()) && wm.getWord().equals(word.getWord())) {
 				int id = wm.getId();
 				data.deleteWordWhereId(id);
 			}
@@ -170,6 +170,7 @@ public class DatabaseAccess {
     public SetOfWords selectWordsWhereConditions(int level, String searchedPhrase, String language) {
     	List<LanguageModel> lm = data.selectLanguageWhereName(language);
 		SetOfWords sow = new SetOfWords(level);
+		sow.language= language;
     	if(lm.size()>0) {
 	    	int idLanguage = lm.get(0).getId();
 			List<WordModel> words = data.selectWordsWhereConditions(level, searchedPhrase, idLanguage);

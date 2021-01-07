@@ -30,9 +30,9 @@ public class LearningSet {
 		strategy = level;
 	}
 	
-	public void generateSetOfWords() 
+	public void generateSetOfWords(String language) 
 	{
-		learningSet = strategy.generateWords();
+		learningSet = strategy.generateWords(language);
 	}
 	
 	public class PractiseIterator implements Iterator<Word>{

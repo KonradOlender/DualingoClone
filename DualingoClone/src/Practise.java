@@ -20,6 +20,7 @@ public class Practise extends LearningMode implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
+		
 		if(getCorrectAnswer()!= null && getCorrectAnswer().equals(getUserAnswer()))
 		{
 			messageLabel.setVisible(false);
@@ -49,6 +50,7 @@ public class Practise extends LearningMode implements ActionListener{
 		messageLabel.setVisible(false);
 		panel.setPreferredSize(new Dimension(500,200));
 		this.setNextButtonListener(this);
+		super.setUpQuiz();
 	}
 	
 	@Override

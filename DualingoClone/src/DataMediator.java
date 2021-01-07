@@ -17,10 +17,10 @@ public class DataMediator{
 	private User currentUser = new User();
 	private ArchivedUserStates previousStates = new ArchivedUserStates(this);
 	private Iterator<Word> wordIterator;
-	private int pointsForLearningSet = 1;
-	//private LearningSet learningSet;
+	private LearningSet learningSet;
 	private SetOfWords sow;
 	private TypeOfLearning currentQuiz;
+	private Random randomizer = new Random();
 	
 	//---------------------------------------------------------------------------------------------------------->DATABASE METHODS
 	//sprawdzanie bazy
@@ -71,6 +71,29 @@ public class DataMediator{
 		sow = db.selectWordsWhereConditions(level, searchedPhrase, language);
 		return sow;
 	}
+	
+	public List<String> generateRandomAnswers(int size, String correctAnswer)//, boolean isTranslation)
+	{
+		ArrayList<String> answers = new ArrayList<String>();
+		if(learningSet == null || learningSet.getSize() < 2 || correctAnswer == null)
+		{
+			for(int i = 0; i < size ; i++)
+				answers.add("");
+			return answers;
+		}
+		while(answers.size() < size)
+		{
+			int index = randomInt(learningSet.getSize());
+			Word word = learningSet.getWordAt(index);
+			String stringToCompare = randomInt(2) == 1 ? word.translation: word.word; 
+			if(!correctAnswer.equals(stringToCompare))
+			{
+				answers.add(stringToCompare);
+			}
+		}
+		return answers;
+	}
+	
 	
 	public void deleteWord(Word w) {
 		//database operation after 
@@ -302,9 +325,8 @@ public class DataMediator{
 				break;
 			
 		}
-		LearningSet learningSet = currentUser.genereteWordToLearn(50);
+		learningSet = currentUser.genereteWordToLearn(50);
 		wordIterator = learningSet.iterator(isTest);
-		pointsForLearningSet = learningSet.points;
 		currentQuiz.SetWord(nextLearningWord());
 		
 		JFrame j = new JFrame();
@@ -347,7 +369,7 @@ public class DataMediator{
 	
 	public void endLearning()
 	{
-		currentUser.increasePoints(pointsForLearningSet);
+		currentUser.increasePoints(learningSet.points);
 	}
 	
 	public ActionListener getCreationQuizListener(JFrame frame)
@@ -369,6 +391,12 @@ public class DataMediator{
 		if(!wordIterator.hasNext())
 			return null;
 		return wordIterator.next();
+	}
+	
+	//max value is excluded from the range
+	public int randomInt(int maxValue)
+	{
+		return randomizer.nextInt(maxValue);
 	}
 	
 	//---------------------------------------------------------------------------------------------------------->ACCESSING DATA FROM THE CLASS
@@ -428,18 +456,19 @@ public class DataMediator{
 	        currentQuiz = (TypeOfLearning)option;
 	         
 	        option = JOptionPane.showInputDialog(
-	        	frame,
-	        	"Wybierz sposób nauki",
-	            "Rodzaj opcji odpowiedzi",
-	            JOptionPane.QUESTION_MESSAGE,null,
-	               	new LearningMode[] {
-	                new OpenAnswers(currentQuiz),
-	                new CloseAnswers(currentQuiz),
-	            }, null);
-	        if(option == null)
-	        	return;
-	        currentQuiz = (TypeOfLearning)option;
+	 	        	frame,
+	 	        	"Wybierz sposób nauki",
+	 	            "Rodzaj opcji odpowiedzi",
+	 	            JOptionPane.QUESTION_MESSAGE,null,
+	 	               	new LearningMode[] {
+	 	                new OpenAnswers(currentQuiz),
+	 	                new CloseAnswers(currentQuiz),
+	 	            }, null);
+	 	        if(option == null)
+	 	        	return;
+	 	    currentQuiz = (TypeOfLearning)option;
 	         
+	        
 	        option = JOptionPane.showInputDialog(
 	            frame,
 	            "Wybierz sposób nauki",
@@ -453,7 +482,9 @@ public class DataMediator{
 	        	 return;
 	         currentQuiz = (TypeOfLearning)option;
 
-	         currentQuiz.setUpQuiz();
+	         
+	 	     currentQuiz.setUpQuiz();
+
 	         if (currentQuiz instanceof Practise) {
 	        	 startLearning(
 		        		 ((UserPanel)frame).getChoosenLevel(),

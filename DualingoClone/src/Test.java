@@ -48,6 +48,7 @@ public class Test extends LearningMode implements ActionListener{
 	public void setUpQuiz()
 	{
 		this.setNextButtonListener(this);
+		super.setUpQuiz();
 	}
 	
 	@Override

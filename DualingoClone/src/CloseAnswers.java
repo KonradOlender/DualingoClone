@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -18,17 +19,26 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 		answers = new JRadioButton[numberOfAnswers];
 		this.panel = new JPanel();
 		this.panel.setLayout(new BoxLayout(panel,1));
+		ActionListener buttonListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				usersAnswer = e.getActionCommand();
+				System.out.println(usersAnswer);
+			}
+			
+		};
+		
 		bg=new ButtonGroup(); 
 		for(int i=0 ;i < numberOfAnswers ; i++)
 		{
 			answers[i] = new JRadioButton();
-			answers[i].setText("Button" + i);
-			answers[i].addActionListener(this);
+			//answers[i].setText("Button" + i);
+			answers[i].addActionListener(buttonListener);
 			bg.add(answers[i]);
 			this.panel.add(answers[i]);
-		}    
+		}
 		this.panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-		this.panel.setBackground(Color.green);
 		this.panel.setBorder(new EmptyBorder(10, 5, 2, 5));
 	}
 	
@@ -50,7 +60,26 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
-		usersAnswer = event.getActionCommand();
+		
+	}
+	
+	private void fillInAnswers()
+	{
+		DataMediator mediator = this.getDataMediator();
+		int correctAnswerIndex = mediator.randomInt(numberOfAnswers);
+		System.out.println(getCorrectAnswer());
+			answers[correctAnswerIndex].setText(getCorrectAnswer());
+			List<String> incorrectAnswers = 
+					mediator.generateRandomAnswers(numberOfAnswers - 1, getCorrectAnswer());
+			
+			int currentIndex = 0;
+			for(int i= 0; i < numberOfAnswers; i++)
+			{
+				if(i != correctAnswerIndex) {
+					answers[i].setText(incorrectAnswers.get(currentIndex));
+					currentIndex++;
+				}
+			}
 	}
 	
 	@Override
@@ -63,5 +92,13 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 	protected void cleanAnswers()
 	{
 		bg.clearSelection();
+	}
+
+	
+	@Override
+	public void SetWord(Word word)
+	{
+		super.SetWord(word);
+		fillInAnswers();
 	}
 }

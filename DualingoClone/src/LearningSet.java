@@ -25,6 +25,18 @@ public class LearningSet {
 		}
 	}
 	
+	public Word getWordAt(int index)
+	{
+		return learningSet.get(index);
+	}
+	
+	public int getSize()
+	{
+		if(learningSet == null)
+			return size;
+		return learningSet.size();
+	}
+	
 	public void setLevel(LevelOfWordsToLearn level)
 	{
 		strategy = level;

@@ -23,7 +23,7 @@ public class User {
 	//strategy
 	public LearningSet genereteWordToLearn(int size)
 	{
-		return new LearningSet(size);
+		return new LearningSet(size, state.getCurrentUserLevel());
 	}
 	
 	public void loadState(State state)

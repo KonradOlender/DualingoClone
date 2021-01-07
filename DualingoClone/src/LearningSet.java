@@ -11,10 +11,12 @@ public class LearningSet {
 	private LevelOfWordsToLearn strategy;
 	private List<Word> learningSet;
 	public int points = 10;
+	private int userLevel;
 	
-	public LearningSet(int size)
+	public LearningSet(int size, int userLevel)
 	{
 		this.size = size;
+		this.userLevel=userLevel;
 		learningSet = new ArrayList<Word>();
 		for(int i=1; i<11; i++)
 		{
@@ -44,7 +46,7 @@ public class LearningSet {
 	
 	public void generateSetOfWords(String language) 
 	{
-		learningSet = strategy.generateWords(language);
+		learningSet = strategy.generateWords(language, userLevel);
 	}
 	
 	public class PractiseIterator implements Iterator<Word>{

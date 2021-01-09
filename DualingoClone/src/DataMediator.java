@@ -173,8 +173,7 @@ public class DataMediator{
 				index = i;
 			}
 		}
-		
-		max=max-1;
+
 		State state =new State();
 		state.setCurrentUserLevel(statesModel.get(index).getCurrentUserLevel());
 		state.setCurrentUserProgress(statesModel.get(index).getCurrentProgress());
@@ -360,7 +359,7 @@ public class DataMediator{
 				break;
 			
 		}
-		learningSet = currentUser.genereteWordToLearn(50);
+		learningSet = currentUser.genereteWordToLearn(language);
 		wordIterator = learningSet.iterator(isTest);
 		currentQuiz.SetWord(nextLearningWord());
 		

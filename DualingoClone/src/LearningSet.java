@@ -44,11 +44,6 @@ public class LearningSet {
 		strategy = level;
 	}
 	
-	public void generateSetOfWords(String language) 
-	{
-		learningSet = strategy.generateWords(language, userLevel);
-	}
-	
 	public class PractiseIterator implements Iterator<Word>{
 
 		private int index;

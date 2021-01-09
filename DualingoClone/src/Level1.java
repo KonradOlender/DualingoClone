@@ -8,7 +8,7 @@ public class Level1 implements LevelOfWordsToLearn{
 	
 	//zwraca 15 slow - w zale¿nosci od wybranego poziomu i poziomu uzytkownika
 	//chyba ze w bazie nie ma tylu slow to zwraca mniej
-	public List<Word> generateWords(String language, int userLevel) 
+	public LearningSet generateWords(String language, int userLevel) 
 	{
 		List<Word> words = new ArrayList();
 		int ile=5, size=0;

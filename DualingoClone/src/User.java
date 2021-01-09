@@ -21,9 +21,9 @@ public class User {
 	}
 	
 	//strategy
-	public LearningSet genereteWordToLearn(int size)
+	public LearningSet genereteWordToLearn(String language) 
 	{
-		return new LearningSet(size, state.getCurrentUserLevel());
+		return strategy.generateWords(language, state.getCurrentUserLevel());
 	}
 	
 	public void loadState(State state)

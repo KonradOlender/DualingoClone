@@ -153,7 +153,33 @@ public class DataMediator{
 		currentUser.setName(name);
 		previousStates = new ArchivedUserStates(this);
 		
-		List<StateModel> states = db.getUserStates(id);
+		List<State> states = db.getDistinctUserStatesList(id);
+		for(State state: states)
+		{
+			currentUser.loadState(state);
+			previousStates.addNewState(currentUser.ArchiveUserState());
+		}
+		
+		List<StateModel> statesModel = db.getUserStates(id);
+		if(statesModel == null || statesModel.size() == 0) 
+			return currentUser;
+		
+		int max=0; 
+		int index = 0;
+		for(int i=0 ;i<statesModel.size(); i++){
+			int k=statesModel.get(i).getId();
+			if(k>max) {
+				max=k;
+				index = i;
+			}
+		}
+		
+		max=max-1;
+		State state =new State();
+		state.setCurrentUserLevel(statesModel.get(index).getCurrentUserLevel());
+		state.setCurrentUserProgress(statesModel.get(index).getCurrentProgress());
+		
+		/*List<StateModel> states = db.getUserStates(id);
 		if(states == null || states.size() == 0) 
 			return currentUser;
 		
@@ -182,7 +208,9 @@ public class DataMediator{
 				currentUser.loadState(archivedState);
 				previousStates.addNewState(currentUser.ArchiveUserState());
 			}
-		}
+		}*/
+		
+		
 		
 		//zamiast tego zakomentowanego wyzej - spr czy dziala
 		/*int max = db.getLastUserState(id);
@@ -216,7 +244,9 @@ public class DataMediator{
         //System.out.println("wywo³ano archive user state");
 		
 		//sprawdzanie czy ostatnio dodany stan jest taki sam
-		DatabaseAccess db = DatabaseAccess.getInstance();
+		
+		
+		/*DatabaseAccess db = DatabaseAccess.getInstance();
 		int id = db.getUserId(currentUser.getName()).get(0);
 		int max = db.getLastUserState(id);
 		if(max<1) {
@@ -232,7 +262,12 @@ public class DataMediator{
 	        System.out.println("dodano archive user state");
 			
 			previousStates.addNewState(currentUser.ArchiveUserState());
-		}
+		}*/
+		
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		int id = db.getUserId(currentUser.getName()).get(0);
+		db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
+	    previousStates.addNewState(currentUser.ArchiveUserState());			
 		
 	}
 	
@@ -277,8 +312,8 @@ public class DataMediator{
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				//if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
-				//	archiveUsersState();
+				if(currentUser.getCurrentLevel() < State.MAX_LEVEL)
+					archiveUsersState();
 				
 				//zamykanie polaczenia z baza
 				closeConnection();

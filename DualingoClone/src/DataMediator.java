@@ -163,7 +163,10 @@ public class DataMediator{
 		List<StateModel> statesModel = db.getUserStates(id);
 		if(statesModel == null || statesModel.size() == 0) 
 			return currentUser;
-		
+//jak gadalysmy to mi chodzilo o to ze
+//faktycznie nie ma funkcji zwracaj¹cej max stan ale wydaje mi sie ze jak zamiast tej petli nizej napisze sie po prostu
+		//int index=db.getLastUserState(id)-1;
+//to tez powinno dzialac poprawnie
 		int max=0; 
 		int index = 0;
 		for(int i=0 ;i<statesModel.size(); i++){

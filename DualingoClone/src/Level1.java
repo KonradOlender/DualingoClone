@@ -5,24 +5,26 @@ import java.util.Random;
 public class Level1 implements LevelOfWordsToLearn{
 	DataMediator m = new DataMediator();
 	private final int level = 1;
+	private final int ls_size=15;
+	private final int points=10;
 	
 	//zwraca 15 slow - w zale¿nosci od wybranego poziomu i poziomu uzytkownika
-	//chyba ze w bazie nie ma tylu slow to zwraca mniej
+	//chyba ze w bazie nie ma tylu slow z wybranego poziomu to zwraca mniej 
 	public LearningSet generateWords(String language, int userLevel) 
 	{
 		List<Word> words = new ArrayList();
 		int ile=5, size=0;
 		Random rand = new Random();
 		
-		//level 1
-		List<Word> allWords = m.getFilteredWords(level, "", language).listOfWords;
+		//level 3
+		List<Word> allWords = m.getFilteredWords(3, "", language).listOfWords;
 		size=allWords.size();
-		
-		if(userLevel==1) ile=13;
-		else if(userLevel==2) ile=11;
-		else ile=10;
+
+		if(userLevel==1) ile=0;
+		else if(userLevel==2) ile=(int)(0.1*ls_size);
+		else ile=(int)(0.2*ls_size);
 		if(size<ile) ile=size;
-		
+
 		boolean[] wylosowane = new boolean[size];
 		for(boolean b: wylosowane) b=false;
 		
@@ -31,18 +33,19 @@ public class Level1 implements LevelOfWordsToLearn{
 			int pom = rand.nextInt(size);
 			if(wylosowane[pom]==false) {
 				words.add(allWords.get(pom));
+				wylosowane[pom]=true;
 			}
 		}
 		
 		//level 2
 		ile=5; size=0;
 		allWords.clear();
-		allWords = m.getFilteredWords(level+1, "", language).listOfWords;
+		allWords = m.getFilteredWords(2, "", language).listOfWords;
 		size= allWords.size();
 
-		if(userLevel==1) ile=2;
-		else if(userLevel==2) ile=3;
-		else ile=3;
+		if(userLevel==1) ile=(int)(0.2*ls_size);
+		else if(userLevel==2) ile=(int)(0.2*ls_size);
+		else ile=(int)(0.3*ls_size);
 		if(size<ile) ile=size;
 
 		wylosowane = new boolean[size];
@@ -53,19 +56,19 @@ public class Level1 implements LevelOfWordsToLearn{
 			int pom = rand.nextInt(size);
 			if(wylosowane[pom]==false) {
 				words.add(allWords.get(pom));
+				wylosowane[pom]=true;
 			}
 		}
-
-		//level 3
+		
+		//level 1
 		ile=5; size=0;
 		allWords.clear();
-		allWords = m.getFilteredWords(level+2, "", language).listOfWords;
+		allWords = m.getFilteredWords(1, "", language).listOfWords;
 		size= allWords.size();
-
-		if(userLevel==1) ile=0;
-		else if(userLevel==2) ile=1;
-		else ile=2;
+		
+		ile = ls_size-words.size();
 		if(size<ile) ile=size;
+		//jesli na levelu 1 jest mniej slow niz potrzeba to zwroci mniej niz ls_size slow		
 
 		wylosowane = new boolean[size];
 		for(boolean b: wylosowane) b=false;
@@ -75,10 +78,16 @@ public class Level1 implements LevelOfWordsToLearn{
 			int pom = rand.nextInt(size);
 			if(wylosowane[pom]==false) {
 				words.add(allWords.get(pom));
+				wylosowane[pom]=true;
 			}
 		}
 		
+		LearningSet ls=new LearningSet(words.size());
+		ls.setLevel(this);
+		ls.setWords(words);
+		ls.setPoints(points);
+		
 
-		return words;
+		return ls;
 	}
 }

@@ -1,3 +1,4 @@
+package system;
 import javax.swing.*;
 
 public class PolishForeign extends LearningMode{

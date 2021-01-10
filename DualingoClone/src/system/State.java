@@ -1,3 +1,4 @@
+package system;
 
 public class State {
 	private int currentUserLevel = 1;

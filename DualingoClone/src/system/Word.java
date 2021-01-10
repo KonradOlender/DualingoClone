@@ -1,3 +1,4 @@
+package system;
 
 public class Word {
 	public String word;	//foreign

@@ -1,12 +1,12 @@
+package system;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Level1 implements LevelOfWordsToLearn{
+public class AutomaticLevel implements LevelOfWordsToLearn{
 	DataMediator m = new DataMediator();
-	private final int level = 1;
 	private final int ls_size=15;
-	private final int points=10;
+	private final int points=80;
 	
 	//zwraca 15 slow - w zale¿nosci od wybranego poziomu i poziomu uzytkownika
 	//chyba ze w bazie nie ma tylu slow z wybranego poziomu to zwraca mniej 
@@ -20,8 +20,7 @@ public class Level1 implements LevelOfWordsToLearn{
 		List<Word> allWords = m.getFilteredWords(3, "", language).listOfWords;
 		size=allWords.size();
 
-		if(userLevel==1) ile=0;
-		else if(userLevel==2) ile=(int)(0.1*ls_size);
+		if(userLevel==3) ile=(int)(0.6*ls_size);
 		else ile=(int)(0.2*ls_size);
 		if(size<ile) ile=size;
 
@@ -43,9 +42,8 @@ public class Level1 implements LevelOfWordsToLearn{
 		allWords = m.getFilteredWords(2, "", language).listOfWords;
 		size= allWords.size();
 
-		if(userLevel==1) ile=(int)(0.2*ls_size);
-		else if(userLevel==2) ile=(int)(0.2*ls_size);
-		else ile=(int)(0.3*ls_size);
+		if(userLevel==2) ile=(int)(0.6*ls_size);
+		else ile=(int)(0.2*ls_size);
 		if(size<ile) ile=size;
 
 		wylosowane = new boolean[size];
@@ -86,7 +84,6 @@ public class Level1 implements LevelOfWordsToLearn{
 		ls.setLevel(this);
 		ls.setWords(words);
 		ls.setPoints(points);
-		
 
 		return ls;
 	}

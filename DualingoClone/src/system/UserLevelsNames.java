@@ -1,3 +1,4 @@
+package system;
 
 public enum UserLevelsNames {
 	BEGGINER(1,"pocz¹tkuj¹cy"),

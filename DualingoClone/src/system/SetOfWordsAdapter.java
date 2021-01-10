@@ -1,3 +1,5 @@
+package system;
+
 import javax.swing.table.AbstractTableModel;
 
 public class SetOfWordsAdapter extends AbstractTableModel{

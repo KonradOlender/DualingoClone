@@ -1,4 +1,4 @@
-
+package system;
 public class User {
 	private String name;
 	private State state = new State();

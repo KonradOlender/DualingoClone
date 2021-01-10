@@ -1,5 +1,4 @@
 package system;
-import java.awt.Dimension;
 
 import javax.swing.*;
 
@@ -9,7 +8,7 @@ public class Main {
 		DataMediator m = new DataMediator();
 		m.startMainWindow();
 		//m.openUserPanel();
-		
+		System.out.println("aaaaaaaaaa");
 		m.allDatabase();
 	}
 }

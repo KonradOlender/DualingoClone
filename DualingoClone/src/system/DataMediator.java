@@ -22,6 +22,7 @@ public class DataMediator{
 	private SetOfWords sow;
 	private TypeOfLearning currentQuiz;
 	private Random randomizer = new Random();
+	private UserPanel currentUserPanel;
 	
 	//---------------------------------------------------------------------------------------------------------->DATABASE METHODS
 	//sprawdzanie bazy
@@ -278,6 +279,7 @@ public class DataMediator{
 	{
 		currentUser.RestoreState(
 				previousStates.RestoreState(index));
+		currentUserPanel.resetUserState();
 	}
 	 
 	public void removeState() 
@@ -310,8 +312,8 @@ public class DataMediator{
 	
 	public void openUserPanel()
 	{
-		UserPanel userPanel = new UserPanel(this);
-		userPanel.addWindowListener(new WindowListener() {
+		currentUserPanel = new UserPanel(this);
+		currentUserPanel.addWindowListener(new WindowListener() {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -364,6 +366,11 @@ public class DataMediator{
 			
 		}
 		learningSet = currentUser.genereteWordToLearn(language);
+		if(learningSet.getSize() == 0)
+		{
+			displayNoWordsWarning();
+			return;
+		}
 		wordIterator = learningSet.iterator(isTest);
 		currentQuiz.SetWord(nextLearningWord());
 		
@@ -375,6 +382,7 @@ public class DataMediator{
 		j.setVisible(true);
 		j.pack();
 		j.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		j.setLocationRelativeTo(null);
 		j.addWindowListener(new WindowListener() {
 
 			@Override
@@ -415,11 +423,21 @@ public class DataMediator{
 		return new CreationQuizDialog(frame, this);
 	}
 	
+	//---------------------------------------------------------------------------------------------------------->WARNINGS
+	
 	public void displayNoLanguagesWarning()
 	{
 		JOptionPane.showMessageDialog(new JFrame(),
 				"Najpierw musisz dodaæ jêzyk",
 				"Nie ma ¿adnego jêzyka",
+				JOptionPane.WARNING_MESSAGE);
+	}
+	
+	public void displayNoWordsWarning()
+	{
+		JOptionPane.showMessageDialog(new JFrame(),
+				"Najpierw musisz dodaæ s³ówka",
+				"Nie ma ¿adnego s³ówka w tym jêzyku",
 				JOptionPane.WARNING_MESSAGE);
 	}
 	

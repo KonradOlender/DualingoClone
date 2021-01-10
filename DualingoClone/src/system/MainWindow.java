@@ -36,10 +36,10 @@ public class MainWindow extends JFrame implements ActionListener{
 		registerButton.addActionListener(new RegisterButtonListener());
 		JPanel main = new JPanel();
 		main.add(panel);
-		this.setLocationRelativeTo(null);
 		this.add(panel);
 		this.setVisible(true);
 		this.pack();
+		this.setLocationRelativeTo(null);
 		this.setSize(500, 100);
 		this.setResizable(false);
 		this.setTitle("Start Window");

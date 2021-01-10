@@ -10,6 +10,7 @@ public class User {
 	public void RestoreState(IUserState archivedState)
 	{
 		this.state = ((UserState)archivedState).getState();
+		System.out.println(getCurrentLevel());
 	}
 	
 	//memento

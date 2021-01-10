@@ -27,6 +27,15 @@ public class Test extends LearningMode implements ActionListener{
 			((Test)this).SetWord(newWord);
 		else
 		{
+			JPanel mainPanel = this.getMainPanel();
+			mainPanel.removeAll();
+			mainPanel.revalidate();
+			JLabel messageLabel = new JLabel();
+			mainPanel.add(messageLabel);
+			messageLabel.setVisible(true);
+			messageLabel.setText("Koniec quizu");
+			mainPanel.repaint();
+			
 			JFrame frame = new JFrame();
 			JPanel panel = new JPanel();
 			panel.setLayout(new BoxLayout(panel, 1));

@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 
 public class Practise extends LearningMode implements ActionListener{
@@ -31,6 +32,13 @@ public class Practise extends LearningMode implements ActionListener{
 			if(newWord == null)
 			{
 				mediator.endLearning();
+				JPanel mainPanel = this.getMainPanel();
+				mainPanel.removeAll();
+				mainPanel.revalidate();
+				mainPanel.add(messageLabel);
+				messageLabel.setVisible(true);
+				messageLabel.setText("Koniec quizu");
+				mainPanel.repaint();
 				return;
 			}
 			((Practise)this).SetWord(newWord);

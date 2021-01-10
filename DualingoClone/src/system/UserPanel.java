@@ -19,6 +19,8 @@ public class UserPanel extends JFrame{
 	private DataMediator mediator;
 	//Panel for learning
 	public JLabel username;
+	public JLabel levelLabel;
+	public JLabel progressLabel;
 	public JRadioButton[] levels = new JRadioButton[4];
 	public JButton startLearningButton;
 	//Panel for managing database
@@ -73,8 +75,8 @@ public class UserPanel extends JFrame{
 		this.getContentPane().setLayout(new BorderLayout());
 		this.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		this.setVisible(true);
-		this.setLocationRelativeTo(null);
 		this.pack();
+		this.setLocationRelativeTo(null);
 		this.setTitle("MangePanel");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -205,16 +207,11 @@ public class UserPanel extends JFrame{
 		username = new JLabel();
 		panel.add(username);
 		username.setText("Nazwa u¿ytkownika:   " + mediator.getUserName());
-		JLabel levelLabel = new JLabel();
+		levelLabel = new JLabel();
 		panel.add(levelLabel);
-		int numberUsersLevel = mediator.getUserLevel();
-		UserLevelsNames usersLevel = 
-				UserLevelsNames.getLevelsName(numberUsersLevel);
-		levelLabel.setText("Poziom:   " + usersLevel);
-		JLabel progressLabel = new JLabel();
+		progressLabel = new JLabel();
 		panel.add(progressLabel);
-		double percentage = 100 - mediator.getUserProgress()*100; 
-		progressLabel.setText("Do nastêpnego poziomu brakuje:   " + percentage + " %");
+		
 		JButton saveStateButton = new JButton("Zapisz aktualny stan");
 		panel.add(saveStateButton);
 		saveStateButton.addActionListener(new ActionListener() {
@@ -234,8 +231,11 @@ public class UserPanel extends JFrame{
 			public void actionPerformed(ActionEvent e) 
 			{
 				mediator.restoreUserState(stateList.getSelectedIndex());
+				revalidate();
+				repaint();
 			}
-		});System.out.println(mediator.getCurrentUserStates().length);
+		});
+		resetUserState();
 		DefaultComboBoxModel<IUserState> model = new DefaultComboBoxModel<>(mediator.getCurrentUserStates());
 		stateList = new JComboBox<IUserState>(model);
 
@@ -365,5 +365,16 @@ public class UserPanel extends JFrame{
 	public String getLanguage()
 	{
 		return (String)languageListLearning.getSelectedItem();
+	}
+	
+	public void resetUserState()
+	{
+		int numberUsersLevel = mediator.getUserLevel();
+		UserLevelsNames usersLevel = 
+				UserLevelsNames.getLevelsName(numberUsersLevel);
+		levelLabel.setText("Poziom:   " + usersLevel);
+		
+		double percentage = 100 - mediator.getUserProgress(); 
+		progressLabel.setText("Do nastêpnego poziomu brakuje:   " + percentage + " %");
 	}
 }

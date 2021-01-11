@@ -13,7 +13,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-//panel do zarzadzania swoimi poziomami (powiazanie z pami¹tk¹) - usprawnic
 public class UserPanel extends JFrame{
 	int level = 4;
 	private DataMediator mediator;

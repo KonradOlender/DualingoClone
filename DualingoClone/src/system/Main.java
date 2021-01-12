@@ -9,6 +9,9 @@ public class Main {
 		m.startMainWindow();
 		//m.openUserPanel();
 		System.out.println("aaaaaaaaaa");
+		String strClassPath = System.getProperty("java.class.path");
+		 
+        System.out.println("Classpath is " + strClassPath);
 		m.allDatabase();
 	}
 }

@@ -24,7 +24,7 @@
               <archive>
                  <manifest>
                     <addClasspath>true</addClasspath>
-                       <classpathPrefix>libs/</classpathPrefix>
+                       <!--classpathPrefix>libs/</classpathPrefix-->
                          <mainClass>
 							system.Main
                          </mainClass>
@@ -32,13 +32,31 @@
          	  </archive>
            </configuration>
        </plugin>
+       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <configuration>
+          <!-- put your configurations here -->
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
-  	<dependency>
-  		<groupId>org.xerial</groupId>
-  		<artifactId>sqlite-jdbc</artifactId>
-  		<version>3.27.2.1</version>
-  	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+	<dependency>
+    	<groupId>org.xerial</groupId>
+    	<artifactId>sqlite-jdbc</artifactId>
+    	<version>3.27.2.1</version>
+	</dependency>
+	
   </dependencies>
 </project>

@@ -176,10 +176,7 @@ public class DataMediator{
 		List<StateModel> statesModel = db.getUserStates(id);
 		if(statesModel == null || statesModel.size() == 0) 
 			return currentUser;
-//jak gadalysmy to mi chodzilo o to ze
-//faktycznie nie ma funkcji zwracaj¹cej max stan ale wydaje mi sie ze jak zamiast tej petli nizej napisze sie po prostu
-		//int index=db.getLastUserState(id)-1;
-//to tez powinno dzialac poprawnie
+
 		int max=0; 
 		int index = 0;
 		for(int i=0 ;i<statesModel.size(); i++){
@@ -194,50 +191,6 @@ public class DataMediator{
 		state.setCurrentUserLevel(statesModel.get(index).getCurrentUserLevel());
 		state.setCurrentUserProgress(statesModel.get(index).getCurrentProgress());
 		
-		/*List<StateModel> states = db.getUserStates(id);
-		if(states == null || states.size() == 0) 
-			return currentUser;
-		
-		int max=0; 
-		int index = 0;
-		for(int i=0 ;i<states.size(); i++){
-			int k=states.get(i).getId();
-			if(k>max) {
-				max=k;
-				index = i;
-			}
-		}
-		
-		max=max-1;
-		State state =new State();
-		state.setCurrentUserLevel(states.get(index).getCurrentUserLevel());
-		state.setCurrentUserProgress(states.get(index).getCurrentProgress());
-		
-		for(int i=0 ;i<states.size(); i++){
-			int k=states.get(i).getId();
-			if(k != max)
-			{
-				State archivedState = new State();
-				archivedState.setCurrentUserLevel(states.get(i).getCurrentUserLevel());
-				archivedState.setCurrentUserProgress(states.get(i).getCurrentProgress());
-				currentUser.loadState(archivedState);
-				previousStates.addNewState(currentUser.ArchiveUserState());
-			}
-		}*/
-		
-		
-		
-		//zamiast tego zakomentowanego wyzej - spr czy dziala
-		/*int max = db.getLastUserState(id);
-		if(max<1) return currentUser;
-		int max = db.getLastUserState(id);
-		if(max<0) return currentUser;
-
-		State state =new State();
-		state.setCurrentUserLevel(db.getUserStates(id).get(max-1).getCurrentUserLevel());
-		state.setCurrentUserProgress(db.getUserStates(id).get(max-1).getCurrentProgress());
-		
-		currentUser.loadState(state);*/
 		return currentUser;
 	}
 	
@@ -246,39 +199,6 @@ public class DataMediator{
 	//dodawanie stanu do bazy danych 
 	public void archiveUsersState()
 	{
-		//sprawdzanie czy identyczny stan nie istnieje ju¿ w bazie
-		/*DatabaseAccess db = DatabaseAccess.getInstance();
-		int id = db.getUserId(currentUser.getName()).get(0);
-		List<State> states = db.getStatesWhereConditions(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
-		if(states == null || states.size() == 0 || db.getUserStates(id) == null || db.getUserStates(id).size() == 0) {
-			//adding state into database here also
-			db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
-			
-			previousStates.addNewState(currentUser.ArchiveUserState());
-		}*/
-        //System.out.println("wywo³ano archive user state");
-		
-		//sprawdzanie czy ostatnio dodany stan jest taki sam
-		
-		
-		/*DatabaseAccess db = DatabaseAccess.getInstance();
-		int id = db.getUserId(currentUser.getName()).get(0);
-		int max = db.getLastUserState(id);
-		if(max<1) {
-			db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
-	        System.out.println("dodano archive user state");
-			
-			previousStates.addNewState(currentUser.ArchiveUserState());			
-		}
-		else if((db.getUserStates(id).get(max-1).getCurrentUserLevel()!=currentUser.getCurrentLevel() && 
-				db.getUserStates(id).get(max-1).getCurrentProgress()!=(int) currentUser.getCurrentProgress())) {
-			//adding state into database here also
-			db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
-	        System.out.println("dodano archive user state");
-			
-			previousStates.addNewState(currentUser.ArchiveUserState());
-		}*/
-		
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		int id = db.getUserId(currentUser.getName()).get(0);
 		db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);

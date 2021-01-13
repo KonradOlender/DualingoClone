@@ -15,9 +15,6 @@ public class DatabaseAccess {
 	private DatabaseAccess() { 
 		data = new Database();
 		
-		
-		//data.dropTable("word");
-		//data = new Database();
 	}
 	
 	public static DatabaseAccess getInstance()
@@ -133,7 +130,6 @@ public class DatabaseAccess {
 		}
 		int currentUserLevel = states.get(max).getCurrentUserLevel();
 		int currentProgress = states.get(max).getCurrentProgress();
-	//³apanie wyj¹tku?
 		if(idUser < 0) return;
 		data.insertState(currentUserLevel, currentProgress, idUser);
 	}

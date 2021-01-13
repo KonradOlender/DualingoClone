@@ -1,7 +1,10 @@
-package system;
+package quiz;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
+
+import system.DataMediator;
+import system.Word;
 
 abstract public class LearningMode extends TypeOfLearning{
 	private TypeOfLearning tol;

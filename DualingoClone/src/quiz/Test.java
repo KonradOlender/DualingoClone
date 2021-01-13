@@ -1,8 +1,11 @@
-package system;
+package quiz;
 import java.awt.Dimension;
 import java.awt.event.*;
 
 import javax.swing.*;
+
+import system.DataMediator;
+import system.Word;
 
 public class Test extends LearningMode implements ActionListener{
 	private int correctAnswers = 0;

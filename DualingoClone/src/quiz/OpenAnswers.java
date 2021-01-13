@@ -1,4 +1,4 @@
-package system;
+package quiz;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;

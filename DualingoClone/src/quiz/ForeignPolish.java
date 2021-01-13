@@ -1,6 +1,8 @@
-package system;
+package quiz;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import system.Word;
 
 public class ForeignPolish extends LearningMode{
 	JLabel label;

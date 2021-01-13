@@ -1,4 +1,8 @@
 package system;
+
+import quiz.LearningMode;
+import quiz.TypeOfLearning;
+
 public class User {
 	private String name;
 	private State state = new State();

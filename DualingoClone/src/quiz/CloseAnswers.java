@@ -1,4 +1,4 @@
-package system;
+package quiz;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import system.DataMediator;
+import system.Word;
 
 public class CloseAnswers extends LearningMode implements ActionListener{
 

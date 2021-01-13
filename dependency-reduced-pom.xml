@@ -4,7 +4,7 @@
   <groupId>DualingoClone</groupId>
   <artifactId>DualingoClone</artifactId>
   <name>DualingoClone</name>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>Dualingo</version>
   <build>
     <sourceDirectory>DualingoClone/src</sourceDirectory>
     <plugins>

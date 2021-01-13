@@ -12,6 +12,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import model.StateModel;
+import quiz.CloseAnswers;
+import quiz.ForeignPolish;
+import quiz.LearningMode;
+import quiz.OpenAnswers;
+import quiz.PolishForeign;
+import quiz.Practise;
+import quiz.Quiz;
+import quiz.Test;
+import quiz.TypeOfLearning;
+import windows.MainWindow;
+import windows.UserPanel;
 
 public class DataMediator{
 
@@ -371,6 +382,7 @@ public class DataMediator{
 			displayNoWordsWarning();
 			return;
 		}
+		currentUserPanel.dispose();
 		wordIterator = learningSet.iterator(isTest);
 		currentQuiz.SetWord(nextLearningWord());
 		
@@ -420,6 +432,7 @@ public class DataMediator{
 	
 	public ActionListener getCreationQuizListener(JFrame frame)
 	{
+		
 		return new CreationQuizDialog(frame, this);
 	}
 	
@@ -554,7 +567,6 @@ public class DataMediator{
 		        		 ((UserPanel)frame).getLanguage(),
 		        		 1
 		     );
-	         frame.dispose();
 		}
 	}
 

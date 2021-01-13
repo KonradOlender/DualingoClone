@@ -1,4 +1,4 @@
-package system;
+package quiz;
 import java.awt.Dimension;
 import java.awt.event.*;
 
@@ -6,6 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import system.DataMediator;
+import system.Word;
 
 
 public class Practise extends LearningMode implements ActionListener{

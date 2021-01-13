@@ -1,10 +1,12 @@
-package system;
+package quiz;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+
+import system.DataMediator;
 
 public class Quiz extends TypeOfLearning{
 	private JButton nextQuestionButton;

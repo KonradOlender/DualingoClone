@@ -1,4 +1,4 @@
-package system;
+package windows;
 
 public enum UserLevelsNames {
 	BEGGINER(1,"pocz¹tkuj¹cy"),

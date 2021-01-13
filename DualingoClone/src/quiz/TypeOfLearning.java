@@ -1,4 +1,4 @@
-package system;
+package quiz;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import system.DataMediator;
+import system.Word;
 
 abstract public class TypeOfLearning //extends JPanel
 {

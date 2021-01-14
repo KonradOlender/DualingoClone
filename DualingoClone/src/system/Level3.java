@@ -11,6 +11,9 @@ public class Level3 implements LevelOfWordsToLearn{
 	
 	//zwraca 15 slow - w zale¿nosci od wybranego poziomu i poziomu uzytkownika
 	//chyba ze w bazie nie ma tylu slow z wybranego poziomu to zwraca mniej 
+	//jezeli uzytkownik jest na poziomie 1 zwraca: 30% slow z poziomu 2, 20% slow z poziomu 1, reszta z poziomu 3
+	//jezeli uzytkownik jest na poziomie 2 zwraca: 20% slow z poziomu 2, 10% slow z poziomu 1, reszta z poziomu 3
+	//jezeli uzytkownik jest na wyzszym poziomie zwraca: 20% slow z poziomu 2, 0% slow z poziomu 1, reszta z poziomu 3
 	public LearningSet generateWords(String language, int userLevel) 
 	{
 		List<Word> words = new ArrayList();
@@ -83,6 +86,7 @@ public class Level3 implements LevelOfWordsToLearn{
 			}
 		}
 		
+		//funkcja zwraca obiekt typu LearningSet zapamietujacy ilosc slow, strategie-level, liste slow i ilosc punktow
 		LearningSet ls=new LearningSet(words.size());
 		ls.setLevel(this);
 		ls.setWords(words);

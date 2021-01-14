@@ -24,6 +24,7 @@ public class Database {
     private static Connection conn;
     private Statement stat;
 
+    //tworzenie polaczenia z baza w konstruktorze
     public Database() {
     	try {
             Class.forName(Database.DRIVER);
@@ -40,10 +41,12 @@ public class Database {
             e.printStackTrace();
         }
 
+        //wywolanie funkcji tworzacej tabele
         createTables();
     }
     
 
+    //tworzenie tabel w bazie - jesli juz wczesniej nie zostaly utworzone
     public boolean createTables()  {
     	
     	String createLevel = "CREATE TABLE IF NOT EXISTS level (id_level INTEGER PRIMARY KEY AUTOINCREMENT, name_level varchar(100))";
@@ -77,7 +80,8 @@ public class Database {
         }
     }
     
-    //dodawanie danych
+    //DODAWANIE DANYCH
+    //dodawanie poziomu
     public boolean insertLevel(String name) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
@@ -92,6 +96,7 @@ public class Database {
         return true;
     }
 
+    //dodawanie slowa
     public boolean insertWord(String word, String translation, int idLevel, int idLanguage) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
@@ -109,6 +114,7 @@ public class Database {
         return true;
     }
     
+    //dodawanie uzytkownika
     public boolean insertUser(String name) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
@@ -123,6 +129,7 @@ public class Database {
         return true;
     }
 
+    //dodawanie stanu
     public boolean insertState(int currentUserLevel, int currentProgress, int idUser) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
@@ -139,6 +146,7 @@ public class Database {
         return true;
     }
 
+    //dodanie jezyka
     public boolean insertLanguage(String name) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
@@ -153,7 +161,8 @@ public class Database {
         return true;
     }
     
-    //zwracanie list wszytkiego co jest w bazie 
+    //FUNKCJE ZWRACAJACE LISTY - wszystkie wiersze, bez narzucowych warunkow
+    //generowanie listy wszystkich poziomow
     public List<LevelModel> selectLevels() {
         List<LevelModel> levels = new LinkedList<LevelModel>();
         try {
@@ -171,7 +180,8 @@ public class Database {
         }
         return levels;
     }
-    
+
+    //generowanie listy wszystkich slow
     public List<WordModel> selectWords() {
         List<WordModel> words = new LinkedList<WordModel>();
         try {
@@ -192,7 +202,8 @@ public class Database {
         }
         return words;
     }
-    
+
+    //generowanie listy wszystkich uzytkownikow
     public List<UserModel> selectUsers() {
         List<UserModel> users = new LinkedList<UserModel>();
         try {
@@ -210,7 +221,8 @@ public class Database {
         }
         return users;
     }
-    
+
+    //generowanie listy wszystkich stanow
     public List<StateModel> selectStates() {
         List<StateModel> states = new LinkedList<StateModel>();
         try {
@@ -230,6 +242,7 @@ public class Database {
         return states;
     }
 
+    //generowanie listy wszystkich jezykow
     public List<LanguageModel> selectLanguages() {
         List<LanguageModel> languages = new LinkedList<LanguageModel>();
         try {
@@ -248,7 +261,8 @@ public class Database {
         return languages;
     }
     
-    //wybieranie z warunkiem - zwracane s¹ listy 
+    //FUNKCJE ZWRACAJACE Z BAZY LISTY - z podanymi warunkami w parametrach
+    //generowanie listy wszystkich slow o wybranym poziomie
     public List<WordModel> selectWordsWhereLevel(int level) {
   	  List<WordModel> words = new LinkedList<WordModel>();
   	  try {
@@ -270,7 +284,7 @@ public class Database {
         return words;
     }
 
-    //wyszukiwanie s³ow o podanych warunkach
+    //generowanie listy wszystkich slow na podanym poziomie, w podanym jezyku, gdzie slowo lub tlumaczenie zawiera podanych fragment
     public List<WordModel> selectWordsWhereConditions(int level, String searchedPhrase, int language) {
     	List<WordModel> words = new LinkedList<WordModel>();
     	  try {
@@ -296,7 +310,8 @@ public class Database {
           }
           return words;
     }
-    
+
+    //generowanie listy wszystkich uzytkownikow o podanej nazwie
     public List<UserModel> selectUserWhereName(String user_name) {
   	  List<UserModel> users = new LinkedList<UserModel>();
   	  try {
@@ -314,8 +329,8 @@ public class Database {
         }
         return users;
     }
-    
-    //wyszukiwanie stanu po id uzytkownika
+
+    //generowanie listy wszystkich stanow konkretnego uzytkownika, ktorego id jest podane jako parametr
     public List<StateModel> selectStateWhereUserId(int userId) {
   	  List<StateModel> states = new LinkedList<StateModel>();
   	  try {
@@ -335,7 +350,7 @@ public class Database {
         return states;
     }
 
-    //wyszukiwanie stanu po id uzytkownika - bez duplikatow
+    //generowanie listy wszystkich stanow konkretnego uzytkownika, ktorego id jest podane jako parametr - bez duplikatow
     public List<State> selectDistinctStateWhereUserId(int userId) {
   	  List<State> states = new LinkedList<State>();
   	  try {
@@ -355,8 +370,8 @@ public class Database {
         }
         return states;
     }
-    
-    //wyszukiwanie stanu o podanych warunkach 
+
+    //generowanie listy wszystkich stanow konkretnego uzytkownika, z danego poziomu i z danym postepem
     public List<StateModel> selectStateWhereConditions(int cul, int cup, int userId) {
   	  List<StateModel> states = new LinkedList<StateModel>();
   	  try {
@@ -376,19 +391,7 @@ public class Database {
         return states;
     }
     
-    //wyszukiwanie osatatnio dodanego stanu
-    public int selectLastStateWhereUserId(int userId) {
-    	int maxId = -1;
-    	  try {
-              ResultSet result = stat.executeQuery("SELECT MAX(id_state) AS Max FROM state WHERE idUser=\""+userId+"\"");
-              maxId = result.getInt(1);
-          } catch (SQLException e) {
-              e.printStackTrace();
-              return -1;
-          }
-          return maxId;
-    }
-
+    //generowanie listy wszystkich jezykow o podanej nazwie 
     public List<LanguageModel> selectLanguageWhereName(String nameL) {
   	  List<LanguageModel> languages = new LinkedList<LanguageModel>();
   	  try {
@@ -406,10 +409,9 @@ public class Database {
         }
         return languages;
     }
-    
-    
 
-    //usuwanie po id
+    //USUWANIE DANYCH Z BAZY
+    //usuwanie poszczegolnych rzeczy o podanym id
     public void deleteLevelWhereId(int id) {
   	  try {
             stat.execute("DELETE FROM level WHERE id_level=\"" +id +"\"");
@@ -455,7 +457,8 @@ public class Database {
         }
     }
     
-    //edytowanie s³owa
+    //INNE
+    //edytowanie s³owa o podanym id - zmiana jego definicji i tlumaczenia
     public void updateWordWhereId(int id, String word, String translation) {
   	  try {
             stat.execute("UPDATE word SET translation=\""+translation+"\", word=\""+word+"\" WHERE id_word=\"" + id +"\"");
@@ -464,9 +467,22 @@ public class Database {
             e.printStackTrace();
         }
     }
+    
+    //zwracanie indeksu stanu danego uzytkownika, ktora jako ostatni zostal dodany do bazy
+    public int selectLastStateWhereUserId(int userId) {
+    	int maxId = -1;
+    	  try {
+              ResultSet result = stat.executeQuery("SELECT MAX(id_state) AS Max FROM state WHERE idUser=\""+userId+"\"");
+              maxId = result.getInt(1);
+          } catch (SQLException e) {
+              e.printStackTrace();
+              return -1;
+          }
+          return maxId;
+    }
 
 
-    //zamykanie po³¹czenia z baz¹
+    //ZAMYKANIE POLACZENIA Z BAZA
     public void closeConnection() {
         try {
             conn.close();

@@ -12,11 +12,13 @@ public class DatabaseAccess {
 	private static DatabaseAccess database;
 	private Database data;
 	
-	private DatabaseAccess() { 
+	private DatabaseAccess() {
+		//wywolanie konstruktora bazy danych - utworzenie polaczenia z baza
 		data = new Database();
-		
 	}
 	
+	//tworzenie tylko 1 obiektu DarabaseAccess - zwracanie tego samego obiektu database po wywolaniu funkcji
+	//zapewnienie ze DatabaseAccess jest Singletonem
 	public static DatabaseAccess getInstance()
 	{
 		if(database == null)  database = new DatabaseAccess();
@@ -24,14 +26,16 @@ public class DatabaseAccess {
 	}
 	
 	
-	//pobieranie wszytkich u¿ytkowników
+	//FUNKCJE KORZYSTAJACE Z KLASY Database.java
+	//FUNKCJE DOTYCZACE UZYTKOWNIKA
+	//pobieranie wszytkich uzytkownikow z bazy
 	public List<UserModel> getUsers() {
 		List<UserModel> users = data.selectUsers();
 		if(users.size()==0) return null;
 		return users;
 	}
 
-	//pobieranie u¿ytkowników o podanym imieniu
+	//pobieranie z bazy uzytkownikow o podanym imieniu
 	public List<User> getUser(String name) {
 		List<UserModel> usersModel = data.selectUserWhereName(name);
 		List<User> users = new ArrayList<User>();
@@ -44,7 +48,7 @@ public class DatabaseAccess {
 		return users;
 	}
 
-	//pobieranie ID u¿ytkowników o podanym imieniu
+	//pobieranie z bazy listy ID uzytkownikow o podanym imieniu
 	public List<Integer> getUserId(String name) {
 		List<UserModel> usersModel = data.selectUserWhereName(name);
 		List<Integer> users = new ArrayList<Integer>();
@@ -56,24 +60,24 @@ public class DatabaseAccess {
 		return users;
 	}
 	
-	//dodawanie u¿ytkownika
+	//dodawanie nowego uzytkownika do bazy
 	public void addUser(String name) {
 		data.insertUser(name);
 	}
 	
-
-	//dodawanie stanu
+	//FUNKCJE DOTYCZACE STANOW
+	//dodawanie nowego stanu do bazy
 	public void addState(int currentUserLevel, int currentProgress, int idUser) {
 		data.insertState(currentUserLevel, currentProgress, idUser);
 	}
 	
-	//pobieranie stanów u¿ytkownika
+	//pobieranie stanow uzytkownika o podanym id
 	public List<StateModel> getUserStates(int id) {
 		List<StateModel> states = data.selectStateWhereUserId(id);
 		return states;
 	}
 	
-	//pobieranie stanów u¿ytkownika o podanych warunkach
+	//pobieranie stanow uzytkownika o podanych warunkach - id uzytkownika, poziomie i postepie
 	public List<State> getStatesWhereConditions(int cul, int cup, int id) {
 		List<StateModel> statesModel = data.selectStateWhereConditions(cul, cup, id);
 		List<State> states = new ArrayList();
@@ -86,7 +90,7 @@ public class DatabaseAccess {
 		return states;
 	}
 
-	//pobieranie stanów u¿ytkownika - lista State
+	//pobieranie stanow uzytkownika o podanym id - lista State
 	public List<State> getUserStatesList(int id) {
 		List<StateModel> statesModel = data.selectStateWhereUserId(id);
 		List<State> states = new ArrayList();
@@ -99,13 +103,13 @@ public class DatabaseAccess {
 		return states;
 	}
 
-	//pobieranie stanów u¿ytkownika - lista State BEZ DUPLIKATOW
+	//pobieranie stanow uzytkownika o podanym id - lista State BEZ DUPLIKATOW
 	public List<State> getDistinctUserStatesList(int id) {
 		List<State> states = data.selectDistinctStateWhereUserId(id);
 		return states;
 	}
 	
-	//pobieranie id ostatnio dodanego stanu u¿ytkownika
+	//pobieranie id ostatnio dodanego stanu danego uzytkownika
 	public int getLastUserState(int id) {
 		return data.selectLastStateWhereUserId(id);
 	}
@@ -145,14 +149,14 @@ public class DatabaseAccess {
 		}
 	}
 	
-	
-	//dodawanie s³owa do bazy 
+	//FUNKCJE DOTYCZACE SLOW
+	//dodawanie slowa do bazy 
 	public void addWord(String word, String translation, int idLevel, String language) {
 		int idLanguage = data.selectLanguageWhereName(language).get(0).getId();
 		data.insertWord(word, translation, idLevel, idLanguage);
 	}
 	
-	//usuwanie s³owa z bazy 
+	//usuwanie slowa z bazy 
 	public void deleteWord(Word word) {
 		List<WordModel> words = data.selectWords();
 		for(WordModel wm: words) {
@@ -163,7 +167,7 @@ public class DatabaseAccess {
 		}
 	}
 	
-	//pobieranie s³ow z bazy spelniajacych podane warunki
+	//pobieranie slow z bazy spelniajacych podane warunki - poziom, fragment slowa, jezyk
     public SetOfWords selectWordsWhereConditions(int level, String searchedPhrase, String language) {
     	List<LanguageModel> lm = data.selectLanguageWhereName(language);
 		SetOfWords sow = new SetOfWords(level);
@@ -180,7 +184,7 @@ public class DatabaseAccess {
 		return sow;
     }
 
-	//pobieranie s³ow z bazy z danego poziomu
+	//pobieranie slow z bazy z danego poziomu
     public SetOfWords selectWordsWhereLevel(int level) {
 		List<WordModel> words = data.selectWordsWhereLevel(level);
 		SetOfWords sow = new SetOfWords(level);
@@ -192,13 +196,13 @@ public class DatabaseAccess {
 		return sow;
     }
 	
-
-	//dodawanie jezyka
+    //FUNKCJE DOTYCZACE JEZYKOW
+	//dodawanie nowego jezyka do bazy
 	public void addLanguage(String name) {
 		data.insertLanguage(name);
 	}
 	
-	//usuwanie jêzyka z bazy 
+	//usuwanie z bazy jezyka o podanej nazwie
 	public void deleteLanguage(String name) {
 		List<LanguageModel> languages = data.selectLanguages();
 		for(LanguageModel lm: languages) {
@@ -209,7 +213,7 @@ public class DatabaseAccess {
 		}
 	}
 	
-    //pobieranie nazw wszytkich jêzyków
+    //pobieranie nazw wszytkich jêzykow - tablica
     public String[] selectLanguages() {
     	List<LanguageModel> list = data.selectLanguages();
     	String[] languages = new String[list.size()];
@@ -221,6 +225,7 @@ public class DatabaseAccess {
     	return languages;
     }
 
+    //pobieranie nazw wszytkich jêzykow - lista
     public List<String> selectLanguagesList() {
     	List<LanguageModel> list = data.selectLanguages();
     	List<String> languages = new ArrayList<String>();
@@ -232,13 +237,13 @@ public class DatabaseAccess {
     	return languages;
     }
     
-    
+    //ZAMYKANIE POLACZENIA Z BAZA
     public void closeConnection() {
     	data.closeConnection();
     }
     
 	
-//SPRAWDZENIE BAZY
+    //SPRAWDZENIE ZAWARTOSCI BAZY
 	public void printAll() {
         System.out.println("Level table");
 		List<LevelModel> levels = data.selectLevels();

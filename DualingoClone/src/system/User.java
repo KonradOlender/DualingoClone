@@ -21,7 +21,7 @@ public class User {
 	public UserState ArchiveUserState()
 	{
 		UserState x = new UserState();
-		x.setState(state);
+			x.setState(state);
 		return x;
 	}
 	
@@ -68,13 +68,19 @@ public class User {
 		state.increaseProgress(points);
 	}
 	
+	public int getCurrentUsersPoints()
+	{
+		return state.getPoints();
+	}
+	
 	//memento
 	private class UserState implements IUserState {
-		private State state;
+		private State state = new State();
 		
 		public void setState(State state)
 		{
-			this.state = state;
+			this.state.setCurrentUserLevel(state.getCurrentUserLevel());
+			this.state.setCurrentUserProgress(state.getPoints());
 		}
 		
 		public State getState()

@@ -240,7 +240,7 @@ public class UserPanel extends JFrame{
 		resetUserState();
 		DefaultComboBoxModel<IUserState> model = new DefaultComboBoxModel<>(mediator.getCurrentUserStates());
 		stateList = new JComboBox<IUserState>(model);
-
+		
 		revertPanel.add(stateList);
 		revertPanel.add(revertLevelButton);
 		panel.add(revertPanel);

@@ -83,7 +83,14 @@ public class MainWindow extends JFrame implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			messageLabel.setText("");
-			mediator.addUser(usernameField.getText());
+			String username = usernameField.getText();
+			if(!mediator.userExists(username))
+				mediator.addUser(username);
+			else
+				JOptionPane.showMessageDialog(new JFrame(),
+	    				"Taki u¿ytkownik ju¿ istnieje",
+	    				"U¿ytkownik istnieje",
+	    				JOptionPane.WARNING_MESSAGE);
 		}
 		
 	}

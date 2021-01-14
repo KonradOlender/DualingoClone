@@ -201,9 +201,8 @@ public class DataMediator{
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		int id = db.getUserId(currentUser.getName()).get(0);
-		db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentProgress(), id);
+		db.addState(currentUser.getCurrentLevel(), (int) currentUser.getCurrentUsersPoints(), id);
 	    previousStates.addNewState(currentUser.ArchiveUserState());			
-		
 	}
 	
 	public void restoreUserState(int index)
@@ -352,7 +351,6 @@ public class DataMediator{
 	
 	public ActionListener getCreationQuizListener(JFrame frame)
 	{
-		
 		return new CreationQuizDialog(frame, this);
 	}
 	

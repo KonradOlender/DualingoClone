@@ -14,7 +14,7 @@ public class State {
 	public void increaseProgress(int points)
 	{
 		currentUsersProgress +=points;
-		if(currentUsersProgress > Math.pow(10, currentUserLevel + 1)) 
+		if(currentUsersProgress >= Math.pow(10, currentUserLevel + 1)) 
 		{
 			currentUsersProgress =currentUsersProgress % (int)Math.pow(10, currentUserLevel + 1);
 			advance();
@@ -34,6 +34,10 @@ public class State {
 		return progress;
 	}
 	
+	int getPoints()
+	{
+		return currentUsersProgress;
+	}
 	
 	//level i progress pobierany z bazy
 	public void setCurrentUserLevel(int cul)

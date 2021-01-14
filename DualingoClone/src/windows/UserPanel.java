@@ -273,6 +273,15 @@ public class UserPanel extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String language = createLanguageField.getText();
+				if(mediator.languageExists(language))
+				{
+					JOptionPane.showMessageDialog(new JFrame(),
+		    				"Taki jêzyk ju¿ istnieje",
+		    				"Taki jêzyk ju¿ istnieje",
+		    				JOptionPane.WARNING_MESSAGE);
+					createLanguageField.setText("");
+					return;
+				}
 				mediator.addLanguage(language);
 				DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(mediator.getLanguages());
 				languageListSearching.setModel(model);

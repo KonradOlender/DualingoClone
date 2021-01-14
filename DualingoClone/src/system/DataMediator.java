@@ -140,6 +140,18 @@ public class DataMediator{
 		return db.selectLanguages();
 	}
 	
+	public boolean languageExists(String language)
+	{
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		List<String> languages = db.selectLanguagesList();
+		for(String lang: languages)
+		{
+			if(lang.equals(language))
+				return true;
+		}
+		return false;
+	}
+	
 	//sprawdzanie czy s¹ jacyœ u¿ytkownicy w bazie danych i zwracanie true jesli jest chocia¿ 1
 	public boolean anyUserExists()
 	{

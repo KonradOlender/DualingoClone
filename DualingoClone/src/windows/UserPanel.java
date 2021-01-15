@@ -99,8 +99,10 @@ public class UserPanel extends JFrame{
 	public void createMenu()
 	{
 		menu = new JMenuBar();
-		JLabel label1 = new JLabel("Wybierz jêzyk:");
-		JLabel label2 = new JLabel("Wybierz poziom:");
+		JLabel labelLanguage = new JLabel("Wybierz jêzyk:");
+		JLabel labelLevel = new JLabel("Wybierz poziom:");
+		JButton clearButton = new JButton("Wyczyœæ");
+		clearButton.addActionListener(new ClearButtonListener());
 		languageListSearching = new JComboBox<String>(manager.getLanguages());
 		research = new JTextField("Wyszukaj s³owa");
 		research.addFocusListener(new FocusListener() {
@@ -128,12 +130,13 @@ public class UserPanel extends JFrame{
 	                MAX_LEVEL, //maximum value  
 	                1); //step  
 	    spinnerSearching = new JSpinner(value);
-		menu.add(label1);
+		menu.add(labelLanguage);
 		menu.add(languageListSearching);
-		menu.add(label2);
+		menu.add(labelLevel);
 		menu.add(spinnerSearching);
 		menu.add(research);
 		menu.add(searchButton);
+		menu.add(clearButton);
 		menu.add(deleteButton);
 		menu.setBorder(new EmptyBorder(10, 5, 2, 5));
 	}
@@ -367,6 +370,16 @@ public class UserPanel extends JFrame{
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			updateListOfWords();
+		}
+		
+	}
+	
+	private class ClearButtonListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			research.setText("Wyszukaj s³owa");
 			updateListOfWords();
 		}
 		

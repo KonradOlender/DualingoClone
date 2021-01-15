@@ -167,6 +167,11 @@ public class DatabaseAccess {
 		}
 	}
 	
+	//edytowanie slow o podanym id
+	public void updateWord(int id, String word, String translation) {
+		data.updateWordWhereId(id, word, translation);
+	}
+	
 	//pobieranie slow z bazy spelniajacych podane warunki - poziom, fragment slowa, jezyk
     public SetOfWords selectWordsWhereConditions(int level, String searchedPhrase, String language) {
     	List<LanguageModel> lm = data.selectLanguageWhereName(language);

@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder;
 import system.DataMediator;
 import system.Word;
 
-public class CloseAnswers extends LearningMode implements ActionListener{
+public class CloseAnswers extends LearningMode {
 
 	JRadioButton[] answers;
 	ButtonGroup bg;
@@ -37,7 +37,6 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 		for(int i=0 ;i < numberOfAnswers ; i++)
 		{
 			answers[i] = new JRadioButton();
-			//answers[i].setText("Button" + i);
 			answers[i].addActionListener(buttonListener);
 			bg.add(answers[i]);
 			this.panel.add(answers[i]);
@@ -46,6 +45,7 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 		this.panel.setBorder(new EmptyBorder(10, 5, 2, 5));
 	}
 	
+	//pobiera odpowiedz, ktora zostala zaznaczona (lub tez nie)
 	@Override
 	public String getUserAnswer()
 	{
@@ -55,26 +55,24 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 			return usersAnswer;
 	}
 	
+	//metoda zwracajaca panel z odpowiednimi kontrolkami 
+	//ktore sluza do udzielenia odpowiedzi
 	@Override
 	protected JPanel getAnswerPanel()
 	{
 		return this.panel;
 	}
+
 	
-	@Override
-	public void actionPerformed(ActionEvent event)
-	{
-		
-	}
-	
+	//metoda, ktora zmienia mozliwe odpowiedzi wyswietlane na ekranie
 	private void fillInAnswers()
 	{
-		DataMediator mediator = this.getDataMediator();
-		int correctAnswerIndex = mediator.randomInt(numberOfAnswers);
+		DataMediator manager = this.getDataMediator();
+		int correctAnswerIndex = manager.randomInt(numberOfAnswers);
 		System.out.println(getCorrectAnswer());
 			answers[correctAnswerIndex].setText(getCorrectAnswer());
 			List<String> incorrectAnswers = 
-					mediator.generateRandomAnswers(numberOfAnswers - 1, getCorrectAnswer());
+					manager.generateRandomAnswers(numberOfAnswers - 1, getCorrectAnswer());
 			
 			int currentIndex = 0;
 			for(int i= 0; i < numberOfAnswers; i++)
@@ -92,13 +90,15 @@ public class CloseAnswers extends LearningMode implements ActionListener{
 		return "Odpowiedzi zamkniête";
 	}
 	
+	//metoda odznaczajaca poprzednia odpowiedz udzielona przez uzytkownika
 	@Override
 	protected void cleanAnswers()
 	{
 		bg.clearSelection();
 	}
 
-	
+	//metoda ta dodatkowo po ustawieniu nowego slowa zmienia mozliwosci
+	//zmienia slowa umieszczone przy button group
 	@Override
 	public void SetWord(Word word)
 	{

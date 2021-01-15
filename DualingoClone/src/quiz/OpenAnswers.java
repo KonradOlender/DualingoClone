@@ -19,12 +19,15 @@ public class OpenAnswers extends LearningMode{
 		this.panel.setBorder(new EmptyBorder(10, 0, 0, 0));
 	}
 	
+	//metoda ta umozliwia pobranie odpowiedzi od uzytkownika
 	@Override
 	public String getUserAnswer()
 	{
 		return answerField.getText();
 	}
 	
+	//metoda zwracajaca panel z odpowiednimi kontrolkami 
+	//ktore sluza do udzielenia odpowiedzi
 	@Override
 	protected JPanel getAnswerPanel()
 	{
@@ -37,6 +40,7 @@ public class OpenAnswers extends LearningMode{
 		return "Odpowiedzi otwarte";
 	}
 	
+	//metoda czyszczaca JTextField
 	@Override
 	protected void cleanAnswers()
 	{

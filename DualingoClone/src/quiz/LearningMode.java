@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import system.DataMediator;
 import system.Word;
 
+//klasa ogolnego dekoratora, ktory nadpisuje wywolanie glownych metod
+//z klasy nadrzednej
 abstract public class LearningMode extends TypeOfLearning{
 	private TypeOfLearning tol;
 	

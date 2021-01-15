@@ -1,5 +1,6 @@
 package windows;
 
+//klasa, ktora definiuje odpowiednie nazwy poziomow
 public enum UserLevelsNames {
 	BEGGINER(1,"pocz¹tkuj¹cy"),
 	INTERMEDIATE(2, "œredniozaawansowany"),
@@ -15,6 +16,7 @@ public enum UserLevelsNames {
 		name = s;
 	}
 	
+	//metoda pozwalajaca na pobranie odpowiedniej nazwy poziomu uzytkownika
 	public static UserLevelsNames getLevelsName(int searchedLevel)
 	{
 		UserLevelsNames[] levels = UserLevelsNames.values();

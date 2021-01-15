@@ -17,6 +17,7 @@ public class Test extends LearningMode implements ActionListener{
 		this.panel = this.getMainPanel();
 	}
 	
+	//metoda ktora obsluguje nacisniecia przycisku nastepne pytanie
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
@@ -24,8 +25,8 @@ public class Test extends LearningMode implements ActionListener{
 			incorrectAnswers ++;
 		else
 			correctAnswers ++;
-		DataMediator mediator = getDataMediator();
-		Word newWord = mediator.nextLearningWord();
+		DataMediator manager = getDataMediator();
+		Word newWord = manager.nextLearningWord();
 		if(newWord != null)
 			((Test)this).SetWord(newWord);
 		else
@@ -49,7 +50,7 @@ public class Test extends LearningMode implements ActionListener{
 			frame.add(panel);
 			panel.add(correctLabel);
 			panel.add(incorrectLabel);
-			mediator.endLearning();
+			manager.endLearning();
 			frame.setVisible(true);
 			frame.pack();
 			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -57,6 +58,7 @@ public class Test extends LearningMode implements ActionListener{
 		this.cleanAnswers();
 	}
 	
+	//w tej metodzie ustawiany jest listener dla przycisku nastepne pytanie
 	@Override
 	public void setUpQuiz()
 	{

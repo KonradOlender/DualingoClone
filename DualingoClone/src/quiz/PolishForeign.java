@@ -14,6 +14,7 @@ public class PolishForeign extends LearningMode{
 		this.panel.add(label);
 	}
 	
+	//dwie ponizsze metody zamieniaja kierunek nauki s³owek
 	@Override
 	public String getCorrectAnswer()
 	{
@@ -26,6 +27,8 @@ public class PolishForeign extends LearningMode{
 		return super.getCorrectAnswer();
 	}
 	
+	//metoda zwraca panel podanego dekoratora, ktory jest
+	// jednoczesnie panelem zawierajacym pytanie z quizu
 	@Override
 	protected JPanel getQuestionPanel()
 	{
@@ -38,6 +41,8 @@ public class PolishForeign extends LearningMode{
 		return "polski-obcy";
 	}
 	
+	//metoda ta dodatkowo ustawia nastepne pytanie po pobraniu
+	//nastepnego slowka
 	@Override
 	public void SetWord(Word word)
 	{

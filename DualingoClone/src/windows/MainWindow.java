@@ -14,6 +14,8 @@ public class MainWindow extends JFrame implements ActionListener{
 	public DataMediator mediator;
 	public JLabel messageLabel;
 	
+	// w konstruktorze tworzone jest okno o odpowiednich rozmiarach
+	//i nastepuje tutaj dodanie listenerow do przyciskow
 	public MainWindow(DataMediator dm)
 	{
 		mediator = dm;
@@ -47,11 +49,13 @@ public class MainWindow extends JFrame implements ActionListener{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	//metoda pobierajaca login podany przez uzytkownika
 	public String getUserLogin()
 	{
 		return usernameField.getText();
 	}
 
+	//metoda osluguje zdarzenie nacisniecia przycisku "zaloguj"
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(!mediator.anyUserExists())
@@ -78,6 +82,7 @@ public class MainWindow extends JFrame implements ActionListener{
 		
 	}
 	
+	//klasa, ktora obsluguje nacisniecie przycisku "Dodaj uzytkownika"
 	private class RegisterButtonListener implements ActionListener{
 
 		@Override

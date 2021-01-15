@@ -21,7 +21,8 @@ public class Practise extends LearningMode implements ActionListener{
 		super(tol);
 		this.panel = this.getMainPanel();
 	}
-	
+
+	//metoda ktora obsluguje nacisniecia przycisku nastepne pytanie
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
@@ -53,6 +54,8 @@ public class Practise extends LearningMode implements ActionListener{
 			
 	}
 	
+	//metoda ta ustawia w glownym panelu dodatkowe miejsce na 
+	//wyswietlanie wiadomosci o niepoprawnej odpowiedzi
 	@Override
 	public void setUpQuiz()
 	{

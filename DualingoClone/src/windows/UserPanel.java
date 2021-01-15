@@ -18,36 +18,47 @@ import system.*;
 
 public class UserPanel extends JFrame{
 	int level = 4;
-	private DataMediator mediator;
-	//Panel for learning
+	private DataMediator manager;
+	
+	//Panel for managing profile:
 	public JLabel username;
 	public JLabel levelLabel;
 	public JLabel progressLabel;
+	JComboBox<IUserState> stateList;
+	public JButton revertLevelButton;
+	
+	//Panel for learning:
 	public JRadioButton[] levels = new JRadioButton[4];
 	public JButton startLearningButton;
-	//Panel for managing database
+	JComboBox<String> languageListLearning;
+	
+	//Panel for adding words
 	public JTextField word;
 	public JTextField translation;
-	public JTextField research;
-	public JTextField createLanguageField;
 	public JButton addButton;
-	public JButton deleteButton;
-	public JButton searchButton;
-	public JButton revertLevelButton;
-	private static int MAX_LEVEL = 3;
-	SetOfWordsAdapter adapter;
+	JComboBox<String> languageListAdding;
 	JSpinner spinnerAdding;
-	JSpinner spinnerSearching;
-	JTable table;
+	
+	//menu
+	public JTextField research;
 	JMenuBar menu;
 	JComboBox<String> languageListSearching;
-	JComboBox<String> languageListAdding;
-	JComboBox<String> languageListLearning;
-	JComboBox<IUserState> stateList;
+	
+	//Panel for creating languages:
+	public JTextField createLanguageField;
+	
+	//Panel for managing database
+	public JButton deleteButton;
+	public JButton searchButton;
+	private static int MAX_LEVEL = 3;
+	SetOfWordsAdapter adapter;
+	JSpinner spinnerSearching;
+	JTable table;
+
 
 	public UserPanel(DataMediator dm)
 	{
-		mediator = dm;
+		manager = dm;
 		createMenu();
 		JTabbedPane tabbedPane = new JTabbedPane();
 		
@@ -58,7 +69,7 @@ public class UserPanel extends JFrame{
 		tabbedPane.add("dodawanie jêzyków", createLanguagePanel());
 		
 		//manage words
-		tabbedPane.add("zarz¹dzanie s³ówkami", createUpdateAndDeletePanel());
+		tabbedPane.add("zarz¹dzanie s³ówkami", createUpdateAndDeleteWordsPanel());
 		
 		//main tab
 		tabbedPane.add("nauka", createMainPanel());
@@ -79,16 +90,18 @@ public class UserPanel extends JFrame{
 		this.setVisible(true);
 		this.pack();
 		this.setLocationRelativeTo(null);
-		this.setTitle("MangePanel");
+		this.setTitle("ManagePanel");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	//metoda ta tworzy menu, ktore jest wyswietlone jak przejdziemy do 
+	//zakladki zarzadzanie slowkami
 	public void createMenu()
 	{
 		menu = new JMenuBar();
 		JLabel label1 = new JLabel("Wybierz jêzyk:");
 		JLabel label2 = new JLabel("Wybierz poziom:");
-		languageListSearching = new JComboBox<String>(mediator.getLanguages());
+		languageListSearching = new JComboBox<String>(manager.getLanguages());
 		research = new JTextField("Wyszukaj s³owa");
 		research.addFocusListener(new FocusListener() {
 		    @Override
@@ -125,6 +138,8 @@ public class UserPanel extends JFrame{
 		menu.setBorder(new EmptyBorder(10, 5, 2, 5));
 	}
 
+	//tworzony jest tutaj panel, przy pomocy ktoreogo mozna rozpoczac
+	//nauke
 	public JPanel createMainPanel()
 	{
 		JPanel panel = new JPanel();
@@ -132,7 +147,7 @@ public class UserPanel extends JFrame{
 		RadioButtonListener rbl = new RadioButtonListener();
 		ButtonGroup bg = new ButtonGroup();
 		JLabel label1 = new JLabel("Wybierz jêzyk:");
-		languageListLearning = new JComboBox<String>(mediator.getLanguages());
+		languageListLearning = new JComboBox<String>(manager.getLanguages());
 		panel.add(label1);
 		panel.add(languageListLearning);
 		for(int i=0;i<3;i++)
@@ -152,18 +167,19 @@ public class UserPanel extends JFrame{
 		
 		startLearningButton = new JButton("Ucz siê");
 		startLearningButton.addActionListener(
-				mediator.getCreationQuizListener(this));
+				manager.getCreationQuizListener(this));
 		panel.add(startLearningButton);
 		panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
 		
 		return panel;
 	}
 	
-	public JPanel createAddingPanel()
+	//zwraca panel, ktory sluzy do dodawania slowek do bazy danych
+	public JPanel createAddingWordsPanel()
 	{
 		JPanel addingPanel = new JPanel();
 		addingPanel.setLayout(new BoxLayout(addingPanel, 1));
-		languageListAdding = new JComboBox<String>(mediator.getLanguages());
+		languageListAdding = new JComboBox<String>(manager.getLanguages());
 		word = new JTextField();
 		translation = new JTextField();
 		addButton = new JButton("Dodaj");
@@ -188,7 +204,8 @@ public class UserPanel extends JFrame{
 		return addingPanel;
 	}
 	
-	public JPanel createUpdateAndDeletePanel()
+	//tworzy panel, ktory sluzy do usuwania i edycji slow
+	public JPanel createUpdateAndDeleteWordsPanel()
 	{
 		JPanel updateAndDeletePanel = new JPanel(new GridLayout());
 		adapter =new SetOfWordsAdapter();
@@ -196,19 +213,21 @@ public class UserPanel extends JFrame{
 	    table = new JTable(adapter);
 	    table.getTableHeader().setReorderingAllowed(false);
 	    updateAndDeletePanel.add(new JScrollPane(table));
-	    updateAndDeletePanel.add(createAddingPanel());
+	    updateAndDeletePanel.add(createAddingWordsPanel());
 	    //panel.add(deleteButton);
 	    
 	    return updateAndDeletePanel;
 	}
 	
+	//tworzy i zwraca panel, ktory sluzy do zarzadzania swoim profilem
+	//tzn powrotem do zapisanych poziomow oraz do zapisywania odpowiednich poziomow
 	public JPanel createProfileManagementPanel()
 	{
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, 1));
 		username = new JLabel();
 		panel.add(username);
-		username.setText("Nazwa u¿ytkownika:   " + mediator.getUserName());
+		username.setText("Nazwa u¿ytkownika:   " + manager.getUserName());
 		levelLabel = new JLabel();
 		panel.add(levelLabel);
 		progressLabel = new JLabel();
@@ -220,8 +239,8 @@ public class UserPanel extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				mediator.archiveUsersState();
-				DefaultComboBoxModel<IUserState> model = new DefaultComboBoxModel<>(mediator.getCurrentUserStates());
+				manager.archiveUsersState();
+				DefaultComboBoxModel<IUserState> model = new DefaultComboBoxModel<>(manager.getCurrentUserStates());
 				stateList.setModel(model);
 			}
 		});
@@ -232,13 +251,13 @@ public class UserPanel extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				mediator.restoreUserState(stateList.getSelectedIndex());
+				manager.restoreUserState(stateList.getSelectedIndex());
 				revalidate();
 				repaint();
 			}
 		});
 		resetUserState();
-		DefaultComboBoxModel<IUserState> model = new DefaultComboBoxModel<>(mediator.getCurrentUserStates());
+		DefaultComboBoxModel<IUserState> model = new DefaultComboBoxModel<>(manager.getCurrentUserStates());
 		stateList = new JComboBox<IUserState>(model);
 		
 		revertPanel.add(stateList);
@@ -247,6 +266,7 @@ public class UserPanel extends JFrame{
 		return panel;
 	}
 	
+	//tworzy i zwraca panel, ktory sluzy do tworzenia nowych jezykow
 	public JPanel createLanguagePanel()
 	{
 		JPanel panel = new JPanel();
@@ -273,7 +293,7 @@ public class UserPanel extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String language = createLanguageField.getText();
-				if(mediator.languageExists(language))
+				if(manager.languageExists(language))
 				{
 					JOptionPane.showMessageDialog(new JFrame(),
 		    				"Taki jêzyk ju¿ istnieje",
@@ -282,8 +302,8 @@ public class UserPanel extends JFrame{
 					createLanguageField.setText("");
 					return;
 				}
-				mediator.addLanguage(language);
-				DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(mediator.getLanguages());
+				manager.addLanguage(language);
+				DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(manager.getLanguages());
 				languageListSearching.setModel(model);
 				languageListAdding.setModel(model);
 				languageListLearning.setModel(model);
@@ -294,7 +314,7 @@ public class UserPanel extends JFrame{
 		return panel;
 	}
 	
-	
+	//nasluchuje ktory poziom zostal wybrany do rozpoczecia quizu
 	private class RadioButtonListener implements ActionListener
 	{
 		@Override
@@ -311,15 +331,18 @@ public class UserPanel extends JFrame{
 		
 	}
 	
+	//metoda, ktora pobiera za pomoca managera odpowiednie slowka
 	private void updateListOfWords()
 	{
 		String searchedPhrase = 
 				("Wyszukaj s³owa").equals(research.getText()) ? "" : research.getText();
 		int level = (int)spinnerSearching.getValue();
 		String language = (String)languageListSearching.getSelectedItem();
-		adapter.setNewSet(mediator.getFilteredWords(level, searchedPhrase, language));
+		adapter.setNewSet(manager.getFilteredWords(level, searchedPhrase, language));
 	}
 	
+	//klasa ktora obsluguje nacisniecie przycisku dodaj, dodaje slowko do bazy danych
+	//przy uzyciu managera
 	private class AddButtonListener implements ActionListener
 	{
 		@Override
@@ -327,10 +350,10 @@ public class UserPanel extends JFrame{
 			String language = (String) languageListSearching.getSelectedItem();
 			if(language == null)
 			{
-				mediator.displayNoLanguagesWarning();
+				manager.displayNoLanguagesWarning();
 				return;
 			}
-			mediator.addWord(word.getText(), translation.getText(), (int)spinnerAdding.getValue(), language);
+			manager.addWord(word.getText(), translation.getText(), (int)spinnerAdding.getValue(), language);
 			word.setText("");
 			translation.setText("");
 			updateListOfWords();
@@ -338,6 +361,8 @@ public class UserPanel extends JFrame{
 		
 	}
 	
+	//metoda ktora obsluguje nacisniecie przycisku wyszukiwania
+	//metoda wyswietla slowka, ktore spelniaja odpowiednie warunki
 	private class SearchButtonListener implements ActionListener
 	{
 		@Override
@@ -347,18 +372,20 @@ public class UserPanel extends JFrame{
 		
 	}
 	
+	//klasa ktora obsluguje nacisniecie przycisku usun, 
+	//usuwa slowko z bazy danych przy uzyciu managera
 	private class DeleteButtonListener implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int row = table.getSelectedRow();
 			try {
-				mediator.deleteWord((String)table.getValueAt(row, 1), (String)table.getValueAt(row, 2), 1);
+				manager.deleteWord((String)table.getValueAt(row, 1), (String)table.getValueAt(row, 2), 1);
 				updateListOfWords();
 			}
 			catch(Exception exp)
 			{
-				System.out.println("User " + mediator.getUserName() + " didn't chooose the word to delete");
+				System.out.println("User " + manager.getUserName() + " didn't chooose the word to delete");
 				JOptionPane.showMessageDialog(new JFrame(),
 	    				"Aby usun¹æ s³owo musisz je zaznaczyæ na liœcie",
 	    				"Nie wybrano s³owa",
@@ -368,24 +395,28 @@ public class UserPanel extends JFrame{
 		
 	}
 	
+	//zwraca poziom wybrany przez uzytkownika w zakladce nauka slowek
 	public int getChoosenLevel()
 	{
 		return level;
 	}
 	
+	//zwraca jezyk wybrany przez uzytkownika 
 	public String getLanguage()
 	{
 		return (String)languageListLearning.getSelectedItem();
 	}
 	
+	//laduje odpowiednie informacje do kontrolek znajdujacych sie w zakladce
+	//do zarzadzania swoim profilem
 	public void resetUserState()
 	{
-		int numberUsersLevel = mediator.getUserLevel();
+		int numberUsersLevel = manager.getUserLevel();
 		UserLevelsNames usersLevel = 
 				UserLevelsNames.getLevelsName(numberUsersLevel);
 		levelLabel.setText("Poziom:   " + usersLevel);
 		
-		double percentage = 100 - mediator.getUserProgress(); 
+		double percentage = 100 - manager.getUserProgress(); 
 		progressLabel.setText("Do nastêpnego poziomu brakuje:   " + percentage + " %");
 	}
 }

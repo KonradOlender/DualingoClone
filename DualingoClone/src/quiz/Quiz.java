@@ -10,30 +10,34 @@ import system.DataMediator;
 
 public class Quiz extends TypeOfLearning{
 	private JButton nextQuestionButton;
-	private DataMediator mediator;
+	private DataMediator manager;
 	
-	public Quiz(DataMediator mediator)
+	public Quiz(DataMediator manager)
 	{
 		super();
-		this.mediator = mediator;
-		nextQuestionButton = new JButton("Next Question >");
+		this.manager = manager;
+		nextQuestionButton = new JButton("Nastepne Pytanie >");
 		nextQuestionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		panel.add(nextQuestionButton);
 	}
 
+	//ustawia listenera przycisku, ktory moze byc rozny w zaleznosci 
+	//od dekoratora
 	@Override
 	protected void setNextButtonListener(ActionListener al) 
 	{
 		nextQuestionButton.addActionListener(al);
 	}
 	
+	//zwraca zarz¹dce systemu
 	@Override
 	public DataMediator getDataMediator()
 	{
-		return mediator;
+		return manager;
 	}
 	
+	//s¹ puste, poniewa¿ aktualnie nie potrzeba tutaj ¿adnych
 	public void setUpQuiz() { }
 	protected void cleanAnswers() { }
 	

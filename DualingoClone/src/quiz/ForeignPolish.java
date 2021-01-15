@@ -15,6 +15,8 @@ public class ForeignPolish extends LearningMode{
 		this.panel.add(label);
 	}
 	
+	//metoda zwraca panel podanego dekoratora, ktory jest
+	// jednoczesnie panelem zawierajacym pytanie z quizu
 	@Override
 	protected JPanel getQuestionPanel()
 	{
@@ -27,6 +29,8 @@ public class ForeignPolish extends LearningMode{
 		return "obcy-polski";
 	}
 	
+	//metoda ta dodatkowo ustawia nastepne pytanie po pobraniu
+	//nastepnego slowka
 	@Override
 	public void SetWord(Word word)
 	{

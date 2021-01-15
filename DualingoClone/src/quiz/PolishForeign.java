@@ -10,8 +10,8 @@ public class PolishForeign extends LearningMode{
 	{
 		super(tol);
 		this.panel = new JPanel();
-		label = new JLabel(getQuestion());
-		this.panel.add(label);
+		/*label = new JLabel(getQuestion());
+		this.panel.add(label);*/
 	}
 	
 	//dwie ponizsze metody zamieniaja kierunek nauki s³owek
@@ -48,5 +48,14 @@ public class PolishForeign extends LearningMode{
 	{
 		super.SetWord(word);
 		label.setText(getQuestion());
+	}
+	
+	@Override
+	public void setUpQuiz()
+	{
+		label = new JLabel(getQuestion());
+		this.panel.add(label);
+		super.setUpQuiz();
+
 	}
 }

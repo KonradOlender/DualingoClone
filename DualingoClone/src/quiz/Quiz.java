@@ -38,7 +38,8 @@ public class Quiz extends TypeOfLearning{
 	}
 	
 	//s¹ puste, poniewa¿ aktualnie nie potrzeba tutaj ¿adnych
-	public void setUpQuiz() { }
+	public void setUpQuiz() 
+	{ }
 	protected void cleanAnswers() { }
 	
 }

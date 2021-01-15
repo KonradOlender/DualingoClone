@@ -20,7 +20,7 @@ public class CloseAnswers extends LearningMode {
 	public CloseAnswers(TypeOfLearning tol)
 	{
 		super(tol);
-		answers = new JRadioButton[numberOfAnswers];
+		/*answers = new JRadioButton[numberOfAnswers];
 		this.panel = new JPanel();
 		this.panel.setLayout(new BoxLayout(panel,1));
 		ActionListener buttonListener = new ActionListener() {
@@ -42,7 +42,7 @@ public class CloseAnswers extends LearningMode {
 			this.panel.add(answers[i]);
 		}
 		this.panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
-		this.panel.setBorder(new EmptyBorder(10, 5, 2, 5));
+		this.panel.setBorder(new EmptyBorder(10, 5, 2, 5));*/
 	}
 	
 	//pobiera odpowiedz, ktora zostala zaznaczona (lub tez nie)
@@ -105,4 +105,35 @@ public class CloseAnswers extends LearningMode {
 		super.SetWord(word);
 		fillInAnswers();
 	}
+	
+	@Override
+	public void setUpQuiz()
+	{
+		answers = new JRadioButton[numberOfAnswers];
+		this.panel = new JPanel();
+		this.panel.setLayout(new BoxLayout(panel,1));
+		ActionListener buttonListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				usersAnswer = e.getActionCommand();
+				System.out.println(usersAnswer);
+			}
+			
+		};
+		
+		bg=new ButtonGroup(); 
+		for(int i=0 ;i < numberOfAnswers ; i++)
+		{
+			answers[i] = new JRadioButton();
+			answers[i].addActionListener(buttonListener);
+			bg.add(answers[i]);
+			this.panel.add(answers[i]);
+		}
+		this.panel.setAlignmentX(JPanel.CENTER_ALIGNMENT);
+		this.panel.setBorder(new EmptyBorder(10, 5, 2, 5));
+		super.setUpQuiz();
+
+	}
+	
 }

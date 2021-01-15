@@ -1,8 +1,12 @@
 package quiz;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -12,11 +16,11 @@ public class OpenAnswers extends LearningMode{
 	public OpenAnswers(TypeOfLearning tol)
 	{
 		super(tol);
-		this.panel = new JPanel();
+		/*this.panel = new JPanel();
 		this.panel.setLayout(new BoxLayout(panel, 1));
 		answerField = new JTextField();
 		this.panel.add(answerField);
-		this.panel.setBorder(new EmptyBorder(10, 0, 0, 0));
+		this.panel.setBorder(new EmptyBorder(10, 0, 0, 0));*/
 	}
 	
 	//metoda ta umozliwia pobranie odpowiedzi od uzytkownika
@@ -45,6 +49,18 @@ public class OpenAnswers extends LearningMode{
 	protected void cleanAnswers()
 	{
 		answerField.setText("");
+	}
+	
+	@Override
+	public void setUpQuiz()
+	{
+		this.panel = new JPanel();
+		this.panel.setLayout(new BoxLayout(panel, 1));
+		answerField = new JTextField();
+		this.panel.add(answerField);
+		this.panel.setBorder(new EmptyBorder(10, 0, 0, 0));
+		super.setUpQuiz();
+
 	}
 }
 

@@ -63,6 +63,7 @@ public class Test extends LearningMode implements ActionListener{
 	public void setUpQuiz()
 	{
 		this.setNextButtonListener(this);
+		panel.setPreferredSize(new Dimension(500,200));
 		super.setUpQuiz();
 	}
 	

@@ -11,8 +11,8 @@ public class ForeignPolish extends LearningMode{
 	{
 		super(tol);
 		this.panel = new JPanel();
-		label = new JLabel(getQuestion());
-		this.panel.add(label);
+		/*label = new JLabel(getQuestion());
+		this.panel.add(label);*/
 	}
 	
 	//metoda zwraca panel podanego dekoratora, ktory jest
@@ -36,5 +36,14 @@ public class ForeignPolish extends LearningMode{
 	{
 		super.SetWord(word);
 		label.setText(getQuestion());
+	}
+	
+	@Override
+	public void setUpQuiz()
+	{
+		label = new JLabel(getQuestion());
+		this.panel.add(label);
+		super.setUpQuiz();
+
 	}
 }

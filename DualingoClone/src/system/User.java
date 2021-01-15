@@ -14,7 +14,6 @@ public class User {
 	public void RestoreState(IUserState archivedState)
 	{
 		this.state = ((UserState)archivedState).getState();
-		System.out.println(getCurrentLevel());
 	}
 	
 	//metoda ta umozliwia zarchiwizowanie aktualnego stanu uzytkownika
@@ -81,6 +80,12 @@ public class User {
 	public int getCurrentUsersPoints()
 	{
 		return state.getPoints();
+	}
+	
+	//zaladowuje stan uzytkownika odczytanego z bazy danych
+	public void loadCurrentStateObject(State state)
+	{
+		this.state = state;
 	}
 	
 	//to jest klasa, ktora uniemozliwia odczytanie zarchiwizowanych stanow

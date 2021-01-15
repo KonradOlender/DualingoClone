@@ -206,10 +206,12 @@ public class DataMediator{
 				index = i;
 			}
 		}
+		System.out.println(max);
 
 		State state =new State();
 		state.setCurrentUserLevel(statesModel.get(index).getCurrentUserLevel());
 		state.setCurrentUserProgress(statesModel.get(index).getCurrentProgress());
+		currentUser.loadCurrentStateObject(state);
 		
 		return currentUser;
 	}

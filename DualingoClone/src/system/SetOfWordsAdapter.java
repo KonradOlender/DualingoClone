@@ -59,8 +59,7 @@ public class SetOfWordsAdapter extends AbstractTableModel{
 		{
 			words.changeTranslation((String) value, row);
 		}
-			
-
+		this.fireTableDataChanged();
 	}
 	
 	@Override

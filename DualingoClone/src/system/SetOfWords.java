@@ -51,12 +51,33 @@ public class SetOfWords {
 	public void changeDefinition(String value, int index)
 	{
 		if(manager != null)
-			listOfWords.get(index).word = value;
+		{
+			Word currentWord = listOfWords.get(index);
+			int id = manager.getWordId(
+					currentWord.word, 
+					currentWord.translation, 
+					level, 
+					language
+			).get(0);
+			currentWord.word = value;
+			manager.updateWord(id,currentWord.word,currentWord.translation);
+		}
+			
 	}
 	
 	public void changeTranslation(String value, int index)
 	{
 		if(manager != null)
-			listOfWords.get(index).translation = value;
+		{
+			Word currentWord = listOfWords.get(index);
+			int id = manager.getWordId(
+					currentWord.word, 
+					currentWord.translation, 
+					level, 
+					language
+			).get(0);
+			currentWord.translation = value;
+			manager.updateWord(id,currentWord.word,currentWord.translation);
+		}
 	}
 }

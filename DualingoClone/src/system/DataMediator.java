@@ -116,6 +116,12 @@ public class DataMediator{
 		db.deleteWord(w);
 	}
 	
+	//pobieranie listy id slow o podanych warunkach
+	public List<Integer> getWordId(String word, String translation, int level, String language) {
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		return db.selectWordsIDWhereConditions(word, translation, level, language);
+	}
+	
 	//edycja slowa w bazie
 	public void updateWord(int id, String word, String translation) {
 		DatabaseAccess db = DatabaseAccess.getInstance();
@@ -190,8 +196,8 @@ public class DataMediator{
 		List<State> states = db.getDistinctUserStatesList(id);
 		for(State state: states)
 		{
-			//currentUser.loadState(state);
-			previousStates.addNewState(currentUser.loadState(state));
+			currentUser.loadState(state);
+			previousStates.addNewState(currentUser.ArchiveUserState());
 		}
 		
 		List<StateModel> statesModel = db.getUserStates(id);
@@ -207,12 +213,10 @@ public class DataMediator{
 				index = i;
 			}
 		}
-		System.out.println(max);
 
 		State state =new State();
 		state.setCurrentUserLevel(statesModel.get(index).getCurrentUserLevel());
 		state.setCurrentUserProgress(statesModel.get(index).getCurrentProgress());
-		currentUser.loadCurrentStateObject(state);
 		
 		return currentUser;
 	}

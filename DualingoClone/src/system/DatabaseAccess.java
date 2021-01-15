@@ -1,5 +1,6 @@
 package system;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import model.LanguageModel;
@@ -171,6 +172,20 @@ public class DatabaseAccess {
 	public void updateWord(int id, String word, String translation) {
 		data.updateWordWhereId(id, word, translation);
 	}
+
+	//pobieranie z bazy ID slow spelniajacych podane warunki - slowo, definicja, poziom, jezyk
+    public List<Integer> selectWordsIDWhereConditions(String word, String translation, int level, String language) {
+    	List<Integer> id = new LinkedList<Integer>();
+    	List<LanguageModel> lm = data.selectLanguageWhereName(language);
+    	if(lm.size()>0) {
+	    	int idLanguage = lm.get(0).getId();
+	    	List<WordModel> wordmodel = data.getWords(word,translation,level,idLanguage);
+	    	for(WordModel wm:wordmodel) {
+	    		id.add(wm.getId());
+	    	}
+    	}
+    	return id;
+    }	
 	
 	//pobieranie slow z bazy spelniajacych podane warunki - poziom, fragment slowa, jezyk
     public SetOfWords selectWordsWhereConditions(int level, String searchedPhrase, String language) {

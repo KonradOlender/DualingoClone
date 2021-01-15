@@ -115,6 +115,11 @@ public class DataMediator{
 		db.deleteWord(w);
 	}
 	
+	public void updateWord(int id, String word, String translation) {
+		DatabaseAccess db = DatabaseAccess.getInstance();
+		db.updateWord(id, word, translation);
+	}
+	
 	public void updateUserState(User u) {
 		// after finishing learning it is updated
 		DatabaseAccess db = DatabaseAccess.getInstance();

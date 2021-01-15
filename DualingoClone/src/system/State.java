@@ -5,12 +5,15 @@ public class State {
 	private int currentUsersProgress = 0;
 	public static final int MAX_LEVEL = 4;
 	
+	//metoda zwiekszajaca poziom uzytkownika 
+	//zapewnianie, ze wyzszego poziomu nie osiagnie
 	private void advance()
 	{
 		if(currentUserLevel < MAX_LEVEL)
 			currentUserLevel++;
 	}
 	
+	//metoda umozliwiajaca zwiekszanie postepow uzytkownika
 	public void increaseProgress(int points)
 	{
 		currentUsersProgress +=points;
@@ -20,12 +23,14 @@ public class State {
 			advance();
 		}
 	}
-	
+
+	//metoda umozliwiajaca pobranie aktualnego stanu uzytkownika
 	public int getCurrentUserLevel()
 	{
 		return currentUserLevel;
 	}
 	
+	//zwraca aktualny postep uzytkownika w %
 	public double getProgress()
 	{
 		double progress = (double) currentUsersProgress;
@@ -34,6 +39,8 @@ public class State {
 		return progress;
 	}
 	
+	//metoda zwracajaca liczbe punktow, uzywana do zapisania do bazy
+	//danych
 	int getPoints()
 	{
 		return currentUsersProgress;

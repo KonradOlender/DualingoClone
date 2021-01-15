@@ -4,30 +4,34 @@ import java.util.List;
 
 public class ArchivedUserStates {
 	private List<IUserState> stateList = new ArrayList<IUserState>();
-	private DataMediator mediator;
+	private DataMediator manager;
 	
-	public ArchivedUserStates(DataMediator mediator)
+	public ArchivedUserStates(DataMediator manager)
 	{
-		this.mediator = mediator;
+		this.manager = manager;
 	}
 	
+	//metoda dodajace stany na liste stanow
 	public void addNewState(IUserState userState)
 	{
 		stateList.add(userState);
 	}
 	
+	//metoda usuwajaca niepotrzebne stany
 	public void deleteState(IUserState userState)
 	{
 		//removes state from the database
-		mediator.removeState();
+		manager.removeState();
 		stateList.remove(userState);
 	}
 	
+	//metoda umozliwiajaca przywrocenie wybranego stanu z listy
 	public IUserState RestoreState(int index)
 	{
 		return stateList.get(index);
 	}
 
+	//konwersja listy stanow w tablice
 	public IUserState[] getStatesArray() 
 	{
 		IUserState[] array = new IUserState[stateList.size()];

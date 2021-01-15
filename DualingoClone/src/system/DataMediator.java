@@ -183,8 +183,8 @@ public class DataMediator{
 		List<State> states = db.getDistinctUserStatesList(id);
 		for(State state: states)
 		{
-			currentUser.loadState(state);
-			previousStates.addNewState(currentUser.ArchiveUserState());
+			//currentUser.loadState(state);
+			previousStates.addNewState(currentUser.loadState(state));
 		}
 		
 		List<StateModel> statesModel = db.getUserStates(id);

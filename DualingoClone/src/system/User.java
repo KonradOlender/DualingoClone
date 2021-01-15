@@ -33,9 +33,11 @@ public class User {
 	
 	//metoda ktora umozliwia zaladowanie slow z bazy danych do 
 	//archiwum (wczytuje ona stan)
-	public void loadState(State state)
+	public UserState loadState(State state)
 	{
-		this.state = state;
+		UserState x = new UserState();
+		x.loadState(state);
+		return x;
 	}
 	
 	//metoda zmieniajaca strategie generowania slowek do nauki
@@ -84,12 +86,19 @@ public class User {
 	//to jest klasa, ktora uniemozliwia odczytanie zarchiwizowanych stanow
 	//przez pozostale elementy systemu
 	private class UserState implements IUserState {
-		private State state = new State();
-		
+		private State state;
+
 		public void setState(State state)
 		{
+			this.state = new State();
 			this.state.setCurrentUserLevel(state.getCurrentUserLevel());
 			this.state.setCurrentUserProgress(state.getPoints());
+		}
+		
+		//load states from database
+		public void loadState(State state) 
+		{
+			this.state = state;
 		}
 		
 		public State getState()

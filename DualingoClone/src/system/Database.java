@@ -310,6 +310,29 @@ public class Database {
           }
           return words;
     }
+    
+    //generowanie listy wszytkich slow o podanych warunkach
+    public List<WordModel> getWords(String newword, String newtranslation, int level, int language) {
+    	List<WordModel> words = new LinkedList<WordModel>();
+    	try {
+  		  ResultSet result = stat.executeQuery("SELECT * FROM word WHERE idLevel=\""+level+"\" AND idLanguage=\""+language+"\" AND  word=\""+newword+"\" AND translation=\""+newtranslation+"\"");
+            
+  		  int id, idLevel, idLanguage;
+            String word, translation;
+            while(result.next()) {
+                id = result.getInt("id_word");
+                word = result.getString("word");
+                translation = result.getString("translation");
+                idLevel = result.getInt("idLevel");
+                idLanguage = result.getInt("idLanguage");
+                words.add(new WordModel(id, word, translation, idLevel, idLanguage));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return words;
+    }
 
     //generowanie listy wszystkich uzytkownikow o podanej nazwie
     public List<UserModel> selectUserWhereName(String user_name) {

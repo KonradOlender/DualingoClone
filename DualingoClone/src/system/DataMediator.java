@@ -115,6 +115,7 @@ public class DataMediator{
 		db.deleteWord(w);
 	}
 	
+	//edycja slowa 
 	public void updateWord(int id, String word, String translation) {
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		db.updateWord(id, word, translation);

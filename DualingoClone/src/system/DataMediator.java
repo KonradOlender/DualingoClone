@@ -85,7 +85,8 @@ public class DataMediator{
 		return sow;
 	}
 	
-	public List<String> generateRandomAnswers(int size, String correctAnswer)//, boolean isTranslation)
+	//generuje przypadkowe slowa z zestawu slowek do nauki, metoda wykorzystywana przy CloseAnswers klasie
+	public List<String> generateRandomAnswers(int size, String correctAnswer)
 	{
 		ArrayList<String> answers = new ArrayList<String>();
 		if(learningSet == null || learningSet.getSize() < 2 || correctAnswer == null)
@@ -140,6 +141,7 @@ public class DataMediator{
 		return db.selectLanguages();
 	}
 	
+	//sprawdza czy dany jezyk istnieje w bazie
 	public boolean languageExists(String language)
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
@@ -217,6 +219,7 @@ public class DataMediator{
 	    previousStates.addNewState(currentUser.ArchiveUserState());			
 	}
 	
+	//przywraca stan uzytkownika
 	public void restoreUserState(int index)
 	{
 		currentUser.RestoreState(
@@ -227,7 +230,6 @@ public class DataMediator{
 	public void removeState() 
 	{
 		//removes state from the database
-		//think how to do it
 		
 		//DatabaseAccess db = DatabaseAccess.getInstance();
 		//db.deleteState(currentUserLevel, currentProgress, idUser); 
@@ -247,11 +249,13 @@ public class DataMediator{
 
 	//---------------------------------------------------------------------------------------------------------->WINDOWS METHODS
 	
+	// metoda tworzaca poczatkowe okno
 	public void startMainWindow()
 	{
 		MainWindow mainWindow = new MainWindow(this);
 	}
 	
+	//metoda otwierajaca panel uzytkownika po "zalogowaniu"
 	public void openUserPanel()
 	{
 		currentUserPanel = new UserPanel(this);
@@ -286,7 +290,7 @@ public class DataMediator{
 		});
 	}
 
-	//create here new Thread that learning and passing learning set into a constructor and also the level is chosen here
+	//tworzy tutaj quiz o odpowiednich parametrach, ktore zostaly wyspecyfikowane przez uzytkownika
 	public void startLearning(int level, String language, int isTest) {
 		switch (level)
 		{
@@ -356,11 +360,13 @@ public class DataMediator{
 		
 	}
 	
+	//zwieksza postep uzytkownika po zakonczeniu quizu
 	public void endLearning()
 	{
 		currentUser.increasePoints(learningSet.points);
 	}
 	
+	//tworzy i zwraca listenera do przycisku w oknie UserPanel, ktory tworzy quiz
 	public ActionListener getCreationQuizListener(JFrame frame)
 	{
 		return new CreationQuizDialog(frame, this);
@@ -386,6 +392,7 @@ public class DataMediator{
 	
 	//---------------------------------------------------------------------------------------------------------->ITERATOR
 	
+	//zwraca nastepne slowo z zestawu slow
 	public Word nextLearningWord() {
 		if(!wordIterator.hasNext())
 			return null;
@@ -414,7 +421,6 @@ public class DataMediator{
 	
 	public IUserState[] getCurrentUserStates() 
 	{
-		//return new IUserState[0];
 		return previousStates.getStatesArray();
 	}
 	
@@ -423,12 +429,12 @@ public class DataMediator{
 	//Nas³uchuje wciœniêcia przycisku, który tworzy quiz
 	private class CreationQuizDialog implements ActionListener {
 		JFrame frame;
-		DataMediator mediator;
+		DataMediator manager;
 		
-		public CreationQuizDialog(JFrame frame, DataMediator mediator)
+		public CreationQuizDialog(JFrame frame, DataMediator manager)
 		{
 			this.frame = frame;
-			this.mediator = mediator;
+			this.manager = manager;
 			
 		}
 		
@@ -447,8 +453,8 @@ public class DataMediator{
 	          "Ustwienie jêzyka",
 	          JOptionPane.QUESTION_MESSAGE,null,
 	         	new LearningMode[] {
-	            new ForeignPolish(new Quiz(mediator)),
-	            new PolishForeign(new Quiz(mediator)),
+	            new ForeignPolish(new Quiz(manager)),
+	            new PolishForeign(new Quiz(manager)),
 	        }, null);
 	        if(option == null)
 	        	 return;

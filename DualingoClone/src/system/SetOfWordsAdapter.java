@@ -3,7 +3,7 @@ package system;
 import javax.swing.table.AbstractTableModel;
 
 public class SetOfWordsAdapter extends AbstractTableModel{
-	SetOfWords words = new SetOfWords(0);
+	SetOfWords words = new SetOfWords();
 	
 	@Override
 	public int getRowCount()
@@ -52,9 +52,14 @@ public class SetOfWordsAdapter extends AbstractTableModel{
 	public void setValueAt(Object value, int row, int column)
 	{
 		if(column == 1)
+		{
 			words.changeDefinition((String) value, row);
+		}
 		if(column == 2)
+		{
 			words.changeTranslation((String) value, row);
+		}
+			
 
 	}
 	

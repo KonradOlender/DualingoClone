@@ -6,11 +6,22 @@ public class SetOfWords {
 	String language;
 	int level;
 	List<Word> listOfWords;
+	DataMediator manager;
+	
+	public SetOfWords()
+	{
+		listOfWords = new ArrayList<Word>();
+	}
 	
 	public SetOfWords(int level)
 	{
 		this.level = level;
 		listOfWords = new ArrayList<Word>();
+	}
+	
+	public void setManager(DataMediator manager)
+	{
+		this.manager = manager;
 	}
 	
 	//zwraca rozmiar zestawu slowek
@@ -39,12 +50,13 @@ public class SetOfWords {
 	//metody edytujace slowko
 	public void changeDefinition(String value, int index)
 	{
-		listOfWords.get(index).word = value;
+		if(manager != null)
+			listOfWords.get(index).word = value;
 	}
 	
 	public void changeTranslation(String value, int index)
 	{
-		listOfWords.get(index).translation = value;
+		if(manager != null)
+			listOfWords.get(index).translation = value;
 	}
-	
 }

@@ -82,6 +82,7 @@ public class DataMediator{
 	{
 		DatabaseAccess db = DatabaseAccess.getInstance();
 		sow = db.selectWordsWhereConditions(level, searchedPhrase, language);
+		sow.setManager(this);
 		return sow;
 	}
 	

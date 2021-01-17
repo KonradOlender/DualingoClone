@@ -33,6 +33,8 @@ public class State {
 	//zwraca aktualny postep uzytkownika w %
 	public double getProgress()
 	{
+		if(currentUserLevel == MAX_LEVEL)
+			return 100;
 		double progress = (double) currentUsersProgress;
 		progress *= 100;
 		progress /= Math.pow(10, currentUserLevel + 1);

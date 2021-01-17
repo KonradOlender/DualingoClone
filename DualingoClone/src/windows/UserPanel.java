@@ -53,7 +53,7 @@ public class UserPanel extends JFrame{
 	private static int MAX_LEVEL = 3;
 	SetOfWordsAdapter adapter;
 	JSpinner spinnerSearching;
-	JTable table;
+	JTable tableWithWords;
 
 
 	public UserPanel(DataMediator dm)
@@ -213,9 +213,9 @@ public class UserPanel extends JFrame{
 		JPanel updateAndDeletePanel = new JPanel(new GridLayout());
 		adapter =new SetOfWordsAdapter();
 		updateListOfWords();
-	    table = new JTable(adapter);
-	    table.getTableHeader().setReorderingAllowed(false);
-	    updateAndDeletePanel.add(new JScrollPane(table));
+	    tableWithWords = new JTable(adapter);
+	    tableWithWords.getTableHeader().setReorderingAllowed(false);
+	    updateAndDeletePanel.add(new JScrollPane(tableWithWords));
 	    updateAndDeletePanel.add(createAddingWordsPanel());
 	    //panel.add(deleteButton);
 	    
@@ -391,9 +391,9 @@ public class UserPanel extends JFrame{
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int row = table.getSelectedRow();
+			int row = tableWithWords.getSelectedRow();
 			try {
-				manager.deleteWord((String)table.getValueAt(row, 1), (String)table.getValueAt(row, 2), 1);
+				manager.deleteWord((String)tableWithWords.getValueAt(row, 1), (String)tableWithWords.getValueAt(row, 2), 1);
 				updateListOfWords();
 			}
 			catch(Exception exp)

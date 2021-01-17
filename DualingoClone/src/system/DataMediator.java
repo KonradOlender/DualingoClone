@@ -34,6 +34,12 @@ public class DataMediator{
 	private TypeOfLearning currentQuiz;
 	private Random randomizer = new Random();
 	private UserPanel currentUserPanel;
+	private LevelOfWordsToLearn[] avaliableLevels = {
+			new Level1(),
+			new Level2(),
+			new Level3(),
+			new AutomaticLevel()
+	};
 	
 	//---------------------------------------------------------------------------------------------------------->DATABASE METHODS
 	//sprawdzanie bazy
@@ -137,7 +143,8 @@ public class DataMediator{
 	//user chooses an option to add a user
 	public void addUser(String name) {
 		DatabaseAccess db = DatabaseAccess.getInstance();
-		db.addUser(name);	
+		db.addUser(name);
+		
 	}
 	
 	//adding languages
@@ -305,25 +312,9 @@ public class DataMediator{
 
 	//tworzy tutaj quiz o odpowiednich parametrach, ktore zostaly wyspecyfikowane przez uzytkownika
 	public void startLearning(int level, String language, int isTest) {
-		switch (level)
-		{
-			case 1:
-				currentUser.setLevel(new Level1());
-				break;
-				
-			case 2:
-				currentUser.setLevel(new Level2());
-				break;
-				
-			case 3:
-				currentUser.setLevel(new Level3());
-				break;
-				
-			default:
-				currentUser.setLevel(new AutomaticLevel());
-				break;
-			
-		}
+		level = level - 1 < 0 ? avaliableLevels.length : level;
+		currentUser.setLevel(avaliableLevels[level - 1]);
+		
 		learningSet = currentUser.genereteWordToLearn(language);
 		if(learningSet.getSize() == 0)
 		{
@@ -334,16 +325,16 @@ public class DataMediator{
 		wordIterator = learningSet.iterator(isTest);
 		currentQuiz.SetWord(nextLearningWord());
 		
-		JFrame j = new JFrame();
+		JFrame window = new JFrame();
 		JPanel basicPanel = new JPanel();
 		basicPanel.add(currentQuiz.createPanel());
-		j.setPreferredSize(basicPanel.getPreferredSize());
-		j.add(basicPanel);			
-		j.setVisible(true);
-		j.pack();
-		j.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		j.setLocationRelativeTo(null);
-		j.addWindowListener(new WindowListener() {
+		window.setPreferredSize(basicPanel.getPreferredSize());
+		window.add(basicPanel);			
+		window.setVisible(true);
+		window.pack();
+		window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		window.setLocationRelativeTo(null);
+		window.addWindowListener(new WindowListener() {
 
 			@Override
 			public void windowClosing(WindowEvent e) 

@@ -116,6 +116,16 @@ public class User {
 		{
 			return "Level: " + state.getCurrentUserLevel() + " progress: " + state.getProgress();
 		}
+		
+		@Override
+		public boolean statesAreSame(IUserState userState)
+		{
+			UserState us = (UserState) userState;
+			if(us.state.getCurrentUserLevel() == this.state.getCurrentUserLevel() 
+					&& us.state.getPoints() == this.state.getPoints())
+				return true;
+			return false;
+		}
 	}
 
 }

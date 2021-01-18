@@ -35,10 +35,10 @@ public class DataMediator{
 	private Random randomizer = new Random();
 	private UserPanel currentUserPanel;
 	private LevelOfWordsToLearn[] avaliableLevels = {
-			new Level1(),
-			new Level2(),
-			new Level3(),
-			new AutomaticLevel()
+			new Level1(this),
+			new Level2(this),
+			new Level3(this),
+			new AutomaticLevel(this)
 	};
 	
 	//---------------------------------------------------------------------------------------------------------->DATABASE METHODS

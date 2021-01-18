@@ -14,6 +14,11 @@ public class ArchivedUserStates {
 	//metoda dodajace stany na liste stanow
 	public void addNewState(IUserState userState)
 	{
+		for(IUserState state : stateList)
+		{
+			if(userState.statesAreSame(state))
+				return;
+		}
 		stateList.add(userState);
 	}
 	

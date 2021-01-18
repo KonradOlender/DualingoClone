@@ -4,9 +4,14 @@ import java.util.List;
 import java.util.Random;
 
 public class AutomaticLevel implements LevelOfWordsToLearn{
-	DataMediator m = new DataMediator();
+	DataMediator m;
 	private final int ls_size=15;
 	private final int points=80;
+	
+	public AutomaticLevel(DataMediator m)
+	{
+		this.m = m;
+	}
 	
 	//zwraca 15 slow - w zale¿nosci od wybranego poziomu i poziomu uzytkownika
 	//chyba ze w bazie nie ma tylu slow z wybranego poziomu to zwraca mniej 

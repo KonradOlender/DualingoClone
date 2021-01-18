@@ -51,7 +51,7 @@ public class UserPanel extends JFrame{
 	public JButton deleteButton;
 	public JButton searchButton;
 	private static int MAX_LEVEL = 3;
-	SetOfWordsAdapter adapter;
+	SetOfWordsAdapter tableWithWordsadapter;
 	JSpinner spinnerSearching;
 	JTable tableWithWords;
 
@@ -211,9 +211,9 @@ public class UserPanel extends JFrame{
 	public JPanel createUpdateAndDeleteWordsPanel()
 	{
 		JPanel updateAndDeletePanel = new JPanel(new GridLayout());
-		adapter =new SetOfWordsAdapter();
+		tableWithWordsadapter =new SetOfWordsAdapter();
 		updateListOfWords();
-	    tableWithWords = new JTable(adapter);
+	    tableWithWords = new JTable(tableWithWordsadapter);
 	    tableWithWords.getTableHeader().setReorderingAllowed(false);
 	    updateAndDeletePanel.add(new JScrollPane(tableWithWords));
 	    updateAndDeletePanel.add(createAddingWordsPanel());
@@ -331,7 +331,6 @@ public class UserPanel extends JFrame{
 			else 
 				level = 4;
 		}
-		
 	}
 	
 	//metoda, ktora pobiera za pomoca managera odpowiednie slowka
@@ -340,8 +339,9 @@ public class UserPanel extends JFrame{
 		String searchedPhrase = 
 				("Wyszukaj s³owa").equals(research.getText()) ? "" : research.getText();
 		int level = (int)spinnerSearching.getValue();
+		level = level > MAX_LEVEL ? MAX_LEVEL : level;
 		String language = (String)languageListSearching.getSelectedItem();
-		adapter.setNewSet(manager.getFilteredWords(level, searchedPhrase, language));
+		tableWithWordsadapter.setNewSet(manager.getFilteredWords(level, searchedPhrase, language));
 	}
 	
 	//klasa ktora obsluguje nacisniecie przycisku dodaj, dodaje slowko do bazy danych

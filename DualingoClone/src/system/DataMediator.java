@@ -250,7 +250,6 @@ public class DataMediator{
 	public void removeState() 
 	{
 		//removes state from the database
-		
 		//DatabaseAccess db = DatabaseAccess.getInstance();
 		//db.deleteState(currentUserLevel, currentProgress, idUser); 
 	}

@@ -17,13 +17,6 @@ public class LearningSet {
 	{
 		this.size = size;
 		learningSet = new ArrayList<Word>();
-		/*for(int i=1; i<11; i++)
-		{
-			Word w = new Word();
-			w.translation = "t³umaczenie" + i;
-			w.word = "slowko" + i;
-			learningSet.add(w);
-		}*/
 	}
 	
 	public Word getWordAt(int index)
